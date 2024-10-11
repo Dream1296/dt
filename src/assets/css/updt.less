@@ -1,0 +1,190 @@
+#all {
+  width: 100vw;
+  height: 100vh;
+  background-image: url("../../assets/img/updtbg.png");
+  /* 设置背景图片不重复 */
+  background-repeat: no-repeat;
+  /* 设置背景图片始终位于中心 */
+  background-position: center;
+}
+
+#shuru {
+  width: 90%;
+  height: 55%;
+  margin: 0 auto;
+  border: 1px solid black;
+  position: relative;
+  top: 90px;
+  // background-color: aqua;
+  outline: none;
+  font-size: 20px;
+}
+
+.emoji {
+  width: 25px;
+}
+
+#test {
+  width: 50px;
+  height: 50px;
+  background-color: aqua;
+  position: fixed;
+  left: 20%;
+  top: 0%;
+}
+//底部栏高度
+@topH: 40px;
+#di {
+  width: 100%;
+  height: @topH;
+  background-color: antiquewhite;
+  position: fixed;
+  top: ~"calc(100% - @{topH})";
+  display: flex;
+  align-content: center;
+  flex-wrap: wrap;
+  justify-content: space-around;
+  div {
+    width: 40px;
+    height: 40px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+@topEmoji: 300px;
+
+#emojiC {
+  width: 90%;
+  height: @topEmoji;
+  // margin: 0 auto;
+  border-radius: 25px;
+  background-color: antiquewhite;
+  position: fixed;
+  top: ~"calc(100% - @{topEmoji})";
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 10px;
+
+  display: flex;
+  flex-wrap: wrap;
+  align-content: space-around;
+  overflow: auto;
+  div {
+    margin-left: 3px;
+    margin-right: 3px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+    width: 8%;
+    // height: 20px;
+    img {
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+#imgs {
+  width: 90%;
+  height: 520px;
+  // margin: 0 auto;
+  border-radius: 25px;
+  background-color: antiquewhite;
+  position: fixed;
+  top: ~"calc(100% - 600px)";
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 10px;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  div {
+    display: inline-block;
+    margin: 10px;
+    border-radius: 10px;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+#videos {
+  width: 90%;
+  height: 520px;
+  // margin: 0 auto;
+  border-radius: 25px;
+  background-color: antiquewhite;
+  position: fixed;
+  top: ~"calc(100% - 600px)";
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 10px;
+  overflow: auto;
+  display: flex;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+  div {
+    display: inline-block;
+    margin: 10px;
+    border-radius: 10px;
+    width: 80px;
+    height: 80px;
+    overflow: hidden;
+    img {
+      object-fit: cover;
+      width: 100%;
+      height: 100%;
+    }
+  }
+}
+
+#configs {
+  width: 90%;
+  height: 520px;
+  // margin: 0 auto;
+  border-radius: 25px;
+  background-color: antiquewhite;
+  position: fixed;
+  top: ~"calc(100% - 600px)";
+  left: 50%;
+  transform: translate(-50%, 0%);
+  padding: 10px;
+  overflow: auto;
+  flex-wrap: wrap;
+  align-content: flex-start;
+  justify-content: center;
+}
+
+// #imgs{
+//     width: 100%;
+//     height: 130px;
+//     background-color: aquamarine;
+//     position: fixed;
+//     left: 0%;
+//     top: 70%;
+//     overflow-x: auto;
+//     white-space: nowrap;
+//     // display: flex;
+
+// }
+
+#build {
+    width: 50px;
+    height: 50px;
+    position: absolute;
+    left: 84%;
+    top: 40px;
+    img{
+        width: 100%;
+        height: 100%;
+    }
+}
