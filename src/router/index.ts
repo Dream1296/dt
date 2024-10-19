@@ -6,6 +6,7 @@ import dtOne from '../views/dtOne.vue';
 import videoPlay from '../views/videoPlay.vue';
 import config from '../views/config.vue';
 import updt from '../views/updt.vue';
+import dtAll from '@/views/dtAll.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -37,6 +38,10 @@ const routes: Array<RouteRecordRaw> = [
   {
     path:'/updt',
     component:updt,
+  },
+  {
+    path:'/dts',
+    component:dtAll,
   }
 ];
 

@@ -64,7 +64,7 @@ export async function dtFindData(qb: string, token: string) {
 
 //获取动态主数据
 export async function dtDataInit(loa: string | number, token: string): Promise<A[]> {
-    let data = (await dtDate(token, loa, 0) as { code: number, data: A[] }).data;
+    let data = (await dtDate( loa, 0) as { code: number, data: A[] }).data;
 
     //处理图片数据
     // imgs(data);

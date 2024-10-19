@@ -6,7 +6,7 @@
 		</div>
 		<!-- 名字 -->
 		<div class="name">
-			<span>{{ data.name }}</span>
+			<span>{{ data.name }} {{ data.id }}</span>
 		</div>
 		<!-- 正文 -->
 		<div class="text">
@@ -37,7 +37,7 @@
 		<div class="di">
 			<!-- 日期 -->
 			<div class="date" @click="showX">
-				<span>2024-9-3</span>
+				<span>{{ data.date.slice(0,10) }}</span>
 			</div>
 
 			<!-- 选项 -->
@@ -45,6 +45,8 @@
 				<img @click.stop="getV()!.isInput = !getV()!.isInput" src="../../assets/img/pl.png"
 					style="width: 30px;height: 30px; margin-left: 6px;"></img>
 				<img @click.stop="isDels()" src="../../assets/img/del.png" style="width: 30px;height: 30px;    left: 20px;
+				position: relative;"></img>
+				<img @click.stop="tzXq(data.id)" src="../../assets/img/xq.png" style="width: 30px;height: 30px;    left: 36px;
 				position: relative;"></img>
 			</div>
 		</div>
@@ -87,6 +89,7 @@ import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
 import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg } from '@/api/api';
 import { token } from '@/getToken';
 import { dtData } from '@/dtData/getList';
+import router from '@/router';
 
 
 
@@ -146,6 +149,11 @@ function videoSrc(index:number){
 	return dtVideoImg(dtid,index);
 }
 
+function tzXq(index:number){
+	router.push({ path: '/dts', query: {dtid:index} });
+}
+
+
 function showImg(temp: number) {
 	let id = data.value?.id;
 	emit('showImg', {
@@ -189,7 +197,7 @@ function isDels() {
 	})
 		.then(() => {
 			let id = data.value!.id;
-			delDts(String(id), token).then((res: any) => {
+			delDts(String(id)).then((res: any) => {
 				if (res.tf == 1) {
 					showSuccessToast('成功文案');
 					dtData.del(id);
@@ -219,7 +227,7 @@ function setPls() {
 	// ----
 	let uptext = getV()!.plText;
 	let id = data.value!.id;
-	postCom(uptext, String(id), token).then((res: any) => {
+	postCom(uptext, String(id)).then((res: any) => {
 		if (res.tf == 1) {
 			showSuccessToast('成功文案');
 			data.value?.com.push({

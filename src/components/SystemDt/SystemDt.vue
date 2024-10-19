@@ -43,7 +43,7 @@
 		<div class="di">
 			<!-- 日期 -->
 			<div class="date">
-				<text>时间之外</text>
+				<text>2024-09-03</text>
 			</div>
 		</div>
 		<hr>
@@ -57,7 +57,6 @@
 <script setup lang="ts">
 	import { ref } from 'vue';
 	// import { userImg } from '../../api';
-
 	let isdtall = ref(false);
 	let fings = ref(false);
 	let sr = ref('');

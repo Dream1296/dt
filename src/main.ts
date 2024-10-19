@@ -24,7 +24,15 @@ import { tokenInit } from './getToken'
 
 initCordovaApi()
 
-const app = createApp(App)
+const app = createApp(App);
+
+
+// import { createApp } from 'vue';
+import {  CellGroup } from 'vant';
+
+app.use(Form);
+app.use(Field);
+app.use(CellGroup);
 
 app.use(createPinia())
 app.use(router);
@@ -32,8 +40,8 @@ app.use(Button);
 app.use(Toast);
 app.use(Dialog);
 app.use(Search);
-app.use(Form);
-app.use(Field);
+// app.use(Form);
+// app.use(Field);
 app.use(RadioGroup);
 app.use(Radio);
 app.use(DatePicker);

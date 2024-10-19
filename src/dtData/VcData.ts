@@ -6,6 +6,9 @@ export let vData = ref<As[]>([]);
 
 export function VcDataInit(dtData:A[]) {
     let newData:As[] = [];
+    // if(!vData.value && localStorage.getItem('VPLData')){
+    //     vData.value = JSON.parse(localStorage.getItem('VPLData')!);
+    // }
     //新的数组
     for(let a of dtData){
         newData.push({
@@ -26,8 +29,11 @@ export function VcDataInit(dtData:A[]) {
         if(b){
             a.plText = b.plText;
         }
+        vData.value = newData; 
     }
+    // localStorage.setItem('VPLData', JSON.stringify(vData.value));
 }
+
 
 export function findvData(id:string | number){
     id = Number(id);

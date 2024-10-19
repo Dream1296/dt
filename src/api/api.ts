@@ -1,7 +1,9 @@
 import type { A } from '@/dtData/dtType';
 import axioss from 'axios';
+import {token as tokens} from '@/api/token';
 
 let axios:any;
+
 // 创建新的 axios 实例，忽略ssl证书错误
 if (typeof window === 'undefined') {
     // Node.js 环境
@@ -14,6 +16,8 @@ if (typeof window === 'undefined') {
     // 浏览器环境
     axios = axioss;
 }
+
+
 
 
 
@@ -43,12 +47,17 @@ export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?:
 export async function login(user: string, passwd: string) {
     const urls = Internet.url + "/api/login";
 
-    let res = await api(urls, 'POST', { username: user, passwd });
+    let res = await api<{code:number,message:string,token:string}>(urls, 'POST', { username: user, passwd });
     return res;
 }
 
+export async function yz(token:string){
+    let userId = await api<string>( Internet.url + '/api/userClass','GET',undefined,token);
+    return userId; 
+}
+
 //动态主数据
-export async function dtDate(token: string, loa: string | number, aes: number) {
+export async function dtDate( loa: string | number, aes: number) {
 
     // const datas = res.data;
     // const data = decrypt(datas, '012345');
@@ -58,37 +67,37 @@ export async function dtDate(token: string, loa: string | number, aes: number) {
     }
 
     const urls = Internet.url + "/api/getDtList?loa=" + loa + "&aes=" + aes;
-    let res = await api(urls, 'GET', undefined, token);
+    let res = await api(urls, 'GET', undefined, tokens);
     return res;
 }
 
 //查询动态
 //qb=标签  isqb=预留，是否开启标签对比
-export async function dtfind(token: string,qb: string, loa?: string,  isbq?: string) {
+export async function dtfind( qb: string, loa?: string,  isbq?: string) {
     const urls = Internet.url + "/api/dtfind?bq=" + qb;
-    let res = await api(urls, 'GET', undefined, token);
+    let res = await api(urls, 'GET', undefined, tokens);
     return res;
 }
 
 //单个动态
-export async function getdt(token: string, id: string | number):Promise<A> {
+export async function getdt( id: string | number):Promise<A> {
 
     let urls = Internet.url + "/api/getdt?id=" + String(id);
-    let res = ( await api(urls, 'GET', undefined, token)) as {data:A};
+    let res = ( await api(urls, 'GET', undefined, tokens)) as {data:A};
     return res.data;
 }
 
 //提交动态评论内容
-export async function postCom(content: string, dtId: string, token: string) {
+export async function postCom(content: string, dtId: string ) {
     let urls = Internet.url + '/api/postCom';
-    let res = await api(urls, 'POST', { content, dtId }, token);
+    let res = await api(urls, 'POST', { content, dtId }, tokens);
     return res;
 }
 
 //删除动态
-export async function delDts(dtId: string, token: string){
+export async function delDts(dtId: string){
     let urls = Internet.url + '/api/delDt';
-    let res = await api(urls, 'POST',{id:dtId}, token);
+    let res = await api(urls, 'POST',{id:dtId}, tokens);
     return res;
 }
 

@@ -7,20 +7,24 @@
         </div>
 
         <!-- 背景图 -->
-        <div id="head" ref="head">
+        <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
         </div>
 
         <!-- 背景图山的头像部分 -->
         <div id="touxian">
             <text class="texts">不爱吃糖</text>
-            <img src="https://frp-fix.top:20047/api/userImg?name=yw"></img>
+            <img :src=touxianSrc></img>
         </div>
         <!-- 空白间隔 -->
         <div id="nulls"></div>
 
         <div id="" v-if="vlist">
             <!-- 系统选项 -->
-            <SystemDt @shownewdt='shownewdt(13)' @tzs='tzs' @find='dtFind' @config="configs"></SystemDt>
+            <SystemDt  @shownewdt='shownewdt(13)' @tzs='tzs' @find='dtFind' @config="configs"></SystemDt>
+            <div v-show="showLogin">
+                <login ></login>
+            </div>
+           
 
             <!-- 动态 -->
             <div v-for="a in vlist" :key="a.id" ref="dtsDom">
@@ -33,12 +37,6 @@
         <div>
 
         </div>
-
-
-
-
-
-
     </div>
 
 
@@ -57,24 +55,43 @@ import dts from '@/components/dts/dts.vue';
 import { token } from '@/getToken';
 import { data1 } from '../testData';
 import { showTop } from '@/util/dt/dtTopShow';
-import {  upvideo } from '@/util/dt/dtUtil';
+import { upvideo } from '@/util/dt/dtUtil';
 import router from '@/router';
 import { config } from 'process';
 import { obsDt } from '@/dtData/observerDt';
+import login from '@/components/login/login.vue';
 
+import {Internet} from '../api/api';
+import { isToken, verifyToken } from '@/api/token';
+let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
-//主数据
-// let data: A[] = [];
-dtData;
 
 //视图数据
 const vlist = dtData.vlist;
 
-//评论列表数据
-vData;
+let showLogin = ref(false);
+
+showLogin.value = !isToken();
+
+verifyToken().then(data => {    
+    console.log(data);
+    if(!data){
+        showLogin.value = true;
+    }
+})
+
 
 //测试数据
 // vlist.value.push(data1);
+const bgSrcCon = '/bgImg/bg';
+let bgId = 0;
+let bgSrc = ref(bgSrcCon + bgId + ".png");
+
+
+//懒加载
+const dtsDom = ref<HTMLElement[]>([]);
+
+
 
 
 
@@ -107,7 +124,7 @@ function playVideo(ids: {
     router.push({ path: '/videoPlay', query: ids });
 }
 
-function updt(){
+function updt() {
     router.push({ path: '/updt' });
 }
 
@@ -129,24 +146,26 @@ function dtFind(text: string) {
         obsDt.init();
         vlist.value = [];
         obsDt.dtAdd(dtsDom);
-       
+
     }
-
-
 }
 
 //初始化数据,初始化评论列表
 dtDataInit(0, token)
     .then(datas => {
-        console.log(datas);
-
+        VcDataInit(datas);
         obsDt.dtAdd(dtsDom);
-       
+
     })
 
 //切换显示分级
 function tzs(num: boolean) {
     dtDataInit(num ? 1 : 0, token).then(() => {
+
+        //切换背景图
+        bgId = Number(num);
+        bgSrc.value = bgSrcCon + bgId + ".png";
+
         obsDt.init();
         vlist.value = [];
         obsDt.dtAdd(dtsDom);
@@ -154,17 +173,15 @@ function tzs(num: boolean) {
 }
 
 //切换显示等级
-function shownewdt(num:number){
-    dtDataInit(13, token).then(() => {
+function shownewdt(num: number) {
+    dtDataInit(13, token).then((datas) => {
+        VcDataInit(datas);
         obsDt.init();
         vlist.value = [];
         obsDt.dtAdd(dtsDom);
     })
 }
 
-
-//懒加载
-const dtsDom = ref<HTMLElement[]>([]);
 
 
 
