@@ -9,3 +9,13 @@ git push -u origin master
 git push -u origin main
 
 # git push -u dream dev
+
+#git提交记录
+git log
+
+# 切换到指定更改
+git checkout <id>
+
+# 切换为分支最新提交
+git checkout <main/master>
+

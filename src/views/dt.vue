@@ -12,8 +12,11 @@
 
         <!-- 背景图山的头像部分 -->
         <div id="touxian">
-            <text class="texts">不爱吃糖</text>
-            <img :src=touxianSrc></img>
+            <div class="tou">
+                <text class="texts"> {{ userName }} </text>
+                <img :src=touxianSrc></img>
+            </div>
+
         </div>
         <!-- 空白间隔 -->
         <div id="nulls"></div>
@@ -22,9 +25,8 @@
             <!-- 系统选项 -->
             <SystemDt  @shownewdt='shownewdt(13)' @tzs='tzs' @find='dtFind' @config="configs"></SystemDt>
             <div v-show="showLogin">
-                <login ></login>
+                <login @success="logins"></login>
             </div>
-           
 
             <!-- 动态 -->
             <div v-for="a in vlist" :key="a.id" ref="dtsDom">
@@ -60,9 +62,9 @@ import router from '@/router';
 import { config } from 'process';
 import { obsDt } from '@/dtData/observerDt';
 import login from '@/components/login/login.vue';
-
-import {Internet} from '../api/api';
+import { getName, Internet } from '../api/api';
 import { isToken, verifyToken } from '@/api/token';
+
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
 
@@ -70,16 +72,35 @@ let touxianSrc = Internet.url + "/api/userImg?name=yw";
 const vlist = dtData.vlist;
 
 let showLogin = ref(false);
+let isLogin = false;
+
+//用户名
+let userName = ref('正在加载');
 
 showLogin.value = !isToken();
 
-verifyToken().then(data => {    
-    console.log(data);
-    if(!data){
+
+verifyToken().then(data => {
+
+    if (!data) {
         showLogin.value = true;
     }
 })
 
+
+getName().then(data => {
+    if (data.user == "guest") {
+        userName.value = '未登录';
+        return
+    }
+    isLogin = true;
+    userName.value = data.name;
+})
+
+function logins() {
+    //刷新
+    location.reload();
+}
 
 //测试数据
 // vlist.value.push(data1);
@@ -135,11 +156,13 @@ function configs() {
 
 //查询
 function dtFind(text: string) {
+    console.log(text);
+
 
     if (text == '' || text == ' ') {
-        dtDataInit(0, token).then(fn);
+        dtDataInit(0).then(fn);
     } else {
-        dtFindData(text, token).then(fn);
+        dtFindData(text).then(fn);
     }
 
     function fn() {
@@ -151,7 +174,7 @@ function dtFind(text: string) {
 }
 
 //初始化数据,初始化评论列表
-dtDataInit(0, token)
+dtDataInit(0)
     .then(datas => {
         VcDataInit(datas);
         obsDt.dtAdd(dtsDom);
@@ -160,7 +183,7 @@ dtDataInit(0, token)
 
 //切换显示分级
 function tzs(num: boolean) {
-    dtDataInit(num ? 1 : 0, token).then(() => {
+    dtDataInit(num ? 1 : 0).then(() => {
 
         //切换背景图
         bgId = Number(num);
@@ -174,7 +197,7 @@ function tzs(num: boolean) {
 
 //切换显示等级
 function shownewdt(num: number) {
-    dtDataInit(13, token).then((datas) => {
+    dtDataInit(13).then((datas) => {
         VcDataInit(datas);
         obsDt.init();
         vlist.value = [];

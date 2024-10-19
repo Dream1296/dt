@@ -4,6 +4,7 @@ import { settext, splitContent } from "./dtUtils";
 import { VcDataInit } from "./VcData";
 import { ref } from 'vue';
 import type { Ref } from 'vue';
+import { token } from "@/api/token";
 export let dtData: {
     values: A[],
     vlist: Ref<A[]>,
@@ -46,14 +47,11 @@ export let dtData: {
     }
 };
 
-export async function dtFindData(qb: string, token: string) {
-    let data = ((await dtfind(token, qb)) as { code: number, data: A[] }).data;
+export async function dtFindData(qb: string) {
+    let data = ((await dtfind(qb)) as { code: number, data: A[] }).data;
     settext('textArr', 'text', data);
     dtData.set(data);
     VcDataInit(data);
-
-
-
     return data;
 
 }
@@ -63,7 +61,7 @@ export async function dtFindData(qb: string, token: string) {
 
 
 //获取动态主数据
-export async function dtDataInit(loa: string | number, token: string): Promise<A[]> {
+export async function dtDataInit(loa: string | number,): Promise<A[]> {
     let data = (await dtDate( loa, 0) as { code: number, data: A[] }).data;
 
     //处理图片数据

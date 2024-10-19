@@ -47,6 +47,9 @@ import { ref } from 'vue';
 let username = ref('');
 let password = ref('');
 
+	//传递事件
+	const emit = defineEmits(['success']);
+
 function onSubmit(e: any) {
   login(username.value, password.value)
 
@@ -56,6 +59,7 @@ function onSubmit(e: any) {
       }
 
       localStorage.setItem('token', res.token);
+      emit('success');
       showSuccessToast('登录成功');  
       
     })

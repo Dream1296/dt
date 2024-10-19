@@ -101,6 +101,15 @@ export async function delDts(dtId: string){
     return res;
 }
 
+//获取用户名
+export async function getName(){
+    let urls =   Internet.url + '/api/userc';
+    let res = await api<{user:string,name:string }>(urls, 'GET',undefined, tokens);
+    console.log(res);
+    
+    return res;
+}
+
 
 
 export function imgSrc(dtid:number , index:number) {

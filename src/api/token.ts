@@ -4,7 +4,7 @@ export let token = '';
 
 
 export function isToken():boolean{
-    let to = localStorage.getItem('token');
+    let to = localStorage.getItem('token');    
     if(to){
         token = to;
         return true;
