@@ -9,6 +9,7 @@ export interface A {
     name : string,
     text : string,
     textArr : { type : string, text : string }[],
+    keyword:{keyword:string,isAi:0|1 }[],
     touxian : string,
     user : string,
     // video : string[],

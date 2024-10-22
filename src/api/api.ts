@@ -79,6 +79,13 @@ export async function dtfind( qb: string, loa?: string,  isbq?: string) {
     return res;
 }
 
+export async function addDtindex(dtid:number,text:string){
+    const urls = Internet.url + "/api/dtindex";
+    let res = await api(urls,'POST',{id:dtid,dtindex:text},tokens);
+    return res;
+
+}
+
 //单个动态
 export async function getdt( id: string | number):Promise<A> {
 

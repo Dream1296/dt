@@ -1,7 +1,7 @@
 <template>
 
     <div id="top">
-        <button >← 返回</button>
+        <button>← 返回</button>
         <h1>动态详情</h1>
         <button>分享</button>
     </div>
@@ -24,21 +24,28 @@
 
         <!-- 展示图片区 -->
         <div class="imgShow">
-            <div v-for="(a,index) in srcShow" @click="GetImg({dtid:data.id.toString(),index:index})">
-                <Myimage  :src="a"></Myimage>
+            <div v-for="(a, index) in srcShow" @click="GetImg({ dtid: data.id.toString(), index: index })">
+                <Myimage :src="a"></Myimage>
             </div>
 
-            <div class="showVideo" v-for="(a,index) in srcVideoImg" @click="Getvideo({dtid:data.id.toString(),index:index})">
-                <Myimage  :src="a"></Myimage>
+            <div class="showVideo" v-for="(a, index) in srcVideoImg"
+                @click="Getvideo({ dtid: data.id.toString(), index: index })">
+                <Myimage :src="a"></Myimage>
                 <img src="../assets/img/videIon.png">
             </div>
 
 
         </div>
 
-        <div style="height: 100px;">
-
+        <div id="keyword" @click="addKeyworld">
+            <div v-for="a in data.keyword">
+                {{ a.keyword }}
+            </div>
         </div>
+
+        <div style="height: 100px;">
+        </div>
+
         <!-- 全部图片区 -->
         <p @click="isAllsho">全部图片</p>
         <div class="imgAll" v-if="isImgAll" v-show="isShowImg">
@@ -46,18 +53,33 @@
         </div>
 
         <!-- 评论显示 -->
-		<div class="pl">
-			<div class="pls" v-for="pl in data.com">
-				<span>
-					{{ pl.name }}
-				</span>
-				<span>:</span>
-				<span>
-					{{ pl.content }}
-				</span>
-			</div>
-		</div>
+        <div class="pl">
+            <div class="pls" v-for="pl in data.com">
+                <span>
+                    {{ pl.name }}
+                </span>
+                <span>:</span>
+                <span>
+                    {{ pl.content }}
+                </span>
+            </div>
+        </div>
     </div>
+
+    <!-- 圆角弹窗（底部） -->
+    <van-popup v-model:show="showBottom" round position="bottom" :style="{ height: '50%' }">
+        <div class="addW">
+            <h4>添加新的标签，更快速的检索</h4>
+            <van-cell-group inset>
+                <van-field v-model="newKeyWorld" label="新标签" placeholder="请输入标签名" />
+            </van-cell-group>
+            <div class="tijiao" @click="dtindextijiao">
+                <img src="../assets/img/addKeyWorldBu.png">
+            </div>
+        </div>
+
+    </van-popup>
+
 
 
 
@@ -72,7 +94,7 @@
 
 
 <script setup lang="ts">
-import { getdt, getEmoSrc } from '@/api/api';
+import { addDtindex, getdt, getEmoSrc } from '@/api/api';
 import { useRoute } from 'vue-router';
 import Myimage from '../components/image/Myimage.vue';
 import Pbl from '@/components/pbl/Pbl.vue';
@@ -93,16 +115,19 @@ let isShowImg = ref(true);
 
 let data = ref<A>();
 
+let showBottom = ref(false);
+let newKeyWorld = ref('');
+
 getdt(dtid).then(res => {
     data.value = res;
     console.log(res);
     res.textArr = splitContent(res.text);
     imgShow(res);
     // imgAll(res);
-
-
-
 })
+
+
+let arr = ['12', '测试1', '测试2', '测试3', '12', '测试1', '测试2', '测试3', '12', '测试1', '测试2', '测试3'];
 
 function emosrc(name: string) {
     return getEmoSrc(name);
@@ -121,7 +146,7 @@ function imgAll(res: A) {
     isImgAll.value = true;
 }
 
-function imgShow(res:A){
+function imgShow(res: A) {
     let srcs = 'https://frp-fix.top:20047/api/dtimg?dtid=' + res.id + '&index=';
     let videoImgSrc = 'https://frp-fix.top:20047/api/dtvideoImg?dtid=' + res.id + '&index=';
     if (!res.imgShowAll) {
@@ -131,29 +156,44 @@ function imgShow(res:A){
         srcShow.value.push(srcs + i);
     }
 
-    if(!res.videoNum){
+    if (!res.videoNum) {
         res.videoNum = 0;
     }
 
 
-    
 
-    for(let i = 0; i < res.videoNum; i++){
-        
+
+    for (let i = 0; i < res.videoNum; i++) {
+
         srcVideoImg.value.push(videoImgSrc + i);
     }
 
-    
+
 
 
 }
 
-function isAllsho(){
-    if(!isImgAll.value){
+function dtindextijiao() {
+    addDtindex(dtid, newKeyWorld.value)
+        .then((res:any) => {
+            if(res.tf == 1){
+                showBottom.value = false;
+                alert('成功');
+            }
+            
+        })
+}
+
+function isAllsho() {
+    if (!isImgAll.value) {
         imgAll(data.value!);
         return
     }
     isShowImg.value = !isShowImg.value;
+}
+
+function addKeyworld() {
+    showBottom.value = true;
 }
 
 
