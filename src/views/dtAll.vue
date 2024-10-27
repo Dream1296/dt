@@ -1,7 +1,7 @@
 <template>
 
     <div id="top">
-        <button>← 返回</button>
+        <button @click="fh">← 返回</button>
         <h1>动态详情</h1>
         <button>分享</button>
     </div>
@@ -28,7 +28,7 @@
                 <Myimage :src="a"></Myimage>
             </div>
 
-            <div class="showVideo" v-for="(a, index) in srcVideoImg"
+            <div class="showVideo" v-for="(a, index) in srcVideoImg.slice(0,1)"
                 @click="Getvideo({ dtid: data.id.toString(), index: index })">
                 <Myimage :src="a"></Myimage>
                 <img src="../assets/img/videIon.png">
@@ -41,13 +41,28 @@
             </div>
         </div>
 
-        <div style="height: 100px;">
+        <div style="height: 10px;">
         </div>
+        
 
         <!-- 全部图片区 -->
-        <p @click="isAllsho">全部图片</p>
-        <div class="imgAll" v-if="isImgAll" v-show="isShowImg">
-            <Pbl :srcArr="srcAll" :dtid="dtid" @img="test"></Pbl>
+        <!-- <p @click="isAllsho">全部图片</p> -->
+        <div class="imgalllogo">
+            <img v-if="data.imgAllNum"  @click="isAllsho('img')" src="../assets/img/imgall.png">
+            <img v-if="data.videoNum && data.videoNum > 1"  @click="isAllsho('video')" src="../assets/img/videoA.png">
+        </div>
+        <div class="imgAll" v-if="isShowType != ''" v-show="isShowImg">
+            <!-- 图片 -->
+            <div v-if="isShowType == 'img'">
+                <Pbl  :srcArr="srcAll" :dtid="dtid" @img="getImgs"></Pbl>
+            </div>
+
+            <!-- 视频 -->
+            <div v-if="isShowType == 'video'">
+                <Pbl :srcArr="srcAll" :dtid="dtid" @img="getvideos"></Pbl>
+            </div>
+            
+        
         </div>
 
         <!-- 评论显示 -->
@@ -106,15 +121,19 @@ let dtid = Number(route.query.dtid);
 let srcShow = ref<string[]>([]);
 let srcVideoImg = ref<string[]>([]);
 
-let srcAll = ref<number[]>([]);
+let srcAll = ref<string[]>([]);
 
-let isImgAll = ref(false);
+// let isImgAll = ref(false);
+let isShowType = ref<'img' | 'video' | ''>('');
+
 let isShowImg = ref(true);
 
 let data = ref<A>();
 
 let showBottom = ref(false);
 let newKeyWorld = ref('');
+
+
 
 getdt(dtid).then(res => {
     data.value = res;
@@ -124,11 +143,11 @@ getdt(dtid).then(res => {
 
 
 watch(() => route.query, () => {
-    if (route.path != '/dts') {
+    if (route.path != '/dts' || Number(route.query.dtid) == dtid) {
         return
     }
     dtid = Number(route.query.dtid);
-    isImgAll.value = false;
+    isShowType.value = '';
     isShowImg.value = true;
     showBottom.value = false;
     newKeyWorld.value = '';
@@ -142,8 +161,11 @@ watch(() => route.query, () => {
     })
 });
 
-function test(index: string) {
+function getImgs(index: string) {
     GetImg({ dtid: dtid.toString(), index: Number(index) });
+}
+function getvideos(index: string) {
+    Getvideo({ dtid: dtid.toString(), index: Number(index) });
 }
 
 
@@ -156,16 +178,7 @@ function emosrc(name: string) {
 
 let src = '../../public/bgImg/bg0.png';
 
-function imgAll(res: A) {
-    let srcs = 'https://frp-fix.top:20047/api/dtimg?dtid=' + res.id + '&index=';
-    if (!res.imgAllNum) {
-        return
-    }
-    for (let i = 0; i < res.imgAllNum; i++) {
-        srcAll.value.push(i);
-    }
-    isImgAll.value = true;
-}
+
 
 function imgShow(res: A) {
     let srcs = 'https://frp-fix.top:20047/api/dtimg?dtid=' + res.id + '&index=';
@@ -200,21 +213,52 @@ function dtindextijiao() {
             if (res.tf == 1) {
                 showBottom.value = false;
                 alert('成功');
+                data.value?.keyword.push({
+                    keyword:newKeyWorld.value,
+                    isAi:0,
+                })
             }
 
         })
 }
 
-function isAllsho() {
-    if (!isImgAll.value) {
-        imgAll(data.value!);
-        return
+function isAllsho(types:'video' | 'img') {
+    let imgSrc = 'https://frp-fix.top:20047/api/dtimg?dtid=' + dtid + '&index=';
+    let videoSrc = 'https://frp-fix.top:20047/api/dtvideoImg?dtid='+ dtid+'&index=';
+    if(isShowType.value == types){
+        return isShowType.value = '';
     }
-    isShowImg.value = !isShowImg.value;
+    isShowType.value = types;
+    if(types == 'img'){
+        if(!data.value?.imgAllNum){
+            return
+        }
+        for(let i = 0; i < data.value.imgAllNum; i++){
+            srcAll.value.push(imgSrc + i);
+        }
+    }
+    if(types == 'video'){
+        if(!data.value?.videoNum || data.value.videoNum <= 1){
+            return ;
+        }
+        for(let i = 0; i < data.value.videoNum; i++){
+            srcAll.value.push(videoSrc + i);
+        }
+    }
+
+
+
+
+
+    isShowType.value = types;
 }
 
 function addKeyworld() {
     showBottom.value = true;
+}
+
+function fh(){
+    router.back();
 }
 
 

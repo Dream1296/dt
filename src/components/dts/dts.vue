@@ -10,11 +10,12 @@
 		</div>
 		<!-- 正文 -->
 		<div class="text">
-			<template v-for="a in data.textArr">
+			<template v-for="a in data.textArr.slice(0,textLen)">
 				<span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
 				<br v-if="a.type == 'text' && a.text == '\n'">
 				<img v-if="a.type == 'emoji'" :src="emosrc(a.text)" />
 			</template>
+			<span style="color: blueviolet;" v-if=" data.textArr.length > textLen" @click="textLen = 10000">。。。(显示更多)</span>
 		</div>
 
 		<!-- 图片 -->
@@ -28,7 +29,7 @@
 		</div>
 		<!-- 视频 -->
 		<div  class="video" >
-			 <div v-for="(a,index) in data.videoNum" @click="playVideo(index)">
+			 <div v-for="(a,index) in (data.videoNum ? 1 : 0)" @click="playVideo(index)">
 				<img src="../../assets/img/videIon.png">
 				<Myimage :src='videoSrc(index)'></Myimage>
 			 </div>
@@ -84,7 +85,7 @@
 
 		</div>
 
-		<div class="ding">
+		<div class="ding" v-show="data.po != 0">
 			<img src="../../assets/img/ding.png">
 		</div>
 
@@ -102,6 +103,7 @@ import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg } from '@/api
 import { token } from '@/getToken';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
+import { styleText } from 'util';
 
 
 
@@ -116,7 +118,7 @@ setTimeout(()=>{
 })
 
 
-
+let textLen = ref(60);
 
 let vData: {
 	id: number;

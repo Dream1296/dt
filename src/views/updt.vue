@@ -1,5 +1,9 @@
 <template>
     <div id="all" @click="stops">
+        <div id="bj">
+            <img src="../assets/img/updtbgs.png">
+        </div>
+
         <!-- 输入框 -->
         <div id="shuru" contenteditable ref="shuru">
         </div>

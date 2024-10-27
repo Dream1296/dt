@@ -23,17 +23,14 @@ let rgiht = ref<HTMLDivElement>();
 const emit = defineEmits(['img']);
 
 const props = defineProps<{
-    srcArr: number[],
+    srcArr: string[],
     dtid: number,
 }>();
 
-for (let num of props.srcArr) {
-    let srcs = 'https://frp-fix.top:20047/api/dtimg?dtid=' + props.dtid + '&index=';
-    imgSrc.push(srcs + num)
-}
 
 
 onMounted(() => {
+    imgSrc = props.srcArr;
     addVList();
 
 
@@ -62,7 +59,7 @@ function addVList() {
     } else {
         vR.value.push(dom);
     }
-    nextTick(() => setTimeout(addVList,150));
+    nextTick(() => setTimeout(addVList,100));
 }
 
 

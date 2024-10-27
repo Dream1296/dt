@@ -14,10 +14,10 @@
         <div id="touxian">
             <div class="tou">
                 <text class="texts"> {{ userName }} </text>
-                <div id="guajian">
-                    <img src="../assets/img/guajianc.png">
-                </div>
                 <img :src=touxianSrc></img>
+            </div>
+            <div id="guajian">
+                <img src="../assets/img/guajianc.png">
             </div>
 
         </div>
@@ -26,7 +26,7 @@
 
         <div id="" v-if="vlist">
             <!-- 系统选项 -->
-            <SystemDt  @shownewdt='shownewdt(13)' @tzs='tzs' @find='dtFind' @config="configs"></SystemDt>
+            <SystemDt @shownewdt='shownewdt(13)' @tzs='tzs' @find='dtFind' @config="configs"></SystemDt>
             <div v-show="showLogin">
                 <login @success="logins"></login>
             </div>
