@@ -51,6 +51,10 @@
 
 		</div>
 
+		<div class="ding">
+			<img src="../../assets/img/ding.png">
+		</div>
+
 	</div>
 </template>
 

@@ -111,12 +111,15 @@ export async function delDts(dtId: string){
 //获取用户名
 export async function getName(){
     let urls =   Internet.url + '/api/userc';
-    let res = await api<{user:string,name:string }>(urls, 'GET',undefined, tokens);
-    console.log(res);
-    
+    let res = await api<{user:string,name:string }>(urls, 'GET',undefined, tokens);    
     return res;
 }
 
+export async function getlvObj(id:number){
+    let url = 'https://frp-fix.top:20047/api/lviobj?id=' + id;
+    let res = await api<{id:number,dt_id:number,name:string,src:string}>(url,'GET',undefined,undefined);
+    return res;
+}
 
 
 export function imgSrc(dtid:number , index:number) {

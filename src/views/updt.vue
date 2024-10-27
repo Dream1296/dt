@@ -55,13 +55,15 @@
         <div id="configs" v-show="configV" @click.stop="">
             <h3>图片显示数</h3>
             <van-stepper v-model="showImgNum" min="0" max="6" />
-
-            <h3>权限等级{{ loa }}</h3>
+            <h3>权限等级-{{ loa }}</h3>
             <van-radio-group v-model="loa" direction="horizontal">
                 <van-radio name="0">public</van-radio>
                 <van-radio name="1">Protected</van-radio>
                 <van-radio name="13">Private</van-radio>
             </van-radio-group>
+            <h3>内部上传图片</h3>
+            <van-switch v-model="isImgDir" />
+
             <h3>发布参考时间</h3>
             <p @click="showSetDate = true; showPopup = true">
                 {{ dateArr.join('-') }}
@@ -71,7 +73,10 @@
                 {{ timeArr.join(':') }}
             </p>
 
+
+
         </div>
+
 
         <van-popup v-model:show="showSetDate" round position="bottom" :style="{ height: '50%' }" @click.stop="">
             <van-date-picker v-model="dateArr" title="选择日期" v-if="true" @confirm="showSetDate = false" />
@@ -81,6 +86,8 @@
             <van-time-picker v-model="timeArr" title="选择时间" @confirm="showSetTime = false" />
 
         </van-popup>
+
+
 
 
 
@@ -119,6 +126,8 @@ let showEmo = ref(false);
 let loa = ref('0');
 let dateArr = ref<string[]>([]);
 let timeArr = ref<string[]>([]);
+
+let isImgDir = ref(false);
 
 //弹出层日期
 let showSetDate = ref(false);
@@ -196,7 +205,7 @@ async function updts() {
         showImgNum.value = imgArr.length > 6 ? 6 : imgArr.length;
     }
     let time = getDataTime(dateArr.value, timeArr.value);
-    postDt(txt, pro.imgNameArr, showImgNum.value.toString(), time, loa.value, pro.videoNumArr)
+    postDt(txt, pro.imgNameArr, showImgNum.value.toString(), time, loa.value, pro.videoNumArr,isImgDir.value)
         .then((a: any) => {
             if (a.tf == 1) {
                 closeToast(false);
@@ -338,11 +347,11 @@ function getInputText() {
 
     // 去除其他多余的 HTML 标签
     formattedText = formattedText.replace(/<[^>]+>/g, '');
-    
-    console.log(formattedText);
-    
 
-    return formattedText    
+    console.log(formattedText);
+
+
+    return formattedText
 }
 
 
@@ -391,7 +400,7 @@ function getDataTime(dateArr: string[], timeArr: string[]) {
     const day = String(dateArr[2]).padStart(2, '0');
     const hours = String(timeArr[0]).padStart(2, '0');
     const minutes = String(timeArr[1]).padStart(2, '0');
-    
+
     return `${year}-${month}-${day} ${hours}:${minutes}:00`;
 }
 

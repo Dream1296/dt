@@ -14,6 +14,9 @@
         <div id="touxian">
             <div class="tou">
                 <text class="texts"> {{ userName }} </text>
+                <div id="guajian">
+                    <img src="../assets/img/guajianc.png">
+                </div>
                 <img :src=touxianSrc></img>
             </div>
 

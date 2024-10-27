@@ -34,6 +34,14 @@
 			 </div>
 		</div>
 
+		<div class="lvLogos" v-if="data.longVideo">
+
+			<div class="lvLogo" v-for="a in data.longVideo" @click="tzlv(a.id)">
+				{{ a.name }}
+			</div>
+
+		</div>
+
 		<div class="di">
 			<!-- 日期 -->
 			<div class="date" @click="showX">
@@ -76,6 +84,10 @@
 
 		</div>
 
+		<div class="ding">
+			<img src="../../assets/img/ding.png">
+		</div>
+
 	</div>
 </template>
 
@@ -113,7 +125,9 @@ let vData: {
 	plText: string;
 };
 
-
+function tzlv(id:number){
+	router.push({ path: '/Lvi', query: {id:id} });
+}
 
 
 

@@ -7,6 +7,7 @@ import videoPlay from '../views/videoPlay.vue';
 import config from '../views/config.vue';
 import updt from '../views/updt.vue';
 import dtAll from '@/views/dtAll.vue';
+import longVideo from '@/views/longVideo.vue';
 
 
 const routes: Array<RouteRecordRaw> = [
@@ -42,7 +43,11 @@ const routes: Array<RouteRecordRaw> = [
   {
     path:'/dts',
     component:dtAll,
+  },{
+    path:'/Lvi',
+    component:longVideo,
   }
+
 ];
 
 const router = createRouter({

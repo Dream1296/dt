@@ -33,8 +33,6 @@
                 <Myimage :src="a"></Myimage>
                 <img src="../assets/img/videIon.png">
             </div>
-
-
         </div>
 
         <div id="keyword" @click="addKeyworld">
@@ -49,7 +47,7 @@
         <!-- 全部图片区 -->
         <p @click="isAllsho">全部图片</p>
         <div class="imgAll" v-if="isImgAll" v-show="isShowImg">
-            <Pbl :srcArr="srcAll"></Pbl>
+            <Pbl :srcArr="srcAll" :dtid="dtid" @img="test"></Pbl>
         </div>
 
         <!-- 评论显示 -->
@@ -99,7 +97,7 @@ import { useRoute } from 'vue-router';
 import Myimage from '../components/image/Myimage.vue';
 import Pbl from '@/components/pbl/Pbl.vue';
 import type { A } from '@/dtData/dtType';
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import { splitContent } from '@/dtData/dtUtils';
 import router from '@/router';
 
@@ -108,7 +106,7 @@ let dtid = Number(route.query.dtid);
 let srcShow = ref<string[]>([]);
 let srcVideoImg = ref<string[]>([]);
 
-let srcAll = ref<string[]>([]);
+let srcAll = ref<number[]>([]);
 
 let isImgAll = ref(false);
 let isShowImg = ref(true);
@@ -120,11 +118,34 @@ let newKeyWorld = ref('');
 
 getdt(dtid).then(res => {
     data.value = res;
-    console.log(res);
     res.textArr = splitContent(res.text);
     imgShow(res);
-    // imgAll(res);
 })
+
+
+watch(() => route.query, () => {
+    if (route.path != '/dts') {
+        return
+    }
+    dtid = Number(route.query.dtid);
+    isImgAll.value = false;
+    isShowImg.value = true;
+    showBottom.value = false;
+    newKeyWorld.value = '';
+    srcShow.value = [];
+    srcVideoImg.value = [];
+    srcAll.value = [];
+    getdt(dtid).then(res => {
+        data.value = res;
+        res.textArr = splitContent(res.text);
+        imgShow(res);
+    })
+});
+
+function test(index: string) {
+    GetImg({ dtid: dtid.toString(), index: Number(index) });
+}
+
 
 
 let arr = ['12', '测试1', '测试2', '测试3', '12', '测试1', '测试2', '测试3', '12', '测试1', '测试2', '测试3'];
@@ -141,7 +162,7 @@ function imgAll(res: A) {
         return
     }
     for (let i = 0; i < res.imgAllNum; i++) {
-        srcAll.value.push(srcs + i);
+        srcAll.value.push(i);
     }
     isImgAll.value = true;
 }
@@ -175,12 +196,12 @@ function imgShow(res: A) {
 
 function dtindextijiao() {
     addDtindex(dtid, newKeyWorld.value)
-        .then((res:any) => {
-            if(res.tf == 1){
+        .then((res: any) => {
+            if (res.tf == 1) {
                 showBottom.value = false;
                 alert('成功');
             }
-            
+
         })
 }
 
@@ -214,6 +235,10 @@ function Getvideo(ids: {
 }
 
 
+
+defineOptions({
+    name: 'DtAllComponent'  // 为组件设置名称
+});
 
 
 </script>

@@ -104,7 +104,7 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: num
 
 }
 
-export function postDt(text: string, img: string[], imgShowNum: string, date: string, loa: string, video: string[]) {
+export function postDt(text: string, img: string[], imgShowNum: string, date: string, loa: string, video: string[],imgDir:boolean) {
     return new Promise((resolve,rejects)=>{
         fetch(Internet.url + '/api/postdt', {
             method: 'POST',
@@ -118,6 +118,7 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
                 date,
                 loa,
                 video,
+                imgDir:imgDir,
             })
         })
         .then(po => po.json())

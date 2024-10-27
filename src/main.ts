@@ -16,6 +16,8 @@ import { DatePicker } from 'vant';
 import { TimePicker } from 'vant';
 import { Popup } from 'vant';
 import { Stepper } from 'vant';
+import { Switch } from 'vant';
+
 
 // 2. 引入组件样式
 import 'vant/lib/index.css';
@@ -48,10 +50,7 @@ app.use(DatePicker);
 app.use(TimePicker);
 app.use(Popup);
 app.use(Stepper);
-
-
-
-
+app.use(Switch);
 
 
 
@@ -63,11 +62,3 @@ tokenInit();
 
 
 app.mount('#app')
-
-
-
-
-
-
-
-
