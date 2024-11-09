@@ -1,6 +1,6 @@
 import type { A } from '@/dtData/dtType';
 import axioss from 'axios';
-import {token as tokens} from '@/api/token';
+import {token as tokens, tempToken} from '@/api/token';
 
 let axios:any;
 
@@ -16,9 +16,6 @@ if (typeof window === 'undefined') {
     // 浏览器环境
     axios = axioss;
 }
-
-
-
 
 
 let url = "https://frp-fix.top:20047";
@@ -49,6 +46,12 @@ export async function login(user: string, passwd: string) {
 
     let res = await api<{code:number,message:string,token:string}>(urls, 'POST', { username: user, passwd });
     return res;
+}
+
+export async function getTempTokenApi(token:string = tokens){
+    const urls = Internet.url + "/api/getTempToken";
+    let res = await api<{tempToken:string}>(urls,'GET',undefined,token);
+    return res.tempToken;
 }
 
 export async function yz(token:string){
@@ -121,20 +124,36 @@ export async function getlvObj(id:number){
     return res;
 }
 
-
+// 缩略图
 export function imgSrc(dtid:number , index:number) {
+    if(tempToken){
+        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&token=' + tempToken;
+    }
     return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index;
+    
 }
 
+//原图
 export function imgSrcs(dtid:number , index:number) {
+    if(tempToken){
+        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&a=1' + "&token=" + tempToken ;
+    }
     return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&a=1';
 }
 
+//视频
 export function dtVideo(dtid:number, index:number  ) {
+    if(tempToken){
+        return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}&token=${tempToken}`
+    }
     return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}`;
 }
 
+// 视频图片
 export function dtVideoImg(dtid:number,index:number){
+    if(tempToken){
+        return  `${Internet.url}/api/dtvideoImg?dtid=${dtid}&index=${index}&token=${tempToken}` 
+    }
     return  `${Internet.url}/api/dtvideoImg?dtid=${dtid}&index=${index}`;
 }
 

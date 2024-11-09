@@ -10,7 +10,6 @@
 <script setup lang="ts">
 
 import { useRoute } from 'vue-router';
-import { token } from '@/getToken';
 import { dtData } from '@/dtData/getList';
 import { ref } from 'vue';
 import { onMounted } from 'vue';

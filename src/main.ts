@@ -21,7 +21,6 @@ import { Switch } from 'vant';
 
 // 2. 引入组件样式
 import 'vant/lib/index.css';
-import { tokenInit } from './getToken'
 
 
 initCordovaApi()
@@ -31,6 +30,7 @@ const app = createApp(App);
 
 // import { createApp } from 'vue';
 import {  CellGroup } from 'vant';
+import { initToken } from './api/token'
 
 app.use(Form);
 app.use(Field);
@@ -55,10 +55,14 @@ app.use(Switch);
 
 
 
-//初始化token
-tokenInit();
+// token初始化
+initToken().then(()=>{
+    app.mount('#app')
+}
+)
 
 
 
 
-app.mount('#app')
+
+

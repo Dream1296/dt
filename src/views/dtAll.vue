@@ -28,7 +28,7 @@
                 <Myimage :src="a"></Myimage>
             </div>
 
-            <div class="showVideo" v-for="(a, index) in srcVideoImg.slice(0,1)"
+            <div class="showVideo" v-for="(a, index) in srcVideoImg.slice(0, 1)"
                 @click="Getvideo({ dtid: data.id.toString(), index: index })">
                 <Myimage :src="a"></Myimage>
                 <img src="../assets/img/videIon.png">
@@ -43,26 +43,26 @@
 
         <div style="height: 10px;">
         </div>
-        
+
 
         <!-- 全部图片区 -->
         <!-- <p @click="isAllsho">全部图片</p> -->
         <div class="imgalllogo">
-            <img v-if="data.imgAllNum"  @click="isAllsho('img')" src="../assets/img/imgall.png">
-            <img v-if="data.videoNum && data.videoNum > 1"  @click="isAllsho('video')" src="../assets/img/videoA.png">
+            <img v-if="data.imgAllNum" @click="isAllsho('img')" src="../assets/img/imgall.png">
+            <img v-if="data.videoNum && data.videoNum > 1" @click="isAllsho('video')" src="../assets/img/videoA.png">
         </div>
         <div class="imgAll" v-if="isShowType != ''" v-show="isShowImg">
             <!-- 图片 -->
             <div v-if="isShowType == 'img'">
-                <Pbl  :srcArr="srcAll" :dtid="dtid" @img="getImgs"></Pbl>
+                <Pbl :srcArr="srcAll" :dtid="dtid" @img="getImgs"></Pbl>
             </div>
 
             <!-- 视频 -->
             <div v-if="isShowType == 'video'">
                 <Pbl :srcArr="srcAll" :dtid="dtid" @img="getvideos"></Pbl>
             </div>
-            
-        
+
+
         </div>
 
         <!-- 评论显示 -->
@@ -100,14 +100,11 @@
 
 
 
-
-
-
 </template>
 
 
 <script setup lang="ts">
-import { addDtindex, getdt, getEmoSrc } from '@/api/api';
+import { addDtindex, dtVideoImg, getdt, getEmoSrc, imgSrc } from '@/api/api';
 import { useRoute } from 'vue-router';
 import Myimage from '../components/image/Myimage.vue';
 import Pbl from '@/components/pbl/Pbl.vue';
@@ -115,6 +112,7 @@ import type { A } from '@/dtData/dtType';
 import { ref, watch } from 'vue';
 import { splitContent } from '@/dtData/dtUtils';
 import router from '@/router';
+import { tempToken } from '@/api/token';
 
 const route = useRoute();
 let dtid = Number(route.query.dtid);
@@ -169,9 +167,6 @@ function getvideos(index: string) {
 }
 
 
-
-let arr = ['12', '测试1', '测试2', '测试3', '12', '测试1', '测试2', '测试3', '12', '测试1', '测试2', '测试3'];
-
 function emosrc(name: string) {
     return getEmoSrc(name);
 }
@@ -181,13 +176,11 @@ let src = '../../public/bgImg/bg0.png';
 
 
 function imgShow(res: A) {
-    let srcs = 'https://frp-fix.top:20047/api/dtimg?dtid=' + res.id + '&index=';
-    let videoImgSrc = 'https://frp-fix.top:20047/api/dtvideoImg?dtid=' + res.id + '&index=';
     if (!res.imgShowAll) {
         res.imgShowAll = 0;
     }
     for (let i = 0; i < res.imgShowAll; i++) {
-        srcShow.value.push(srcs + i);
+        srcShow.value.push(imgSrc(res.id, i));
     }
 
     if (!res.videoNum) {
@@ -199,13 +192,14 @@ function imgShow(res: A) {
 
     for (let i = 0; i < res.videoNum; i++) {
 
-        srcVideoImg.value.push(videoImgSrc + i);
+        srcVideoImg.value.push(dtVideoImg(res.id, i));
     }
 
 
 
 
 }
+
 
 function dtindextijiao() {
     addDtindex(dtid, newKeyWorld.value)
@@ -214,35 +208,33 @@ function dtindextijiao() {
                 showBottom.value = false;
                 alert('成功');
                 data.value?.keyword.push({
-                    keyword:newKeyWorld.value,
-                    isAi:0,
+                    keyword: newKeyWorld.value,
+                    isAi: 0,
                 })
             }
 
         })
 }
 
-function isAllsho(types:'video' | 'img') {
-    let imgSrc = 'https://frp-fix.top:20047/api/dtimg?dtid=' + dtid + '&index=';
-    let videoSrc = 'https://frp-fix.top:20047/api/dtvideoImg?dtid='+ dtid+'&index=';
-    if(isShowType.value == types){
+function isAllsho(types: 'video' | 'img') {
+    if (isShowType.value == types) {
         return isShowType.value = '';
     }
     isShowType.value = types;
-    if(types == 'img'){
-        if(!data.value?.imgAllNum){
+    if (types == 'img') {
+        if (!data.value?.imgAllNum) {
             return
         }
-        for(let i = 0; i < data.value.imgAllNum; i++){
-            srcAll.value.push(imgSrc + i);
+        for (let i = 0; i < data.value.imgAllNum; i++) {
+            srcAll.value.push(imgSrc(dtid, i));
         }
     }
-    if(types == 'video'){
-        if(!data.value?.videoNum || data.value.videoNum <= 1){
-            return ;
+    if (types == 'video') {
+        if (!data.value?.videoNum || data.value.videoNum <= 1) {
+            return;
         }
-        for(let i = 0; i < data.value.videoNum; i++){
-            srcAll.value.push(videoSrc + i);
+        for (let i = 0; i < data.value.videoNum; i++) {
+            srcAll.value.push(dtVideoImg(dtid, i));
         }
     }
 
@@ -257,7 +249,7 @@ function addKeyworld() {
     showBottom.value = true;
 }
 
-function fh(){
+function fh() {
     router.back();
 }
 

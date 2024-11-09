@@ -57,7 +57,6 @@ import { nextTick, onMounted, ref, type Ref } from 'vue';
 import topDh from '../components/topDh/topDh.vue';
 import SystemDt from '../components/SystemDt/SystemDt.vue';
 import dts from '@/components/dts/dts.vue';
-import { token } from '@/getToken';
 import { data1 } from '../testData';
 import { showTop } from '@/util/dt/dtTopShow';
 import { upvideo } from '@/util/dt/dtUtil';
@@ -66,7 +65,7 @@ import { config } from 'process';
 import { obsDt } from '@/dtData/observerDt';
 import login from '@/components/login/login.vue';
 import { getName, Internet } from '../api/api';
-import { isToken, verifyToken } from '@/api/token';
+import { getTempToken, isToken, verifyToken } from '@/api/token';
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
@@ -96,8 +95,10 @@ getName().then(data => {
         userName.value = '未登录';
         return
     }
+    getTempToken();
     isLogin = true;
     userName.value = data.name;
+
 })
 
 function logins() {

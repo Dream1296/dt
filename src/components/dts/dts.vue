@@ -100,7 +100,6 @@ import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
 import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg } from '@/api/api';
-import { token } from '@/getToken';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';

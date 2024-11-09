@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import { getdt } from '@/api/api';
 import { useRoute } from 'vue-router';
-import { token } from '@/getToken';
 import { dtData } from '@/dtData/getList';
 import imgsf from '@/components/imgsf/imgsf.vue';
 
