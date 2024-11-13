@@ -1,6 +1,6 @@
 import type { A } from '@/dtData/dtType';
 import axioss from 'axios';
-import {token as tokens, tempToken} from '@/api/token';
+import {token as tokens} from '@/api/token';
 
 let axios:any;
 
@@ -29,6 +29,13 @@ export let Internet = {
 
 //主简单请求发送函数
 export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?: any, token?: string): Promise<T> {
+    if(token == 'unknown'){
+        await tokens.tokenPro;
+    }
+    if(token != undefined && tokens.istoken == 'false'){
+        console.log('跳转到登录');
+        
+    }
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const response = await axios({
@@ -48,14 +55,15 @@ export async function login(user: string, passwd: string) {
     return res;
 }
 
-export async function getTempTokenApi(token:string = tokens){
+export async function getTempTokenApi(token:string = tokens.token){
     const urls = Internet.url + "/api/getTempToken";
     let res = await api<{tempToken:string}>(urls,'GET',undefined,token);
     return res.tempToken;
 }
 
-export async function yz(token:string){
-    let userId = await api<string>( Internet.url + '/api/userClass','GET',undefined,token);
+export async function yz(token:string){    
+    const urls = Internet.url + '/api/userClass';
+    let userId = await api<string>( urls,'GET',undefined,token);
     return userId; 
 }
 
@@ -70,7 +78,7 @@ export async function dtDate( loa: string | number, aes: number) {
     }
 
     const urls = Internet.url + "/api/getDtList?loa=" + loa + "&aes=" + aes;
-    let res = await api(urls, 'GET', undefined, tokens);
+    let res = await api(urls, 'GET', undefined, tokens.token);
     return res;
 }
 
@@ -78,13 +86,13 @@ export async function dtDate( loa: string | number, aes: number) {
 //qb=标签  isqb=预留，是否开启标签对比
 export async function dtfind( qb: string, loa?: string,  isbq?: string) {
     const urls = Internet.url + "/api/dtfind?bq=" + qb;
-    let res = await api(urls, 'GET', undefined, tokens);
+    let res = await api(urls, 'GET', undefined, tokens.token);
     return res;
 }
 
 export async function addDtindex(dtid:number,text:string){
     const urls = Internet.url + "/api/dtindex";
-    let res = await api(urls,'POST',{id:dtid,dtindex:text},tokens);
+    let res = await api(urls,'POST',{id:dtid,dtindex:text},tokens.token);
     return res;
 
 }
@@ -93,28 +101,28 @@ export async function addDtindex(dtid:number,text:string){
 export async function getdt( id: string | number):Promise<A> {
 
     let urls = Internet.url + "/api/getdt?id=" + String(id);
-    let res = ( await api(urls, 'GET', undefined, tokens)) as {data:A};
+    let res = ( await api(urls, 'GET', undefined, tokens.token)) as {data:A};
     return res.data;
 }
 
 //提交动态评论内容
 export async function postCom(content: string, dtId: string ) {
     let urls = Internet.url + '/api/postCom';
-    let res = await api(urls, 'POST', { content, dtId }, tokens);
+    let res = await api(urls, 'POST', { content, dtId }, tokens.token);
     return res;
 }
 
 //删除动态
 export async function delDts(dtId: string){
     let urls = Internet.url + '/api/delDt';
-    let res = await api(urls, 'POST',{id:dtId}, tokens);
+    let res = await api(urls, 'POST',{id:dtId}, tokens.token);
     return res;
 }
 
 //获取用户名
 export async function getName(){
     let urls =   Internet.url + '/api/userc';
-    let res = await api<{user:string,name:string }>(urls, 'GET',undefined, tokens);    
+    let res = await api<{user:string,name:string }>(urls, 'GET',undefined, tokens.token);    
     return res;
 }
 
@@ -126,8 +134,8 @@ export async function getlvObj(id:number){
 
 // 缩略图
 export function imgSrc(dtid:number , index:number) {
-    if(tempToken){
-        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&token=' + tempToken;
+    if(tokens.tempToken){
+        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&token=' + tokens.tempToken;
     }
     return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index;
     
@@ -135,24 +143,24 @@ export function imgSrc(dtid:number , index:number) {
 
 //原图
 export function imgSrcs(dtid:number , index:number) {
-    if(tempToken){
-        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&a=1' + "&token=" + tempToken ;
+    if(tokens.tempToken){
+        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&a=1' + "&token=" + tokens.tempToken ;
     }
     return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&a=1';
 }
 
 //视频
 export function dtVideo(dtid:number, index:number  ) {
-    if(tempToken){
-        return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}&token=${tempToken}`
+    if(tokens.tempToken){
+        return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}&token=${tokens.tempToken}`
     }
     return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}`;
 }
 
 // 视频图片
 export function dtVideoImg(dtid:number,index:number){
-    if(tempToken){
-        return  `${Internet.url}/api/dtvideoImg?dtid=${dtid}&index=${index}&token=${tempToken}` 
+    if(tokens.tempToken){
+        return  `${Internet.url}/api/dtvideoImg?dtid=${dtid}&index=${index}&token=${tokens.tempToken}` 
     }
     return  `${Internet.url}/api/dtvideoImg?dtid=${dtid}&index=${index}`;
 }

@@ -15,7 +15,7 @@
 
 		<text class="kzText" v-show="showBg" >动态</text>
 
-		<div class="dtUpntb" @click="updts" @longpress="changang">
+		<div class="dtUpntb" @click="updts" @longpress="changang" v-if="showUpDt">
 			<img src=" ../../assets/img/dtadd.png"></img>
 		</div>
 
@@ -23,10 +23,16 @@
 </template>
 
 <script setup lang="ts">
-	import {  ref } from 'vue';
+	import { addToken } from '@/api/apiIng';
+import {  ref } from 'vue';
 
 	let ydsLeft = ref(0);
 	let shows1 = ref(false);
+
+	let showUpDt = ref(false);
+
+	addToken(showUpDt,true);
+
 
     //接受父组件传类的参数
     const props = defineProps({

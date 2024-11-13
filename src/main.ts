@@ -19,18 +19,18 @@ import { Stepper } from 'vant';
 import { Switch } from 'vant';
 
 
+
+
 // 2. 引入组件样式
 import 'vant/lib/index.css';
 
-
-initCordovaApi()
+initCordovaApi();
 
 const app = createApp(App);
 
 
-// import { createApp } from 'vue';
 import {  CellGroup } from 'vant';
-import { initToken } from './api/token'
+import { apiInit } from './api/apiIng'
 
 app.use(Form);
 app.use(Field);
@@ -52,17 +52,18 @@ app.use(Popup);
 app.use(Stepper);
 app.use(Switch);
 
+import { PasswordInput, NumberKeyboard } from 'vant';
+
+app.use(PasswordInput);
+app.use(NumberKeyboard);
 
 
 
-// token初始化
-initToken().then(()=>{
-    app.mount('#app')
-}
-)
+apiInit();
 
 
 
 
+app.mount('#app')
 
 

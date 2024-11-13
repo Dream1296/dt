@@ -112,7 +112,6 @@ import type { A } from '@/dtData/dtType';
 import { ref, watch } from 'vue';
 import { splitContent } from '@/dtData/dtUtils';
 import router from '@/router';
-import { tempToken } from '@/api/token';
 
 const route = useRoute();
 let dtid = Number(route.query.dtid);

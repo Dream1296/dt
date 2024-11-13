@@ -1,6 +1,9 @@
 import type { A } from '@/dtData/dtType';
 import axioss from 'axios';
 import { Internet } from './api';
+import { token } from './token';
+
+
 
 let axios: any;
 // 创建新的 axios 实例，忽略ssl证书错误
@@ -110,6 +113,7 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // 请求头  
+                'Authorization': 'B ' + token, 
             },
             body: JSON.stringify({
                 text,

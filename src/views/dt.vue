@@ -44,6 +44,27 @@
         </div>
     </div>
 
+    <!-- 底部弹出 -->
+    <van-popup v-model:show="showBottom" round position="bottom" :style="{ height: '80%' }">
+        <h3 id="passwd13H3">
+            请输入密码
+        </h3>
+        <div id="passwd13">
+            <van-password-input :value="passwd13" :focused="showKeyboard" @focus="showKeyboard = true" />
+        </div>
+
+        <div id="passwd13Inp">
+            <!-- 数字键盘 -->
+            <van-number-keyboard v-model="passwd13" :show="showKeyboard" @blur="showKeyboard = true" />
+        </div>
+
+
+
+
+
+
+    </van-popup>
+
 
 
 
@@ -53,7 +74,7 @@
 import { dtDataInit, dtData, dtFindData } from '../dtData/getList';
 import { VcDataInit, vData } from '../dtData/VcData';
 import type { A } from '../dtData/dtType';
-import { nextTick, onMounted, ref, type Ref } from 'vue';
+import { nextTick, onMounted, ref, watch, type Ref } from 'vue';
 import topDh from '../components/topDh/topDh.vue';
 import SystemDt from '../components/SystemDt/SystemDt.vue';
 import dts from '@/components/dts/dts.vue';
@@ -65,10 +86,13 @@ import { config } from 'process';
 import { obsDt } from '@/dtData/observerDt';
 import login from '@/components/login/login.vue';
 import { getName, Internet } from '../api/api';
-import { getTempToken, isToken, verifyToken } from '@/api/token';
+import { token } from '@/api/token';
+import { addToken } from '@/api/apiIng';
+import { showFailToast, showSuccessToast } from 'vant';
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
+const passwd13Text = '143323';
 
 //视图数据
 const vlist = dtData.vlist;
@@ -79,27 +103,51 @@ let isLogin = false;
 //用户名
 let userName = ref('正在加载');
 
-showLogin.value = !isToken();
+
+let showBottom = ref(false)
+
+let passwd13 = ref('');
+let showKeyboard = ref(true);
+
+watch(passwd13, (newVal) => {
+        if(newVal == passwd13Text){
+            get13();
+            showSuccessToast('密码正确');
+            showBottom.value = false;
+            return 
+        }
+        if(newVal.length == 6){
+            showFailToast('密码错误');
+            passwd13.value = '';
+        }
+
+});
 
 
-verifyToken().then(data => {
-
-    if (!data) {
-        showLogin.value = true;
-    }
-})
+// 根据token状态来显示登录页面
+addToken(showLogin, false);
 
 
-getName().then(data => {
-    if (data.user == "guest") {
-        userName.value = '未登录';
-        return
-    }
-    getTempToken();
-    isLogin = true;
-    userName.value = data.name;
 
-})
+
+
+
+
+
+
+
+
+//获取用户名
+getName()
+    .then(data => {
+        if (data.user == "guest") {
+            userName.value = '未登录';
+            return
+        }
+        isLogin = true;
+        userName.value = data.name;
+    })
+
 
 function logins() {
     //刷新
@@ -201,6 +249,10 @@ function tzs(num: boolean) {
 
 //切换显示等级
 function shownewdt(num: number) {
+    showBottom.value = true;
+}
+
+function get13(){
     dtDataInit(13).then((datas) => {
         VcDataInit(datas);
         obsDt.init();
