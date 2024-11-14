@@ -35,3 +35,12 @@ export interface Com {
     diId : number,
     name : string,
 }
+
+export interface dataImg {
+    date : string,
+    id : number,
+    name : string,
+    touxian : string,
+    user : string,
+
+}

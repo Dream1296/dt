@@ -17,7 +17,11 @@ export function apiInit() {
         .catch(() => token.istoken = 'false');
 
     //获取tokenTemp
-    if (!token.isTempToken && token.istoken != 'false') {
+
+
+
+
+    if (token.isTempToken != 'true'  && token.istoken != 'false') {
         token.TempTokenPro = getTempTokenApi()
             .then((data) => {
                 token.tempToken = data;
@@ -28,7 +32,7 @@ export function apiInit() {
 
 }
 
-
+// 对Ref变量与token状态绑定
 export function addToken(key: Ref, isTrue: boolean) {
 
     let ketTemp: boolean = true;
