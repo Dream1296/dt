@@ -1,5 +1,21 @@
 <template>
 	<div class="zhu" v-if="data" >
+		<div id="bg" v-if="data.bgStyle == 1">
+			<img class="bgDi" src="../../assets/img/dtbg.png">
+			<img  class="bgIco1" src="../../assets/img/Catico.png">
+		</div>
+		<div id="bg" v-if="data.bgStyle == 2">
+			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
+			<img  class="bgIco2" src="../../assets/img/sl.png">
+		</div>
+		<div id="bg" v-if="data.bgStyle == 3">
+			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
+			<img  class="bgIco3" src="../../assets/img/lanjin.png">
+		</div>
+		<div id="bg" v-if="data.bgStyle == 4">
+			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
+			<img  class="bgIco3" src="../../assets/img/pigYellow.png">
+		</div>
 		<!-- 头像 -->
 		<div class="touxian">
 			<img :src="getTouxian('yw')"></img>
@@ -80,10 +96,9 @@
 
 		</div>
 
-		<hr>
-		<div style="height: 20px;">
-
-		</div>
+		<!-- <hr> -->
+		 <div id="line"></div>
+		<!-- <div style="height: 20px;"></div> -->
 
 		<div class="ding" v-show="data.po != 0">
 			<img src="../../assets/img/ding.png">
@@ -95,7 +110,7 @@
 <script setup lang="ts">
 
 import { onMounted, ref, watch } from 'vue';
-import { type A } from '../../dtData/dtType';
+import { type A } from '../../type/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
@@ -112,9 +127,9 @@ const props = defineProps<{ datas: A | undefined }>();
 
 let data = ref<A>();
 
-setTimeout(()=>{
-	// console.log(data);
-})
+
+
+
 
 
 let textLen = ref(60);

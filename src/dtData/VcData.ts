@@ -1,16 +1,22 @@
 import { ref } from "vue";
-import type { A, As } from "./dtType";
+import type { A, As, dataImg } from "../type/dtType";
 
+// 处理和存储类别中的选项数据
 
 export let vData = ref<As[]>([]);
 
-export function VcDataInit(dtData:A[]) {
-    let newData:As[] = [];
-    // if(!vData.value && localStorage.getItem('VPLData')){
-    //     vData.value = JSON.parse(localStorage.getItem('VPLData')!);
-    // }
-    //新的数组
+export function VcDataInit(dtData:(A | dataImg)[]) {
+    let data:A[] = [];
     for(let a of dtData){
+        if(a.type == 'A'){
+            data.push(a);
+        }
+    }
+    
+
+    let newData:As[] = [];
+    //新的数组
+    for(let a of data){
         newData.push({
             id: a.id,
             isPlss: false,

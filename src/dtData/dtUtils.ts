@@ -1,5 +1,5 @@
 // import { dtVideo, dtVideoImg, imgSrc } from "../api/api";
-import type { A } from "./dtType";
+import type { A } from "../type/dtType";
 
 export function splitContent(content: string) {
     // 确保 content 是字符串

@@ -1,21 +1,23 @@
 import { dtDate, dtfind } from "../api/api";
-import type { A } from "./dtType";
+import type { A, dataImg } from "../type/dtType";
 import { settext, splitContent } from "./dtUtils";
 import { VcDataInit } from "./VcData";
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { token } from "@/api/token";
 export let dtData: {
-    values: A[],
-    vlist: Ref<A[]>,
-    set: (newData: A[]) => void,
+    values: (A | dataImg)[],
+    vlist: Ref<(A | dataImg)[]>,
+    set: (newData: (A | dataImg)[]) => void,
     addVlist: (i: number) => void
     find: (id: number) => A | undefined,
     del: (id: number) => boolean,
 } = {
+    //总数据
     values: [],
-    vlist: ref(<A[]>[]),
-    set: (newData: A[]) => {
+    //渲染视图数据
+    vlist: ref(<(A | dataImg)[]>[]),
+    set: (newData: (A | dataImg)[]) => {
         dtData.values = newData;
     },
     addVlist: (i: number) => {
@@ -23,11 +25,11 @@ export let dtData: {
     },
     find: (id: number) => {
         let obj = dtData.values.find(obj => obj.id == id);
-        if (obj) {
+        if (obj && obj.type == 'A') {
             return obj;
         } else {
             //后续可以添加单动态查询
-            return obj;
+            return undefined;
         }
     },
     del: (id: number) => {
@@ -61,22 +63,27 @@ export async function dtFindData(qb: string) {
 
 
 //获取动态主数据
-export async function dtDataInit(loa: string | number,): Promise<A[]> {
-    let data = (await dtDate( loa, 0) as { code: number, data: A[] }).data;
+export async function dtDataInit(loa: string | number,): Promise<(A | dataImg)[]> {
+    let data = (await dtDate(loa, 0)).data;
+    let dataA: A[] = [];
+    for (let a of data) {
+        if (a.type == 'A') {
+            dataA.push(a);
+        }
+    }
+    Asetcl(dataA);
 
-    //处理图片数据
-    // imgs(data);
-
-    //处理视频数据
-    // setvideo(data);
-
-    //处理正文字符串
-    settext('textArr', 'text', data);
     dtData.set(data);
+
     VcDataInit(data);
 
-
     return data;
+}
+
+function Asetcl(data: A[]) {
+    //处理正文字符串
+    settext('textArr', 'text', data);
+
 }
 
 

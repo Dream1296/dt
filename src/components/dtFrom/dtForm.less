@@ -1,0 +1,259 @@
+.zhu {
+    width: 100vw;
+    position: relative;
+    // background-image: url("../../assets/img/dtbg.png");
+    /* background-color: bisque; */
+    // background-color: bisque;
+  }
+  
+  @leftTap: 35px;
+  
+  .touxian {
+    width: 200px;
+    position: relative;
+    left: @leftTap;
+    top: 10px;
+    img {
+      width: 40px;
+      height: 40px;
+      border-radius: 8px;
+    }
+  }
+  
+  .name {
+    color: rgb(87, 107, 149);
+    font-size: 16px;
+    position: absolute;
+    left: @leftTap + 50;
+    top: 12px;
+  }
+  
+  .text {
+    font-size: 15px;
+    width: 70%;
+    position: relative;
+    font-family: 'nlt', sans-serif; 
+    left: @leftTap + 50;
+    top: -20px;
+    // display: flex;
+    // flex-wrap: wrap;
+    img {
+      width: 26px;
+      height: 26px;
+      display: inline-block;
+      transform: translateY(20%);
+    }
+  }
+  
+  .imgs {
+    width: 70vw;
+    position: relative;
+    top: 10px;
+    left: @leftTap + 0;
+    display: flex;
+    flex-wrap: wrap;
+    .image {
+      img{
+        width: 86vw;
+      }
+    }
+    .imgsAdd {
+      width: 100px;
+      height: 100px;
+      position: absolute;
+      top: 220px;
+      left: 110px;
+      background-color: rgba(0, 0, 0, 0.2);
+      display: flex;
+      justify-content: center;
+      align-content: center;
+      flex-wrap: wrap;
+    }
+    span {
+      font-size: 24px;
+      color: white;
+      font-weight: 700;
+    }
+  }
+  @videoW:160px;
+  @videoH:130px;
+  .video {
+    width: 60vw;
+    position: relative;
+    top: -10px;
+    left: @leftTap + 50;
+    div{
+      width: @videoW;
+      height: @videoH;
+      img{
+        position: absolute;
+        left: (@videoW / 2 - 25);
+        top: (@videoH / 2 - 25);
+        
+        z-index: 100;
+        width: 50px;
+        height: 50px;
+      }
+    }
+  
+  }
+  
+  .videos1 {
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 40%;
+    top: 0;
+  }
+  
+  .videos2 {
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 105%;
+    top: 30px;
+  }
+  
+  .videosc {
+    height: 50px;
+  }
+  
+  .video {
+    image {
+      width: 100%;
+      height: 100%;
+    }
+    video {
+      width: 100%;
+    }
+  }
+  
+  .di {
+    width: 100vw;
+    height: 50px;
+    /* background-color: blue; */
+    position: relative;
+    .date {
+      width: 70px;
+      font-size: 10px;
+      height: 25px;
+      position: absolute;
+      left: calc(100vw - 80px);
+      top: 18px;
+    }
+    .xuan {
+      width: 130px;
+      position: absolute;
+      left: 38%;
+      top: -5px;
+      border-radius: 10px;
+      background-color: rgb(247, 247, 247);
+    }
+  }
+  
+  .shhuru {
+    top: -15px;
+    left: 26%;
+    position: relative;
+    width: 65vw;
+    height: 80px;
+    /* background-color: aqua; */
+    border: 1px solid blue;
+    border-radius: 10px;
+    textarea {
+      /* background-color: black; */
+      width: 95%;
+      height: 80%;
+      margin: 5px;
+    }
+    button {
+      position: relative;
+      left: 72%;
+      top: -45px;
+      width: 60px;
+      height: 26px;
+    }
+  }
+  
+  .pl {
+    width: 66vw;
+    position: relative;
+    left: 85px;
+    top: -15px;
+    background-color: rgb(247, 247, 247);
+  
+    .pls {
+      margin-top: 10px;
+      margin-left: 10px;
+    }
+  
+    .pls > :first-child {
+      color: rgb(87, 107, 147);
+    }
+  
+    .pls > :nth-child(3) {
+      color: black;
+    }
+  
+    .plss {
+      width: 80px;
+      height: 30px;
+      background-color: aqua;
+      border-radius: 8px;
+      top: -39px;
+      left: 60%;
+      position: relative;
+    }
+  }
+  
+  .ding{
+    width: 60px;
+    // height: 100px;
+    position: absolute;
+    left: 266px;
+    top: 0px;
+    img{
+      width: 100%;
+      height: 100%;
+      opacity:0.5;
+    }
+  }
+  
+  .lvLogos{
+    width: 200px;
+    // height: 50px;
+    border-radius: 10px;
+    position: relative;
+    left: 85px;
+    top: -15px;
+    // background-color: antiquewhite;
+    .lvLogo{
+      width: 200px;
+      height: 50px;
+      border-radius: 10px;
+      background-color: antiquewhite;
+      margin-bottom: 10px;
+      display: flex;
+      flex-wrap: wrap;
+      align-content: center;
+      justify-content: center;
+      font-size: 15px;
+  
+    }
+  }
+  
+  #line{
+    width: 100vw;
+    height: 8px;
+    margin: 0 auto;
+    // height: 1px;
+    background-color: rgb(244, 244, 244);
+    // border: 2px solid rgb(244, 244, 244);
+  }
+  
+  @font-face {  
+    font-family: 'nlt'; /* 你给字体起的名字，可以随意 */  
+    src: url('../../assets/nlt.ttf') format('truetype'); /* 字体文件的路径和格式 */  
+    font-weight: normal; /* 字体权重，可以是normal或指定的数字，如400 */  
+    font-style: normal; /* 字体样式，可以是normal（正常）、italic（斜体）等 */  
+  }

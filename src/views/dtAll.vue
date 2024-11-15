@@ -2,7 +2,7 @@
 
     <div id="top">
         <button @click="fh">← 返回</button>
-        <h1>动态详情</h1>
+        <h1 @click="showBottom2 = true">动态详情</h1>
         <button>分享</button>
     </div>
 
@@ -94,6 +94,28 @@
     </van-popup>
 
 
+    <!-- 圆角弹窗（底部） -->
+    <van-popup v-model:show="showBottom2" round position="bottom" :style="{ height: '60%' }">
+        <h1>样式{{ groupChecked }}</h1>
+        <van-radio-group v-model="groupChecked" direction="horizontal">
+            <van-radio name="0">null</van-radio>
+            <van-radio name="1">蓝色渐变-猫羽雫</van-radio>
+            <van-radio name="2">月色森林</van-radio>
+            <van-radio name="3">蓝鲸</van-radio>
+            <van-radio name="4">大黄</van-radio>
+        </van-radio-group>
+
+        <div style="height: 50px;"></div>
+        <div style="margin: 16px;" @click="setBg">
+            <van-button round block type="primary" native-type="submit">
+                提交
+            </van-button>
+        </div>
+
+
+    </van-popup>
+
+
 
 
 
@@ -104,14 +126,16 @@
 
 
 <script setup lang="ts">
-import { addDtindex, dtVideoImg, getdt, getEmoSrc, imgSrc } from '@/api/api';
+import { addDtindex, dtVideoImg, getdt, getEmoSrc, imgSrc, setDtBgStyle } from '@/api/api';
 import { useRoute } from 'vue-router';
 import Myimage from '../components/image/Myimage.vue';
 import Pbl from '@/components/pbl/Pbl.vue';
-import type { A } from '@/dtData/dtType';
+import type { A } from '@/type/dtType';
 import { ref, watch } from 'vue';
 import { splitContent } from '@/dtData/dtUtils';
 import router from '@/router';
+import { showFailToast, showSuccessToast } from 'vant';
+import { dtData } from '@/dtData/getList';
 
 const route = useRoute();
 let dtid = Number(route.query.dtid);
@@ -128,6 +152,8 @@ let isShowImg = ref(true);
 let data = ref<A>();
 
 let showBottom = ref(false);
+let showBottom2 = ref(false);
+let groupChecked = ref('0');
 let newKeyWorld = ref('');
 
 
@@ -169,6 +195,34 @@ function getvideos(index: string) {
 function emosrc(name: string) {
     return getEmoSrc(name);
 }
+
+function setBg() {
+    let dtid = data.value?.id
+    let bgN = groupChecked.value;
+    if (dtid && bgN) {
+        setDtBgStyle(dtid, Number(bgN))
+            .then((datas) => {
+                if (datas.tf == 1) {
+
+                    let c = dtData.find(dtid);
+                    if (c && c.bgStyle) {
+                        c.bgStyle = Number(bgN);
+                        showSuccessToast('修改成功');
+                        console.log(dtData.vlist);
+
+                    }
+                    showBottom2.value = false;
+                } else {
+                    showFailToast('错误');
+                }
+
+            })
+    }
+
+
+
+}
+
 
 let src = '../../public/bgImg/bg0.png';
 

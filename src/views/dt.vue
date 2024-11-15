@@ -7,7 +7,7 @@
         </div>
 
         <!-- 背景图 -->
-        <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
+        <div  id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
         </div>
 
         <!-- 背景图山的头像部分 -->
@@ -33,7 +33,11 @@
 
             <!-- 动态 -->
             <div v-for="a in vlist" :key="a.id" ref="dtsDom">
-                <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
+                <dtForm  :datas="a" v-if="a.type == 'dataImg'"></dtForm>
+                <dts @showImg="dtsClicks" @showVideo='playVideo' v-if="a.type == 'A'"   :datas="a"></dts>
+            </div>
+            <div style="height: 100px;">
+
             </div>
 
         </div>
@@ -73,7 +77,7 @@
 <script setup lang="ts">
 import { dtDataInit, dtData, dtFindData } from '../dtData/getList';
 import { VcDataInit, vData } from '../dtData/VcData';
-import type { A } from '../dtData/dtType';
+import type { A } from '../type/dtType';
 import { nextTick, onMounted, ref, watch, type Ref } from 'vue';
 import topDh from '../components/topDh/topDh.vue';
 import SystemDt from '../components/SystemDt/SystemDt.vue';
@@ -85,10 +89,11 @@ import router from '@/router';
 import { config } from 'process';
 import { obsDt } from '@/dtData/observerDt';
 import login from '@/components/login/login.vue';
-import { getName, Internet } from '../api/api';
+import { dtDate, getName, Internet } from '../api/api';
 import { token } from '@/api/token';
 import { addToken } from '@/api/apiIng';
 import { showFailToast, showSuccessToast } from 'vant';
+import dtForm from '@/components/dtFrom/dtForm.vue';
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
@@ -126,6 +131,7 @@ watch(passwd13, (newVal) => {
 
 // 根据token状态来显示登录页面
 addToken(showLogin, false);
+
 
 
 
@@ -228,6 +234,7 @@ function dtFind(text: string) {
 //初始化数据,初始化评论列表
 dtDataInit(0)
     .then(datas => {
+        
         VcDataInit(datas);
         obsDt.dtAdd(dtsDom);
 

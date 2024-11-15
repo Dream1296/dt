@@ -46,16 +46,15 @@
 				<text>2024-09-03</text>
 			</div>
 		</div>
-		<hr>
-		<div style="height: 10px;">
-
-		</div>
+		<!-- <hr> -->
+		<!-- <div style="height: 10px;"></div> -->
 
 		<div class="ding">
 			<img src="../../assets/img/ding.png">
 		</div>
 
 	</div>
+	<div id="line"></div>
 </template>
 
 <script setup lang="ts">

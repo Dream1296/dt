@@ -1,4 +1,4 @@
-import type { A } from '@/dtData/dtType';
+import type { A } from '@/type/dtType';
 import axioss from 'axios';
 import { Internet } from './api';
 import { token } from './token';
