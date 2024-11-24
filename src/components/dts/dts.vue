@@ -1,20 +1,20 @@
 <template>
-	<div class="zhu" v-if="data" >
+	<div class="zhu" v-if="data">
 		<div id="bg" v-if="data.bgStyle == 1">
 			<img class="bgDi" src="../../assets/img/dtbg.png">
-			<img  class="bgIco1" src="../../assets/img/Catico.png">
+			<img class="bgIco1" src="../../assets/img/Catico.png">
 		</div>
 		<div id="bg" v-if="data.bgStyle == 2">
 			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
-			<img  class="bgIco2" src="../../assets/img/sl.png">
+			<img class="bgIco2" src="../../assets/img/sl.png">
 		</div>
 		<div id="bg" v-if="data.bgStyle == 3">
 			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
-			<img  class="bgIco3" src="../../assets/img/lanjin.png">
+			<img class="bgIco3" src="../../assets/img/lanjin.png">
 		</div>
 		<div id="bg" v-if="data.bgStyle == 4">
 			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
-			<img  class="bgIco3" src="../../assets/img/pigYellow.png">
+			<img class="bgIco3" src="../../assets/img/pigYellow.png">
 		</div>
 		<!-- 头像 -->
 		<div class="touxian">
@@ -26,12 +26,13 @@
 		</div>
 		<!-- 正文 -->
 		<div class="text">
-			<template v-for="a in data.textArr.slice(0,textLen)">
+			<template v-for="a in data.textArr.slice(0, textLen)">
 				<span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
 				<br v-if="a.type == 'text' && a.text == '\n'">
 				<img v-if="a.type == 'emoji'" :src="emosrc(a.text)" />
 			</template>
-			<span style="color: blueviolet;" v-if=" data.textArr.length > textLen" @click="textLen = 10000">。。。(显示更多)</span>
+			<span style="color: blueviolet;" v-if="data.textArr.length > textLen"
+				@click="textLen = 10000">。。。(显示更多)</span>
 		</div>
 
 		<!-- 图片 -->
@@ -44,11 +45,11 @@
 			</div>
 		</div>
 		<!-- 视频 -->
-		<div  class="video" >
-			 <div v-for="(a,index) in (data.videoNum ? 1 : 0)" @click="playVideo(index)">
+		<div class="video">
+			<div v-for="(a, index) in (data.videoNum ? 1 : 0)" @click="playVideo(index)">
 				<img src="../../assets/img/videIon.png">
 				<Myimage :src='videoSrc(index)'></Myimage>
-			 </div>
+			</div>
 		</div>
 
 		<div class="lvLogos" v-if="data.longVideo">
@@ -62,7 +63,7 @@
 		<div class="di">
 			<!-- 日期 -->
 			<div class="date" @click="showX">
-				<span>{{ data.date.slice(0,10) }}</span>
+				<span>{{ data.date.slice(0, 10) }}</span>
 			</div>
 
 			<!-- 选项 -->
@@ -97,8 +98,9 @@
 		</div>
 
 		<!-- <hr> -->
-		 <div id="line"></div>
+		<!-- <div id="line"></div> -->
 		<!-- <div style="height: 20px;"></div> -->
+		<Line></Line>
 
 		<div class="ding" v-show="data.po != 0">
 			<img src="../../assets/img/ding.png">
@@ -114,10 +116,11 @@ import { type A } from '../../type/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
-import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg } from '@/api/api';
+import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg } from '@/api/api';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
+import Line from '../fenge/line.vue';
 
 
 
@@ -141,8 +144,8 @@ let vData: {
 	plText: string;
 };
 
-function tzlv(id:number){
-	router.push({ path: '/Lvi', query: {id:id} });
+function tzlv(id: number) {
+	router.push({ path: '/Lvi', query: { id: id } });
 }
 
 
@@ -161,7 +164,7 @@ watch(
 
 
 
-const emit = defineEmits(['clicks', 'showImg','showVideo']);
+const emit = defineEmits(['clicks', 'showImg', 'showVideo']);
 
 
 
@@ -169,18 +172,18 @@ function emosrc(name: string) {
 	return getEmoSrc(name);
 }
 
-function imgSrcs( index:number){
+function imgSrcs(index: number) {
 	let dtid = data.value?.id || 0;
-	return imgSrc(dtid,index);
+	return imgSrc(dtid, index);
 }
 
-function videoSrc(index:number){
+function videoSrc(index: number) {
 	let dtid = data.value?.id || 0;
-	return dtVideoImg(dtid,index);
+	return dtVideoImg(dtid, index);
 }
 
-function tzXq(index:number){
-	router.push({ path: '/dts', query: {dtid:index} });
+function tzXq(index: number) {
+	router.push({ path: '/dts', query: { dtid: index } });
 }
 
 
@@ -192,7 +195,7 @@ function showImg(temp: number) {
 	});
 }
 
-function playVideo(temp:number){
+function playVideo(temp: number) {
 	let id = data.value?.id;
 	emit('showVideo', {
 		dtid: id,

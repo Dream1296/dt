@@ -39,8 +39,9 @@
 		
         
 	</div>
-	<div id="line"></div>
+	<!-- <div id="line"></div> -->
 	<!-- <hr> -->
+	 <Line></Line>
 
 
 </template>
@@ -56,6 +57,7 @@ import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg } from '@/api
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
+import Line from '../fenge/line.vue';
 
 
 //获取父组件传入数据

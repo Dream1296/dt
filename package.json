@@ -12,10 +12,12 @@
   },
   "dependencies": {
     "@videojs-player/react": "^1.0.0",
+    "@videojs-player/vue": "^1.0.0",
     "an": "file:",
     "axios": "^1.7.7",
     "pinia": "^2.1.7",
     "vant": "^4.9.4",
+    "video.js": "^8.19.1",
     "vue": "^3.4.29",
     "vue-router": "^4.3.3"
   },

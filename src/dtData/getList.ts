@@ -5,18 +5,27 @@ import { VcDataInit } from "./VcData";
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { token } from "@/api/token";
-export let dtData: {
+
+type DataL = {
+
     values: (A | dataImg)[],
     vlist: Ref<(A | dataImg)[]>,
+    signal: AbortSignal,
+    
     set: (newData: (A | dataImg)[]) => void,
     addVlist: (i: number) => void
     find: (id: number) => A | undefined,
     del: (id: number) => boolean,
-} = {
+
+}
+
+export let dtData: DataL = {
     //总数据
     values: [],
     //渲染视图数据
     vlist: ref(<(A | dataImg)[]>[]),
+    //取消api
+    signal:(new AbortController()).signal,
     set: (newData: (A | dataImg)[]) => {
         dtData.values = newData;
     },
@@ -50,21 +59,7 @@ export let dtData: {
 };
 
 export async function dtFindData(qb: string) {
-    let data = ((await dtfind(qb)) as { code: number, data: A[] }).data;
-    settext('textArr', 'text', data);
-    dtData.set(data);
-    VcDataInit(data);
-    return data;
-
-}
-
-
-
-
-
-//获取动态主数据
-export async function dtDataInit(loa: string | number,): Promise<(A | dataImg)[]> {
-    let data = (await dtDate(loa, 0)).data;
+    let data = ((await dtfind(qb)) ).data;
     let dataA: A[] = [];
     for (let a of data) {
         if (a.type == 'A') {
@@ -78,6 +73,33 @@ export async function dtDataInit(loa: string | number,): Promise<(A | dataImg)[]
     VcDataInit(data);
 
     return data;
+
+}
+
+
+
+
+
+//获取动态主数据
+export async function dtDataInit(loa: string | number,): Promise<(A | dataImg)[]> {
+    let data = (await dtDate(loa, 0,dtData.signal)).data;
+    let dataA: A[] = [];
+    for (let a of data) {
+        if (a.type == 'A') {
+            dataA.push(a);
+        }
+    }
+    Asetcl(dataA);
+
+    dtData.set(data);
+
+    VcDataInit(data);
+
+    return data;
+}
+
+function fns(){
+    
 }
 
 function Asetcl(data: A[]) {

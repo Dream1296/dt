@@ -54,11 +54,14 @@
 		</div>
 
 	</div>
-	<div id="line"></div>
+	<!-- <div id="line"></div> -->
+	<Line></Line>
+
 </template>
 
 <script setup lang="ts">
 	import { ref } from 'vue';
+	import Line from '../fenge/line.vue';
 	// import { userImg } from '../../api';
 	let isdtall = ref(false);
 	let fings = ref(false);

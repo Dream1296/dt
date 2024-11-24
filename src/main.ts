@@ -58,6 +58,11 @@ app.use(PasswordInput);
 app.use(NumberKeyboard);
 
 
+import VueVideoPlayer from '@videojs-player/vue'
+import 'video.js/dist/video-js.css'
+
+app.use(VueVideoPlayer)
+
 
 
 

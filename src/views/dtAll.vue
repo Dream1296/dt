@@ -203,13 +203,10 @@ function setBg() {
         setDtBgStyle(dtid, Number(bgN))
             .then((datas) => {
                 if (datas.tf == 1) {
-
+                    showSuccessToast('修改成功');
                     let c = dtData.find(dtid);
                     if (c && c.bgStyle) {
                         c.bgStyle = Number(bgN);
-                        showSuccessToast('修改成功');
-                        console.log(dtData.vlist);
-
                     }
                     showBottom2.value = false;
                 } else {

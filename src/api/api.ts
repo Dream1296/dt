@@ -19,6 +19,7 @@ if (typeof window === 'undefined') {
 
 
 let url = "https://frp-fix.top:20047";
+// let url = "https://10.36.40.224:3010";
 // let url = 'https://172.16.3.12:3010';
 
 export let Internet = {
@@ -28,7 +29,7 @@ export let Internet = {
 
 
 //主简单请求发送函数
-export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?: any, token?: string): Promise<T> {
+export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?: any, token?: string,signal?:AbortSignal): Promise<T> {
     if (token == 'unknown') {
         await tokens.tokenPro;
     }
@@ -40,6 +41,7 @@ export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?:
 
     const response = await axios({
         url: url,
+        signal:signal,
         method: method,
         headers: headers,
         data: method === 'POST' ? data : undefined, // 只有在 POST 请求时才传递数据
@@ -68,10 +70,11 @@ export async function yz(token: string) {
 }
 
 //动态主数据
-export async function dtDate(loa: string | number, aes: number) {
+export async function dtDate(loa: string | number, aes: number , signal?:AbortSignal) {
     if (!aes) {
         aes = 0;
     }
+
 
     const urls = Internet.url + "/api/getDtList?loa=" + loa + "&aes=" + aes;
     type T = {
@@ -79,7 +82,7 @@ export async function dtDate(loa: string | number, aes: number) {
         data : (A | dataImg)[],
         message: string,
     }
-    let res = await api<T>(urls, 'GET', undefined, tokens.token);
+    let res = await api<T>(urls, 'GET', undefined, tokens.token , signal);
     return res;
 }
 
@@ -87,7 +90,7 @@ export async function dtDate(loa: string | number, aes: number) {
 //qb=标签  isqb=预留，是否开启标签对比
 export async function dtfind(qb: string, loa?: string, isbq?: string) {
     const urls = Internet.url + "/api/dtfind?bq=" + qb;
-    let res = await api(urls, 'GET', undefined, tokens.token);
+    let res = await api<{ code: number, data: A[] }>(urls, 'GET', undefined, tokens.token);
     return res;
 }
 

@@ -1,4 +1,5 @@
 <template>
+  <StatusBar></StatusBar>
     <router-view v-slot="{ Component, route }">
       <keep-alive include="DtComponent,DtAllComponent">
         <component :is="Component" />
@@ -11,7 +12,7 @@
 
 
 <script setup lang="ts">
-
+import StatusBar from './components/StatusBar/StatusBar.vue';
 
 
 

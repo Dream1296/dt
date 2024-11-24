@@ -7,7 +7,7 @@
         </div>
 
         <!-- 背景图 -->
-        <div  id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
+        <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
         </div>
 
         <!-- 背景图山的头像部分 -->
@@ -31,10 +31,18 @@
                 <login @success="logins"></login>
             </div>
 
+            <mood></mood>
+
             <!-- 动态 -->
             <div v-for="a in vlist" :key="a.id" ref="dtsDom">
-                <dtForm  :datas="a" v-if="a.type == 'dataImg'"></dtForm>
-                <dts @showImg="dtsClicks" @showVideo='playVideo' v-if="a.type == 'A'"   :datas="a"></dts>
+                <div v-if="a.type == 'dataImg'">
+                    <dtForm :datas="a" ></dtForm>
+                </div>
+                <div v-if="a.type == 'A'">
+                    <dts @showImg="dtsClicks" @showVideo='playVideo'  :datas="a"></dts>
+                </div>
+
+
             </div>
             <div style="height: 100px;">
 
@@ -94,6 +102,7 @@ import { token } from '@/api/token';
 import { addToken } from '@/api/apiIng';
 import { showFailToast, showSuccessToast } from 'vant';
 import dtForm from '@/components/dtFrom/dtForm.vue';
+import mood from '@/components/mood/mood.vue';
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
@@ -115,16 +124,16 @@ let passwd13 = ref('');
 let showKeyboard = ref(true);
 
 watch(passwd13, (newVal) => {
-        if(newVal == passwd13Text){
-            get13();
-            showSuccessToast('密码正确');
-            showBottom.value = false;
-            return 
-        }
-        if(newVal.length == 6){
-            showFailToast('密码错误');
-            passwd13.value = '';
-        }
+    if (newVal == passwd13Text) {
+        get13();
+        showSuccessToast('密码正确');
+        showBottom.value = false;
+        return
+    }
+    if (newVal.length == 6) {
+        showFailToast('密码错误');
+        passwd13.value = '';
+    }
 
 });
 
@@ -234,7 +243,7 @@ function dtFind(text: string) {
 //初始化数据,初始化评论列表
 dtDataInit(0)
     .then(datas => {
-        
+
         VcDataInit(datas);
         obsDt.dtAdd(dtsDom);
 
@@ -259,7 +268,7 @@ function shownewdt(num: number) {
     showBottom.value = true;
 }
 
-function get13(){
+function get13() {
     dtDataInit(13).then((datas) => {
         VcDataInit(datas);
         obsDt.init();
