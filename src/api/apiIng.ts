@@ -21,7 +21,7 @@ export function apiInit() {
 
 
 
-    if (token.isTempToken != 'true'  && token.istoken != 'false') {
+    if (token.isTempToken != 'true' && token.istoken != 'false') {
         token.TempTokenPro = getTempTokenApi()
             .then((data) => {
                 token.tempToken = data;
@@ -33,41 +33,27 @@ export function apiInit() {
 }
 
 // 对Ref变量与token状态绑定
-export function addToken(key: Ref, isTrue: boolean) {
+export function addToken(fnTrue: (key: any) => void, fnFalse: (key: any) => void, key: any) {
 
     let ketTemp: boolean = true;
 
     if (token.istoken == 'false') {
-        ketTemp = false;
-    }
-    if (token.istoken == 'true') {
-        ketTemp = true;
-    }
-
-    if (token.istoken != 'unknown') {
-        if (isTrue) {
-            key.value = ketTemp;
-        } else {
-            key.value = !ketTemp;
-        }
-        
-        
+        fnFalse(key);
         return
     }
-
-
+    if (token.istoken == 'true') {
+        fnTrue(key);
+        return
+    }
     if (token.istoken == 'unknown') {
         token.tokenPro?.then(() => {
             if (token.istoken == 'false') {
-                ketTemp = false;
+                fnFalse(key);
+                return
             }
             if (token.istoken == 'true') {
-                ketTemp = true;
-            }
-            if (isTrue) {
-                key.value = ketTemp;
-            } else {
-                key.value = !ketTemp;
+                fnTrue(key);
+                return
             }
         })
     }

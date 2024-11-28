@@ -8,7 +8,7 @@ export default defineConfig({
   plugins: [
     vue(),
   ],
-  base: '/dts/', // 设置基础路径 
+  // base: '/dts/', // 设置基础路径 
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url))

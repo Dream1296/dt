@@ -104,7 +104,7 @@ export async function addDtindex(dtid: number, text: string) {
 //单个动态
 export async function getdt(id: string | number): Promise<A> {
 
-    let urls = Internet.url + "/api/getdt?id=" + String(id);
+    let urls = Internet.url + "/api/getdt?id=" + String(id) ;
     let res = (await api(urls, 'GET', undefined, tokens.token)) as { data: A };
     return res.data;
 }

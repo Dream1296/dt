@@ -121,9 +121,10 @@ import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
 import Line from '../fenge/line.vue';
+import { tempStore } from '@/stores/tempStore';
 
 
-
+let imgTemp = tempStore();
 
 //获取父组件传入数据
 const props = defineProps<{ datas: A | undefined }>();
@@ -189,10 +190,17 @@ function tzXq(index: number) {
 
 function showImg(temp: number) {
 	let id = data.value?.id;
-	emit('showImg', {
-		dtid: id,
-		index: temp,
-	});
+	imgTemp.imgLog = imgSrcs(temp);
+	console.log(imgTemp.imgLog);
+	
+	router.push({ path: '/imgs', query: {
+		dtid:id,
+		index:temp
+	} });
+	// emit('showImg', {
+	// 	dtid: id,
+	// 	index: temp,
+	// });
 }
 
 function playVideo(temp: number) {

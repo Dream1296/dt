@@ -26,8 +26,8 @@
 
         <div id="" v-if="vlist">
             <!-- 系统选项 -->
-            <SystemDt @shownewdt='shownewdt(13)' @tzs='tzs' @find='dtFind' @config="configs"></SystemDt>
-            <div v-show="showLogin">
+            <SystemDt @find='dtFind' @config="configs"></SystemDt>
+            <div v-show="!userData.isLogin">
                 <login @success="logins"></login>
             </div>
 
@@ -36,10 +36,10 @@
             <!-- 动态 -->
             <div v-for="a in vlist" :key="a.id" ref="dtsDom">
                 <div v-if="a.type == 'dataImg'">
-                    <dtForm :datas="a" ></dtForm>
+                    <dtForm :datas="a"></dtForm>
                 </div>
                 <div v-if="a.type == 'A'">
-                    <dts @showImg="dtsClicks" @showVideo='playVideo'  :datas="a"></dts>
+                    <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
                 </div>
 
 
@@ -103,16 +103,22 @@ import { addToken } from '@/api/apiIng';
 import { showFailToast, showSuccessToast } from 'vant';
 import dtForm from '@/components/dtFrom/dtForm.vue';
 import mood from '@/components/mood/mood.vue';
+import { viewDataStore } from '@/stores/viewDataStore';
+import { userStore } from '@/stores/userStore';
+
+let viewData = viewDataStore();
+let userData = userStore();
+
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
 const passwd13Text = '143323';
 
+
+
 //视图数据
 const vlist = dtData.vlist;
 
-let showLogin = ref(false);
-let isLogin = false;
 
 //用户名
 let userName = ref('正在加载');
@@ -123,8 +129,34 @@ let showBottom = ref(false)
 let passwd13 = ref('');
 let showKeyboard = ref(true);
 
+
+
+watch(() => viewData.loa,
+    (newVal, oldValue) => {
+        if (newVal == 0 || newVal == 1) {
+            get01(newVal);
+        }
+
+        if (newVal == 12) {
+            showBottom.value = true;
+        }
+    }
+)
+
+function get01(newVal: number) {
+    dtDataInit(newVal ? 1 : 0).then(() => {
+        //切换背景图
+        bgId = Number(newVal);
+        bgSrc.value = bgSrcCon + bgId + ".png";
+        obsDt.init();
+        vlist.value = [];
+        obsDt.dtAdd(dtsDom);
+    })
+}
+
 watch(passwd13, (newVal) => {
     if (newVal == passwd13Text) {
+        viewData.loa = 13;
         get13();
         showSuccessToast('密码正确');
         showBottom.value = false;
@@ -134,18 +166,32 @@ watch(passwd13, (newVal) => {
         showFailToast('密码错误');
         passwd13.value = '';
     }
-
 });
 
 
+
+function get13() {
+    dtDataInit(13).then((datas) => {
+        VcDataInit(datas);
+        obsDt.init();
+        vlist.value = [];
+        obsDt.dtAdd(dtsDom);
+    })
+}
+
+
+
+//token有效的修改函数
+let fnTure = (key: { isLogin: boolean }) => {
+    key.isLogin = true;
+}
+//token无效的修改函数
+let fnFalse = (key: { isLogin: boolean }) => {
+    key.isLogin = true;
+}
+
 // 根据token状态来显示登录页面
-addToken(showLogin, false);
-
-
-
-
-
-
+addToken(fnTure, fnFalse, userData);
 
 
 
@@ -159,10 +205,9 @@ getName()
             userName.value = '未登录';
             return
         }
-        isLogin = true;
+        userData.isLogin = true;
         userName.value = data.name;
     })
-
 
 function logins() {
     //刷新
@@ -225,11 +270,10 @@ function configs() {
 function dtFind(text: string) {
     console.log(text);
 
-
     if (text == '' || text == ' ') {
         dtDataInit(0).then(fn);
     } else {
-        dtFindData(text).then(fn);
+        dtFindData(text, 0).then(fn);
     }
 
     function fn() {
@@ -243,43 +287,10 @@ function dtFind(text: string) {
 //初始化数据,初始化评论列表
 dtDataInit(0)
     .then(datas => {
-
         VcDataInit(datas);
         obsDt.dtAdd(dtsDom);
 
     })
-
-//切换显示分级
-function tzs(num: boolean) {
-    dtDataInit(num ? 1 : 0).then(() => {
-
-        //切换背景图
-        bgId = Number(num);
-        bgSrc.value = bgSrcCon + bgId + ".png";
-
-        obsDt.init();
-        vlist.value = [];
-        obsDt.dtAdd(dtsDom);
-    })
-}
-
-//切换显示等级
-function shownewdt(num: number) {
-    showBottom.value = true;
-}
-
-function get13() {
-    dtDataInit(13).then((datas) => {
-        VcDataInit(datas);
-        obsDt.init();
-        vlist.value = [];
-        obsDt.dtAdd(dtsDom);
-    })
-}
-
-
-
-
 
 
 defineOptions({

@@ -25,8 +25,8 @@
 					</div>
 
 					<div id="xuanx1" @click="tzs()">
-						<img v-show="!isdtall" src="../../assets/img/yangjin1.png"></img>
-						<img v-show="isdtall" src="../../assets/img/yangjin2.png"></img>
+						<img v-show="viewData.loa == 0" src="../../assets/img/yangjin1.png"></img>
+						<img v-show="viewData.loa != 0" src="../../assets/img/yangjin2.png"></img>
 					</div>
 				</div>
 			</div>
@@ -62,9 +62,14 @@
 <script setup lang="ts">
 	import { ref } from 'vue';
 	import Line from '../fenge/line.vue';
+	import { viewDataStore } from '@/stores/viewDataStore';
+	const viewData = viewDataStore();
+
 	// import { userImg } from '../../api';
-	let isdtall = ref(false);
+
 	let fings = ref(false);
+
+	
 	let sr = ref('');
 	let showSs = ref(false);
 	
@@ -72,7 +77,7 @@
 	const emit = defineEmits(['shownewdt','tzs','find','config']);
 
 	function shownewdt(num:number) {
-			emit('shownewdt',13);
+		viewData.loa = 12;
 	}
 	function sousuo(){
 			emit('find',sr.value);
@@ -83,8 +88,11 @@
 	}
 
 	function tzs() {
-		emit('tzs',!isdtall.value);
-		isdtall.value = !isdtall.value;
+		if(viewData.loa == 0){
+			viewData.loa = 1;
+		}else{
+			viewData.loa = 0;
+		}
 	}
 </script>
 

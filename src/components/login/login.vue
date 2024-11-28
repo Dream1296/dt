@@ -39,7 +39,7 @@
 
 <script setup lang="ts">
 import { login } from '@/api/api';
-import { showSuccessToast } from 'vant';
+import { showFailToast, showSuccessToast } from 'vant';
 import { ref } from 'vue';
 
 
@@ -55,8 +55,10 @@ function onSubmit(e: any) {
 
     .then((res) => {      
       if(res.message != 'OK'){
+        showFailToast('账号或密码错误');
         return
       }
+      showFailToast('账号或密码错误');
 
       localStorage.setItem('token', res.token);
       emit('success');

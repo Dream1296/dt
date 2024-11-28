@@ -58,8 +58,8 @@ export let dtData: DataL = {
     }
 };
 
-export async function dtFindData(qb: string) {
-    let data = ((await dtfind(qb)) ).data;
+export async function dtFindData(qb: string,loa:number) {
+    let data = ((await dtfind(qb,loa.toString())) ).data;
     let dataA: A[] = [];
     for (let a of data) {
         if (a.type == 'A') {
