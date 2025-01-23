@@ -1,13 +1,7 @@
 <template>
   <div class="zhu">
-    <div class="touxian">
-      <img src="https://frp-fix.top:20047/api/userImg?name=xt"></img>
-    </div>
-    <!-- 名字 -->
-    <div class="name">
-      <text>系统</text>
-    </div>
-    <div class="text">登录</div>
+    <topView :touxianSrc="getTouxian('xt')" :name="name" :dtid="dtid.toString()" ></topView>
+    <div class="text">鉴权系统</div>
     <div class="a">
       <van-form @submit="onSubmit">
         <van-cell-group inset>
@@ -32,20 +26,25 @@
     </div>
   </div>
 
-  <hr>
+  <Line></Line>
 
 </template>
 
 
 <script setup lang="ts">
-import { login } from '@/api/api';
+import { getTouxian, login } from '@/api/api';
 import { showFailToast, showSuccessToast } from 'vant';
+import topView from '../TopView/topView.vue';
 import { ref } from 'vue';
+import Line from "@/components/fenge/line.vue";
 
 
 // let onSubmit = ref('');
 let username = ref('');
 let password = ref('');
+
+let name = ref("服务器");
+let dtid = ref(999);
 
 	//传递事件
 	const emit = defineEmits(['success']);

@@ -4,6 +4,7 @@
             <img src="../assets/img/updtbgs.png">
         </div>
 
+        <!-- {{ num[0] }} -->
         <!-- 输入框 -->
         <div id="shuru" contenteditable ref="shuru">
         </div>
@@ -88,7 +89,6 @@
 
         <van-popup v-model:show="showSetTime" round position="bottom" :style="{ height: '50%' }" @click.stop="">
             <van-time-picker v-model="timeArr" title="选择时间" @confirm="showSetTime = false" />
-
         </van-popup>
 
 
@@ -147,7 +147,27 @@ let videoV = ref(false);
 let imgV = ref(false);
 let configV = ref(false);
 
-let a = ref<number[]>([]);
+let a = ref<number[]>([0]);
+
+onMounted(() => {
+
+    let updTtText = localStorage.getItem('updTtText');
+
+    if (updTtText && shuru.value) {
+        shuru.value.innerHTML = updTtText;
+    }
+
+    shuru.value?.addEventListener('input', (e) => {        
+        let shuruText = shuru.value?.innerHTML;
+        if (!shuruText) {
+            return
+        }
+        localStorage.setItem('updTtText', shuruText);
+    })
+
+    initialHeight = window.innerHeight;
+})
+
 
 
 //图片数据
@@ -165,6 +185,7 @@ timeArr.value = [
     date.getHours().toString(), date.getMinutes().toString()
 ];
 
+let num = ref<number[]>([0]);
 
 //视频数据
 let videoArr: any[] = [];
@@ -202,6 +223,7 @@ async function updts() {
     //上传媒体资源
     let pro = upfiles(imgArr, videoArr);
     let bool = await Promise.all(pro.upPromise.map(task => task()));
+    num = pro.percentCompleteArr;
     if (!bool) {
         return console.log('错误');
     }
@@ -209,7 +231,7 @@ async function updts() {
         showImgNum.value = imgArr.length > 6 ? 6 : imgArr.length;
     }
     let time = getDataTime(dateArr.value, timeArr.value);
-    postDt(txt, pro.imgNameArr, showImgNum.value.toString(), time, loa.value, pro.videoNumArr,isImgDir.value)
+    postDt(txt, pro.imgNameArr, showImgNum.value.toString(), time, loa.value, pro.videoNumArr, isImgDir.value)
         .then((a: any) => {
             if (a.tf == 1) {
                 closeToast(false);
@@ -259,11 +281,6 @@ function upfilevideo(e: any) {
 
 
 
-onMounted(() => {
-    initialHeight = window.innerHeight;
-
-    // window.addEventListener('resize', a);
-})
 
 
 function funs(temp: number) {

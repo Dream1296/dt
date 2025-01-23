@@ -2,7 +2,7 @@
 	<div class="zhu">
 		<!-- 头像 -->
 		<div class="touxian">
-			<img src="https://frp-fix.top:20047/api/userImg?name=xt"></img>
+			<img :src="userImg"></img>
 		</div>
 		<!-- 名字 -->
 		<div class="name">
@@ -25,8 +25,8 @@
 					</div>
 
 					<div id="xuanx1" @click="tzs()">
-						<img v-show="viewData.loa == 0" src="../../assets/img/yangjin1.png"></img>
-						<img v-show="viewData.loa != 0" src="../../assets/img/yangjin2.png"></img>
+						<img v-show="viewData.loa != 1" src="../../assets/img/yangjin1.png"></img>
+						<img v-show="viewData.loa == 1" src="../../assets/img/yangjin2.png"></img>
 					</div>
 				</div>
 			</div>
@@ -34,7 +34,7 @@
 				<!-- <input v-model="sr" />
 				
 				<div @click="sousuo">精确搜索</div> -->
-				<van-search v-model="sr"  @search="sousuo" placeholder="请输入搜索关键词" />
+				<van-search v-model="sr" @search="dtFind" :autocomplete="'off'" placeholder="请输入搜索关键词" />
 
 			</div>
 		</div>
@@ -60,43 +60,59 @@
 </template>
 
 <script setup lang="ts">
-	import { ref } from 'vue';
-	import Line from '../fenge/line.vue';
-	import { viewDataStore } from '@/stores/viewDataStore';
-	const viewData = viewDataStore();
+import { ref } from 'vue';
+import Line from '../fenge/line.vue';
+import { viewDataStore } from '@/stores/viewDataStore';
+import { Internet } from '@/api/api';
+import { dtData, dtDataInit, dtFindData } from '@/dtData/getList';
+import { obsDt } from '@/dtData/observerDt';
+import { myEvent } from '@/myEnit';
+const viewData = viewDataStore();
+//视图数据
+const vlist = dtData.vlist;
 
-	// import { userImg } from '../../api';
+// import { userImg } from '../../api';
 
-	let fings = ref(false);
+let fings = ref(false);
 
-	
-	let sr = ref('');
-	let showSs = ref(false);
-	
-	//传递事件
-	const emit = defineEmits(['shownewdt','tzs','find','config']);
+let userImg = ref(Internet.url + "/api/userImg?name=xt");
 
-	function shownewdt(num:number) {
-		viewData.loa = 12;
+
+let sr = ref('');
+let showSs = ref(false);
+
+//传递事件
+const emit = defineEmits(['shownewdt', 'tzs', 'config']);
+
+function shownewdt(num: number) {
+	viewData.loa = 12;
+}
+
+function config() {
+	emit('config');
+}
+
+function tzs() {
+	if (viewData.loa == 0) {
+		viewData.loa = 1;
+	} else {
+		viewData.loa = 0;
 	}
-	function sousuo(){
-			emit('find',sr.value);
+}
+//查询
+function dtFind() {
+	if (sr.value == '' || sr.value == ' ') {
+		dtDataInit(0).then(() => {
+			myEvent.emit('upDtList');
+		});
+	} else {
+		dtFindData(sr.value, viewData.loa).then(() => {
+			myEvent.emit('upDtList');
+		});
 	}
-
-	function config(){
-		emit('config');
-	}
-
-	function tzs() {
-		if(viewData.loa == 0){
-			viewData.loa = 1;
-		}else{
-			viewData.loa = 0;
-		}
-	}
+}
 </script>
 
 <style scoped lang="less">
 @import url('./SystemDt.less');
-	
 </style>

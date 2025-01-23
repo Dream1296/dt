@@ -1,5 +1,5 @@
 <template>
-  <StatusBar></StatusBar>
+  <!-- <StatusBar></StatusBar> -->
     <router-view v-slot="{ Component, route }">
       <keep-alive include="DtComponent,DtAllComponent">
         <component :is="Component" />

@@ -2,6 +2,7 @@ import type { A } from '@/type/dtType';
 import axioss from 'axios';
 import { Internet } from './api';
 import { token } from './token';
+import { ref, type Ref } from 'vue';
 
 
 
@@ -37,7 +38,8 @@ export function upfiles(imgArr: any[], videoArr: any[]) {
     let len = imgArr.length + videoArr.length;
     let imgNameArr: string[] = [];
     let videoNumArr :string[] = [];
-    let percentCompleteArr: number[] = new Array(len).fill(0);
+    // let percentCompleteArr: number[] = new Array(len).fill(0);
+    let percentCompleteArr = ref<number[]>(new Array(len).fill(0));
     let upPromise: (() => Promise<boolean>)[] = new Array(len);
 
     for (let i = 0; i < imgArr.length; i++) {
@@ -57,7 +59,7 @@ export function upfiles(imgArr: any[], videoArr: any[]) {
 }
 
 
-export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: number[], fileNameArr: string[], index: number): Promise<boolean> {
+export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: Ref<number[]>, fileNameArr: string[], index: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
         const date = new Date();
         const fileExtension = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2); // 获取文件扩展名
@@ -86,7 +88,7 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: num
         xhr.upload.addEventListener('progress', function (e) {
             if (e.lengthComputable) {
                 const percentComplete = (e.loaded / e.total);
-                percentCompleteArr[index] = percentComplete;
+                percentCompleteArr.value[index] = percentComplete;
             }
         });
 

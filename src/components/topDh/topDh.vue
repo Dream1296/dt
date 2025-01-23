@@ -24,14 +24,22 @@
 
 <script setup lang="ts">
 	import { addToken } from '@/api/apiIng';
-import {  ref } from 'vue';
+import {  ref, type Ref } from 'vue';
 
 	let ydsLeft = ref(0);
 	let shows1 = ref(false);
 
 	let showUpDt = ref(false);
 
-	addToken(showUpDt,true);
+	let fnTrue = (showUpDt:Ref) =>{
+		showUpDt.value = true;
+	}
+	let fnFalse = (showUpDt:Ref) =>{
+		showUpDt.value = false;
+	}
+
+
+	addToken(fnTrue,fnFalse,showUpDt);
 
 
     //接受父组件传类的参数

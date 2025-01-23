@@ -7,9 +7,9 @@ import router from './router'
 
 // 1. 引入你需要的组件
 import { Button } from 'vant';
-import { Toast  } from 'vant';
+import { Toast } from 'vant';
 import { Dialog } from 'vant';
-import { Search  } from 'vant';
+import { Search } from 'vant';
 import { Form, Field } from 'vant';
 import { RadioGroup, Radio } from 'vant';
 import { DatePicker } from 'vant';
@@ -29,14 +29,19 @@ initCordovaApi();
 const app = createApp(App);
 
 
-import {  CellGroup } from 'vant';
+import { CellGroup } from 'vant';
 import { apiInit } from './api/apiIng'
+
+import {testNw} from '@/api/api';
+testNw();
 
 app.use(Form);
 app.use(Field);
 app.use(CellGroup);
 
-app.use(createPinia())
+app.use(createPinia());
+
+
 app.use(router);
 app.use(Button);
 app.use(Toast);
@@ -58,14 +63,22 @@ app.use(PasswordInput);
 app.use(NumberKeyboard);
 
 
-import VueVideoPlayer from '@videojs-player/vue'
-import 'video.js/dist/video-js.css'
 
-app.use(VueVideoPlayer)
-
+import { Circle } from 'vant';
+app.use(Circle);
 
 
+import { Swipe, SwipeItem } from 'vant';
 
+app.use(Swipe);
+app.use(SwipeItem);
+
+import { Checkbox } from 'vant';
+app.use(Checkbox);
+
+
+import { ShareSheet } from 'vant';
+app.use(ShareSheet);
 
 
 

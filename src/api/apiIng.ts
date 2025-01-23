@@ -35,7 +35,6 @@ export function apiInit() {
 // 对Ref变量与token状态绑定
 export function addToken(fnTrue: (key: any) => void, fnFalse: (key: any) => void, key: any) {
 
-    let ketTemp: boolean = true;
 
     if (token.istoken == 'false') {
         fnFalse(key);

@@ -6,6 +6,7 @@ import type { A, As, dataImg } from "../type/dtType";
 export let vData = ref<As[]>([]);
 
 export function VcDataInit(dtData:(A | dataImg)[]) {
+    
     let data:A[] = [];
     for(let a of dtData){
         if(a.type == 'A'){

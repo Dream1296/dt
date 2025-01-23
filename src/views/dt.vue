@@ -26,24 +26,36 @@
 
         <div id="" v-if="vlist">
             <!-- 系统选项 -->
-            <SystemDt @find='dtFind' @config="configs"></SystemDt>
+            <SystemDt @config="configs"></SystemDt>
             <div v-show="!userData.isLogin">
                 <login @success="logins"></login>
             </div>
 
-            <mood></mood>
 
-            <!-- 动态 -->
+
+
+
             <div v-for="a in vlist" :key="a.id" ref="dtsDom">
-                <div v-if="a.type == 'dataImg'">
-                    <dtForm :datas="a"></dtForm>
-                </div>
                 <div v-if="a.type == 'A'">
                     <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
                 </div>
 
+                <div v-if="a.type == 'dataImg'">
+                    <dtForm :datas="a"></dtForm>
+                </div>
+
+                <div v-if="a.type == 'mood'">
+                    <!-- 心情填报 -->
+                    <mood :datas="a"></mood>
+                </div>
+
+                <!-- 服务器性能监控 -->
+                <div v-if="a.type == 'top'">
+                    <Top :datas="a"></Top>
+                </div>
 
             </div>
+
             <div style="height: 100px;">
 
             </div>
@@ -52,8 +64,12 @@
 
         <!-- end -->
         <div>
-
+            <elf @touchmove="a2"></elf>
         </div>
+        <div>
+            <configV></configV>
+        </div>
+
     </div>
 
     <!-- 底部弹出 -->
@@ -69,11 +85,6 @@
             <!-- 数字键盘 -->
             <van-number-keyboard v-model="passwd13" :show="showKeyboard" @blur="showKeyboard = true" />
         </div>
-
-
-
-
-
 
     </van-popup>
 
@@ -105,9 +116,16 @@ import dtForm from '@/components/dtFrom/dtForm.vue';
 import mood from '@/components/mood/mood.vue';
 import { viewDataStore } from '@/stores/viewDataStore';
 import { userStore } from '@/stores/userStore';
+import Top from '@/components/top/top.vue';
+import { myEvent } from '@/myEnit';
+import elf from '@/components/elf/elf.vue';
+import threeView from '@/components/threeView/threeView.vue';
+import configV from '@/components/configV/configV.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();
+
+
 
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
@@ -133,6 +151,15 @@ let showKeyboard = ref(true);
 
 watch(() => viewData.loa,
     (newVal, oldValue) => {
+
+        if (token.istoken == 'false') {
+            setTimeout(() => {
+                viewData.loa = 0;
+            }, 300);
+            showFailToast('仅在登录后可查看所有内容');
+            return
+        }
+
         if (newVal == 0 || newVal == 1) {
             get01(newVal);
         }
@@ -140,19 +167,33 @@ watch(() => viewData.loa,
         if (newVal == 12) {
             showBottom.value = true;
         }
+
+        
     }
 )
 
 function get01(newVal: number) {
-    dtDataInit(newVal ? 1 : 0).then(() => {
-        //切换背景图
-        bgId = Number(newVal);
-        bgSrc.value = bgSrcCon + bgId + ".png";
-        obsDt.init();
-        vlist.value = [];
-        obsDt.dtAdd(dtsDom);
+    dtDataInit(newVal ? 1 : 0).then((data) => {
+        // viewData.loa = data.loa;
+        // 切换背景图
+        if (newVal == 0) {
+            // 页面视图改变
+            bgSrc.value = bgSrcCon + newVal + ".webp";
+        } else {
+            bgSrc.value = bgSrcCon + "1" + ".png";
+        }
+
+        myEvent.emit('upDtList');
     })
 }
+
+myEvent.on('upDtList', () => {
+    obsDt.init();
+    vlist.value = [];
+    nextTick(() => {
+        obsDt.dtAdd(dtsDom);
+    })
+})
 
 watch(passwd13, (newVal) => {
     if (newVal == passwd13Text) {
@@ -171,6 +212,9 @@ watch(passwd13, (newVal) => {
 
 
 function get13() {
+    //切换背景图片
+    bgSrc.value = bgSrcCon + "1" + ".png";
+
     dtDataInit(13).then((datas) => {
         VcDataInit(datas);
         obsDt.init();
@@ -181,13 +225,22 @@ function get13() {
 
 
 
+function a2(e: any) {
+    e.preventDefault(); // 防止页面滚动
+    const touch = e.touches[0];
+    viewData.elfX = touch.clientX;
+    viewData.elfY = touch.clientY;
+}
+
+
+
 //token有效的修改函数
 let fnTure = (key: { isLogin: boolean }) => {
     key.isLogin = true;
 }
 //token无效的修改函数
 let fnFalse = (key: { isLogin: boolean }) => {
-    key.isLogin = true;
+    key.isLogin = false;
 }
 
 // 根据token状态来显示登录页面
@@ -214,11 +267,16 @@ function logins() {
     location.reload();
 }
 
-//测试数据
-// vlist.value.push(data1);
 const bgSrcCon = '/bgImg/bg';
-let bgId = 0;
-let bgSrc = ref(bgSrcCon + bgId + ".png");
+let bgSrc = ref(bgSrcCon + 0 + ".webp");
+
+
+
+
+
+
+
+
 
 
 //懒加载
@@ -266,31 +324,16 @@ function configs() {
     router.push({ path: '/config' });
 }
 
-//查询
-function dtFind(text: string) {
-    console.log(text);
 
-    if (text == '' || text == ' ') {
-        dtDataInit(0).then(fn);
-    } else {
-        dtFindData(text, 0).then(fn);
-    }
-
-    function fn() {
-        obsDt.init();
-        vlist.value = [];
-        obsDt.dtAdd(dtsDom);
-
-    }
-}
 
 //初始化数据,初始化评论列表
 dtDataInit(0)
     .then(datas => {
         VcDataInit(datas);
         obsDt.dtAdd(dtsDom);
-
     })
+
+
 
 
 defineOptions({

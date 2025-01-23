@@ -6,6 +6,7 @@ export const tempStore = defineStore('temp', {
   state: () => ({
     imgLog: "",
     imgSrc: "",
+    
   }),
   actions: {
 

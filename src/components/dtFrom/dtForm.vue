@@ -1,13 +1,6 @@
 <template>
 <div class="zhu" v-if="data" >
-		<!-- 头像 -->
-		<div class="touxian">
-			<img :src="getTouxian('yw')"></img>
-		</div>
-		<!-- 名字 -->
-		<div class="name">
-			<span>{{ data.name }} {{ data.id }}</span>
-		</div>
+		<topView :dtid="dtid" :touxian-src="getTouxian('yw')" :name="data.name"></topView>
 		<!-- 正文 -->
 		<div class="text">
 		</div>
@@ -23,7 +16,7 @@
 		<div class="di">
 			<!-- 日期 -->
 			<div class="date" >
-				<span>{{ data.date.slice(0,10) }}</span>
+				<span>2024-01-21</span>
 			</div>
 
 			<!-- 选项 -->
@@ -53,15 +46,20 @@ import { ref, watch } from 'vue';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
-import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg } from '@/api/api';
+import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg, Internet } from '@/api/api';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
 import Line from '../fenge/line.vue';
+import topView from '../TopView/topView.vue';
+
 
 
 //获取父组件传入数据
 const props = defineProps<{ datas: dataImg | undefined }>();
+
+let dtid = ref("999");
+
 
 let vData: {
 	id: number;
@@ -82,7 +80,11 @@ watch(
 	{ immediate: true } // 当props.datas初始值为undefined时，immediate确保一开始就会执行
 );
 
-let src = ref("https://frp-fix.top:20047/api/dtDataImg?year=2024")
+// let src = ref("https://frp-fix.top:20047/api/dtDataImg?year=2024");
+let src = ref(Internet.url + "/api/dtDataImg?year=2025");
+
+
+
 
 function getV() {
 	if (vData) {

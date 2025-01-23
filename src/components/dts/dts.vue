@@ -1,29 +1,9 @@
 <template>
 	<div class="zhu" v-if="data">
-		<div id="bg" v-if="data.bgStyle == 1">
-			<img class="bgDi" src="../../assets/img/dtbg.png">
-			<img class="bgIco1" src="../../assets/img/Catico.png">
-		</div>
-		<div id="bg" v-if="data.bgStyle == 2">
-			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
-			<img class="bgIco2" src="../../assets/img/sl.png">
-		</div>
-		<div id="bg" v-if="data.bgStyle == 3">
-			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
-			<img class="bgIco3" src="../../assets/img/lanjin.png">
-		</div>
-		<div id="bg" v-if="data.bgStyle == 4">
-			<!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
-			<img class="bgIco3" src="../../assets/img/pigYellow.png">
-		</div>
-		<!-- 头像 -->
-		<div class="touxian">
-			<img :src="getTouxian('yw')"></img>
-		</div>
-		<!-- 名字 -->
-		<div class="name">
-			<span>{{ data.name }} {{ data.id }}</span>
-		</div>
+		<StyleTop :bgStyle="data.bgStyle"></StyleTop>
+		<topView :touxianSrc="getTouxian('yw')" :name="data.name" :dtid="data.id.toString()"></topView>
+
+
 		<!-- 正文 -->
 		<div class="text">
 			<template v-for="a in data.textArr.slice(0, textLen)">
@@ -38,7 +18,7 @@
 		<!-- 图片 -->
 		<div class="imgs">
 			<div class="image" v-for="(a, temp) in data.imgShowAll" @click="showImg(temp)">
-				<Myimage :src='imgSrcs(temp)'></Myimage>
+				<Myimage :src='imgSrcsc(temp)'></Myimage>
 			</div>
 			<div class="imgsAdd" v-if="data.imgShowAll && data.imgShowAll > 6">
 				<span>+{{ data.imgAllNum ? data.imgAllNum - 6 : '0' }}</span>
@@ -51,11 +31,25 @@
 				<Myimage :src='videoSrc(index)'></Myimage>
 			</div>
 		</div>
+		<van-switch v-if="data.id == 562" v-model="isMo" />
+
+		<div id="thressV" v-if="data.id == 562 && isMo">
+			<threeView modelPath="./小凳子.glb"></threeView>
+
+		</div>
 
 		<div class="lvLogos" v-if="data.longVideo">
 
 			<div class="lvLogo" v-for="a in data.longVideo" @click="tzlv(a.id)">
 				{{ a.name }}
+			</div>
+
+		</div>
+
+		<div class="lvLogos" v-if="data.textTile">
+
+			<div class="lvLogo" @click="tzlt(data.id)">
+				{{ data.textTile  }}
 			</div>
 
 		</div>
@@ -116,13 +110,15 @@ import { type A } from '../../type/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
-import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg } from '@/api/api';
+import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, imgSrcs } from '@/api/api';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
 import Line from '../fenge/line.vue';
 import { tempStore } from '@/stores/tempStore';
-
+import topView from '../TopView/topView.vue';
+import StyleTop from '../styleTop/styleTop.vue';
+import threeView from '@/components/threeView/threeView.vue';
 
 let imgTemp = tempStore();
 
@@ -131,7 +127,7 @@ const props = defineProps<{ datas: A | undefined }>();
 
 let data = ref<A>();
 
-
+let isMo = ref(false);
 
 
 
@@ -147,6 +143,11 @@ let vData: {
 
 function tzlv(id: number) {
 	router.push({ path: '/Lvi', query: { id: id } });
+}
+
+function tzlt(id:number){
+	router.push({ path: '/longText', query: { id: id } });
+
 }
 
 
@@ -173,7 +174,7 @@ function emosrc(name: string) {
 	return getEmoSrc(name);
 }
 
-function imgSrcs(index: number) {
+function imgSrcsc(index: number) {
 	let dtid = data.value?.id || 0;
 	return imgSrc(dtid, index);
 }
@@ -190,17 +191,15 @@ function tzXq(index: number) {
 
 function showImg(temp: number) {
 	let id = data.value?.id;
-	imgTemp.imgLog = imgSrcs(temp);
-	console.log(imgTemp.imgLog);
-	
-	router.push({ path: '/imgs', query: {
-		dtid:id,
-		index:temp
-	} });
-	// emit('showImg', {
-	// 	dtid: id,
-	// 	index: temp,
-	// });
+	imgTemp.imgLog = imgSrcsc(temp);
+	imgTemp.imgSrc = imgSrcs(Number(id), temp);
+
+	router.push({
+		path: '/imgs', query: {
+			dtid: id,
+			index: temp
+		}
+	});
 }
 
 function playVideo(temp: number) {
