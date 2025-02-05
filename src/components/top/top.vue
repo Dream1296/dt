@@ -47,12 +47,13 @@ import { getTouxian } from '@/api/api';
 import topView from '../TopView/topView.vue';
 import { watch } from 'vue';
 import type { Top } from '@/type/dtType';
+import { token } from '@/api/token';
 
 
 let data = ref<Top>({
     type: 'top',
     id: "999",
-    touxian:'xt',
+    touxian: 'xt',
     name: "访问"
 });
 const props = defineProps<{ datas: Top | undefined }>();
@@ -87,6 +88,15 @@ let eventSource = getXN();
 type Events = { cpuTemperature: number, gpuTemperature: number, sddisk: string, ssddisk: string, cpuUsage: number, memoryUsage: string, fenSanNun: Number };
 
 function setFans() {
+
+
+
+    if (token.istoken == 'false') {
+        showFailToast('拒绝操作');
+        return
+    }
+
+    return
     let setFanNum = fenSanNum.value == 1 ? 0 : 1;
     setFan(setFanNum).then((data) => {
         if (data.code != 200) {

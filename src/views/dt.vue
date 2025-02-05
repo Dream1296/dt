@@ -27,7 +27,9 @@
         <div id="" v-if="vlist">
             <!-- 系统选项 -->
             <SystemDt @config="configs"></SystemDt>
-            <div v-show="!userData.isLogin">
+
+
+            <div v-show="!userData.isLogin && false">
                 <login @success="logins"></login>
             </div>
 
@@ -87,6 +89,27 @@
         </div>
 
     </van-popup>
+
+    <!-- 信息标识 -->
+    <div class="footer-info">
+        <p>
+            <span>ICP备案号：<a href="https://www.beian.gov.cn" target="_blank">ICP 备案号 12345678</a></span>
+        </p>
+        <p>
+            <span>萌国ICP备案号：<a href="https://www.mg-beian.gov.cn" target="_blank">MG ICP 备案号 87654321</a></span>
+        </p>
+      
+        <p>
+            <a href="/feedback" class="feedback-link">内容反馈</a> |
+            <span>运行时长：<span id="run-time"></span></span> |
+            <!-- <span>总访问：<span id="total-visits"></span></span> |
+            <span>今日访问：<span id="daily-visits"></span></span> -->
+        </p>
+        <p>© 2024-2025</p>
+    </div>
+
+
+
 
 
 
@@ -168,7 +191,7 @@ watch(() => viewData.loa,
             showBottom.value = true;
         }
 
-        
+
     }
 )
 

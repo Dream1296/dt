@@ -389,3 +389,79 @@
   width: 100vw;
   height: 280px;
 }
+
+// 底部标识
+
+/* 固定底部，蓝色风格，添加圆角和毛玻璃效果 */
+.footer-info {
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  width: 100%;
+  background-color: rgba(224, 247, 250, 0.8); /* 毛玻璃效果的背景色 */
+  backdrop-filter: blur(8px); /* 毛玻璃模糊效果 */
+  color: #333;
+  text-align: center;
+  padding: 10px 0;
+  font-size: 14px;
+  line-height: 1.5;
+  z-index: 9999;
+  font-family: 'Arial', sans-serif;
+  border-top: 3px solid #80deea; /* 增加的边框对比色 */
+  border-radius: 15px 15px 0 0; /* 添加圆角，顶部圆角 */
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* 添加轻微阴影 */
+}
+
+.footer-info p {
+  margin: 6px 0;
+}
+
+.footer-info a {
+  color: #039be5;
+  text-decoration: none;
+  font-weight: bold;
+  transition: color 0.3s ease;
+}
+
+.footer-info a:hover {
+  color: #0288d1;
+  text-decoration: underline;
+}
+
+.footer-info span {
+  font-size: 12px;
+  color: #607d8b;
+}
+
+/* 内容反馈按钮 */
+.feedback-link {
+  color: #039be5;
+  border: none;
+  background-color: transparent;
+  font-size: 14px;
+  font-weight: normal;
+  text-decoration: none;
+  transition: color 0.3s ease;
+}
+
+.feedback-link:hover {
+  color: #0288d1;
+  text-decoration: underline;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+  .footer-info {
+    font-size: 12px;
+    padding: 6px 0;
+    line-height: 1.4;
+  }
+
+  .footer-info p {
+    margin: 2px 0;
+  }
+
+  .feedback-link {
+    font-size: 12px;
+  }
+}

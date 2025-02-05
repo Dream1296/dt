@@ -18,8 +18,9 @@ if (typeof window === 'undefined') {
 }
 
 
-// let url = "https://frp-fix.top:20047";
-let url = "https://192.168.0.105:3012"
+let url = "https://frp-fix.top:20047";
+// let url = "https://192.168.0.105:3012"
+// let url = "http://192.168.0.105:3010"
 // let url = "https://10.36.40.224:3012";
 // let url = "https://10.36.40.224:3012";
 // let url = 'https://172.16.3.12:3010';

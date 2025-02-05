@@ -345,11 +345,15 @@ function imgShow(res: A) {
 
 
 function dtindextijiao() {
+    if(token.istoken == 'false'){
+        showFailToast('拒绝访问');
+        return
+    }
     addDtindex(dtid, newKeyWorld.value)
         .then((res: any) => {
             if (res.tf == 1) {
                 showBottom.value = false;
-                alert('成功');
+                showSuccessToast('成功');
                 data.value?.keyword.push({
                     keyword: newKeyWorld.value,
                     isAi: 0,

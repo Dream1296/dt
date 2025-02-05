@@ -17,10 +17,6 @@ export function apiInit() {
         .catch(() => token.istoken = 'false');
 
     //获取tokenTemp
-
-
-
-
     if (token.isTempToken != 'true' && token.istoken != 'false') {
         token.TempTokenPro = getTempTokenApi()
             .then((data) => {

@@ -49,7 +49,7 @@
 		<div class="lvLogos" v-if="data.textTile">
 
 			<div class="lvLogo" @click="tzlt(data.id)">
-				{{ data.textTile  }}
+				{{ data.textTile }}
 			</div>
 
 		</div>
@@ -119,6 +119,7 @@ import { tempStore } from '@/stores/tempStore';
 import topView from '../TopView/topView.vue';
 import StyleTop from '../styleTop/styleTop.vue';
 import threeView from '@/components/threeView/threeView.vue';
+import { token } from '@/api/token';
 
 let imgTemp = tempStore();
 
@@ -145,7 +146,7 @@ function tzlv(id: number) {
 	router.push({ path: '/Lvi', query: { id: id } });
 }
 
-function tzlt(id:number){
+function tzlt(id: number) {
 	router.push({ path: '/longText', query: { id: id } });
 
 }
@@ -230,6 +231,11 @@ function isDels() {
 		return
 	}
 
+	if (token.istoken == 'false') {
+		showFailToast('拒绝操作');
+		return
+	}
+
 	showConfirmDialog({
 		title: '确认删除',
 		message:
@@ -267,6 +273,11 @@ function setPls() {
 	// ----
 	let uptext = getV()!.plText;
 	let id = data.value!.id;
+
+	if (token.istoken == 'false') {
+		showFailToast('拒绝操作');
+		return
+	}
 	postCom(uptext, String(id)).then((res: any) => {
 		if (res.tf == 1) {
 			showSuccessToast('成功文案');
@@ -278,7 +289,7 @@ function setPls() {
 				diId: 0
 			})
 		} else {
-			showFailToast('失败')
+			showFailToast('失败');
 		}
 	})
 
