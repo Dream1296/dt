@@ -91,14 +91,14 @@
     </van-popup>
 
     <!-- 信息标识 -->
-    <div class="footer-info">
+    <div class="footer-info" v-show="footer_show" :style="{ bottom: `${Number(footer_show_num)}px` }">
         <p>
             <span>ICP备案号：<a href="https://www.beian.gov.cn" target="_blank">ICP 备案号 12345678</a></span>
         </p>
         <p>
             <span>萌国ICP备案号：<a href="https://www.mg-beian.gov.cn" target="_blank">MG ICP 备案号 87654321</a></span>
         </p>
-      
+
         <p>
             <a href="/feedback" class="feedback-link">内容反馈</a> |
             <span>运行时长：<span id="run-time"></span></span> |
@@ -160,6 +160,10 @@ const passwd13Text = '143323';
 //视图数据
 const vlist = dtData.vlist;
 
+// 底部信息是否显示
+const footer_show = ref(true);
+// 底部信息是否显示
+const footer_show_num = ref(0);
 
 //用户名
 let userName = ref('正在加载');
@@ -346,6 +350,27 @@ function updt() {
 function configs() {
     router.push({ path: '/config' });
 }
+
+
+
+let guanbi_footer_show = () => {
+    console.log(1);
+
+    obsDt.guanbi_footer_show = () => {
+        console.log(2);
+        setTimeout(() => {
+            footer_show_num.value = -100;
+            setTimeout(() => {
+                footer_show.value = false;
+            }, 2000);
+        }, 1500)
+        obsDt.guanbi_footer_show = () => {
+            console.log(3);
+        };
+    }
+
+}
+obsDt.guanbi_footer_show = guanbi_footer_show;
 
 
 

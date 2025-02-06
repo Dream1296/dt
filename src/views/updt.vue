@@ -27,8 +27,8 @@
 
         <!-- 表情包菜单 -->
         <div id="emojiC" v-show="showEmo">
-            <div v-for="a in emojiList" @click.stop="insEmoji(a)">
-                <img :src="emojiSrc(a)">
+            <div v-for="(a,index) in emojiList" @click.stop="insEmoji(a)">
+                <img v-if="emojiNamesUrl[index]" :src="emojiNamesUrl[index]">
             </div>
         </div>
 
@@ -116,12 +116,14 @@ import { text } from 'stream/consumers';
 import { onMounted, ref } from 'vue';
 import { closeToast, showFailToast, showLoadingToast, showSuccessToast, Toast } from 'vant';
 import router from '@/router';
+import {getemojiImg,emojiNamesUrl,emojiNames} from '@/util/dt/emoji';
 // emojiSrc
 
 let shuru = ref<HTMLDivElement>();
 let upImg = ref<HTMLInputElement>();
 let upVideo = ref<HTMLInputElement>();
 let emojiList = ref<string[]>();
+emojiList.value = emojiNames;
 //视图高度
 let initialHeight: number;
 let diTop = ref('calc(100% - 40px  )');
@@ -149,6 +151,9 @@ let configV = ref(false);
 
 let a = ref<number[]>([0]);
 
+//图片获取
+
+
 onMounted(() => {
 
     let updTtText = localStorage.getItem('updTtText');
@@ -166,6 +171,21 @@ onMounted(() => {
     })
 
     initialHeight = window.innerHeight;
+
+    //表情包处理
+    let lists:string[] = [];
+    emoList()
+    .then((list) =>{
+        emojiList.value = list;
+        lists = list;
+    })
+    .then( async ()=>{
+        // for(let emo of lists){
+        //     let url = await getemojiImg(emo);
+        //     let index = lists.findIndex((obj)=> obj == emo);
+        //     getemojiImgArr.value[index] = url;
+        // }
+    })
 })
 
 
@@ -350,7 +370,7 @@ function setVTop(e: any) {
     }
 }
 
-emoList().then(list => emojiList.value = list);
+
 
 //获取输入文本
 function getInputText() {
@@ -389,7 +409,9 @@ function insEmoji(name: string) {
 
         // 创建一个 img 元素
         let img = document.createElement('img');
-        img.src = emojiSrc(name);     // 设置图片的 URL
+        // img.src = emojiSrc(name);     // 设置图片的 URL
+        img.src = emojiNamesUrl.value[emojiNames.findIndex(obj => obj == name)];
+
         img.alt = name;      // 设置图片的 alt 属性
         img.setAttribute('data-emoji', name); // 自定义属性，存储表情名称
         img.style.width = '25px';

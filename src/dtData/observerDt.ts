@@ -9,15 +9,18 @@ export let obsDt: {
     addNum: number,
     dtAdd:  (dtsDom: Ref<HTMLElement[]>) => void,
     init: Function,
+    guanbi_footer_show:Function,
 } = {
     index: 0,
     observer: null,
     addNum: 5,
+    guanbi_footer_show:()=>{},
     init() {
         this.index = 0;
     },
 
     dtAdd(dtsDom: Ref<HTMLElement[]>) {
+        this.guanbi_footer_show();
         for (let i = this.index; i < this.index + this.addNum; i++) {
             if (i == dtData.values.length) {
                 this.observer!.disconnect();
@@ -27,7 +30,7 @@ export let obsDt: {
         }
         this.index += this.addNum;
 
-        nextTick(() => {
+        nextTick(() => {            
             // 如果 observer 已经存在，断开之前的观察
             if (this.observer) {
                 this.observer.disconnect();

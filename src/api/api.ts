@@ -20,6 +20,7 @@ if (typeof window === 'undefined') {
 
 let url = "https://frp-fix.top:20047";
 // let url = "https://192.168.0.105:3012"
+// let url = "https://192.168.0.105:3013";
 // let url = "http://192.168.0.105:3010"
 // let url = "https://10.36.40.224:3012";
 // let url = "https://10.36.40.224:3012";
@@ -195,9 +196,14 @@ export function getTouxian(name: string) {
 
 }
 
+// //获取表情包地址
+// export function emojiSrc(name: string) {
+//     return `${Internet.url}/api/emoji?lei=weixin&name=${name}`;
+// }
+
 //获取表情包地址
 export function emojiSrc(name: string) {
-    return `${Internet.url}/api/emoji?lei=weixin&name=${name}`;
+    return `${Internet.url}/api/emoji?lei=${name}`;
 }
 
 //表情包列表
@@ -260,8 +266,9 @@ export async function getShare(key:string){
 
 
 export async function testNw(){
+    return
     // let url = "https://10.36.40.224:3012";
-    let url = "https://192.168.0.105:3012";
+    // let url = "https://192.168.0.105:3016";
     let a= await axiosGetWithTimeout(url +'/api/ipv6',500);
     if(a){
         Internet.url = url;

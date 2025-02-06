@@ -3,13 +3,13 @@
 		<StyleTop :bgStyle="data.bgStyle"></StyleTop>
 		<topView :touxianSrc="getTouxian('yw')" :name="data.name" :dtid="data.id.toString()"></topView>
 
-
 		<!-- 正文 -->
 		<div class="text">
-			<template v-for="a in data.textArr.slice(0, textLen)">
+			<template v-for="(a, temp) in data.textArr.slice(0, textLen)">
 				<span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
 				<br v-if="a.type == 'text' && a.text == '\n'">
-				<img v-if="a.type == 'emoji'" :src="emosrc(a.text)" />
+				<img v-if="a.type == 'emoji' && emojiNamesUrl[emojiNames.findIndex(obj => obj == a.text)]"
+					:src="emojiNamesUrl[emojiNames.findIndex(obj => obj == a.text)]" />
 			</template>
 			<span style="color: blueviolet;" v-if="data.textArr.length > textLen"
 				@click="textLen = 10000">。。。(显示更多)</span>
@@ -120,6 +120,7 @@ import topView from '../TopView/topView.vue';
 import StyleTop from '../styleTop/styleTop.vue';
 import threeView from '@/components/threeView/threeView.vue';
 import { token } from '@/api/token';
+import { emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
 
 let imgTemp = tempStore();
 
@@ -172,7 +173,8 @@ const emit = defineEmits(['clicks', 'showImg', 'showVideo']);
 
 
 function emosrc(name: string) {
-	return getEmoSrc(name);
+	// emojiNamesUrl.
+	// return getEmoSrc(name);
 }
 
 function imgSrcsc(index: number) {
