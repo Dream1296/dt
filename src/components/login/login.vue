@@ -73,5 +73,6 @@ function onSubmit(e: any) {
 
 
 <style lang="less" scoped>
+@import url('@/assets/css/public.less');
 @import url('./login.less');
 </style>

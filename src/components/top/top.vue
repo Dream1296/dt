@@ -31,7 +31,6 @@
 
     </div>
 
-    <Line></Line>
 
 
 </template>
@@ -95,8 +94,6 @@ function setFans() {
         showFailToast('拒绝操作');
         return
     }
-
-    return
     let setFanNum = fenSanNum.value == 1 ? 0 : 1;
     setFan(setFanNum).then((data) => {
         if (data.code != 200) {
@@ -126,5 +123,6 @@ eventSource.addEventListener('message', (event: any) => {
 </script>
 
 <style scoped lang="less">
+@import url('@/assets/css/public.less');
 @import url('./top.less');
 </style>

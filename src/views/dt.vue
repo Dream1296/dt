@@ -1,6 +1,8 @@
 <template>
 
     <div class="all">
+
+
         <!-- 顶部栏 -->
         <div id="kz" :class="{ kzs: showBg }">
             <topDh :showBg='showBg' @clicks="updt" @longpress1='upvideo'></topDh>
@@ -11,7 +13,7 @@
         </div>
 
         <!-- 背景图山的头像部分 -->
-        <div id="touxian">
+        <!-- <div id="touxian">
             <div class="tou">
                 <text class="texts"> {{ userName }} </text>
                 <img :src=touxianSrc></img>
@@ -19,44 +21,64 @@
             <div id="guajian">
                 <img src="../assets/img/guajianc.png">
             </div>
+        </div> -->
 
-        </div>
         <!-- 空白间隔 -->
         <div id="nulls"></div>
 
-        <div id="" v-if="vlist">
+        <div v-if="vlist">
             <!-- 系统选项 -->
-            <SystemDt @config="configs"></SystemDt>
+            <div class="zhujian">
+                <SystemDt @config="configs"></SystemDt>
+            </div>
 
 
-            <div v-show="!userData.isLogin && false">
+
+            <div class="zhujian" v-show="!userData.isLogin && false">
                 <login @success="logins"></login>
             </div>
 
 
+            <hr>
 
+            <div id="dtArr" ref="dtArr">
+                <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
+                    <div class="zhujian">
 
+                        <div v-if="a.type == 'A'">
+                            <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
+                        </div>
 
-            <div v-for="a in vlist" :key="a.id" ref="dtsDom">
-                <div v-if="a.type == 'A'">
-                    <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
+                        <div v-if="a.type == 'dataImg'">
+                            <dtForm :datas="a"></dtForm>
+                        </div>
+
+                        <div v-if="a.type == 'mood'">
+                            <!-- 心情填报 -->
+                            <mood :datas="a"></mood>
+                        </div>
+
+                        <!-- 服务器性能监控 -->
+                        <div v-if="a.type == 'top'">
+                            <Top :datas="a"></Top>
+                        </div>
+                    </div>
+                    <div class="line">
+                        <Line v-if="index < vlist.length - 1"></Line>
+                    </div>
+
                 </div>
 
-                <div v-if="a.type == 'dataImg'">
-                    <dtForm :datas="a"></dtForm>
-                </div>
 
-                <div v-if="a.type == 'mood'">
-                    <!-- 心情填报 -->
-                    <mood :datas="a"></mood>
-                </div>
 
-                <!-- 服务器性能监控 -->
-                <div v-if="a.type == 'top'">
-                    <Top :datas="a"></Top>
-                </div>
+
+
 
             </div>
+
+
+
+
 
             <div style="height: 100px;">
 
@@ -66,7 +88,7 @@
 
         <!-- end -->
         <div>
-            <elf @touchmove="a2"></elf>
+            <elf @touchmove="a2" @mousemove="a2" @mousedown="startDrag" @mouseup="endDrag" @mouseleave="endDrag"></elf>
         </div>
         <div>
             <configV></configV>
@@ -120,7 +142,7 @@
 import { dtDataInit, dtData, dtFindData } from '../dtData/getList';
 import { VcDataInit, vData } from '../dtData/VcData';
 import type { A } from '../type/dtType';
-import { nextTick, onMounted, ref, watch, type Ref } from 'vue';
+import { nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
 import topDh from '../components/topDh/topDh.vue';
 import SystemDt from '../components/SystemDt/SystemDt.vue';
 import dts from '@/components/dts/dts.vue';
@@ -144,6 +166,8 @@ import { myEvent } from '@/myEnit';
 import elf from '@/components/elf/elf.vue';
 import threeView from '@/components/threeView/threeView.vue';
 import configV from '@/components/configV/configV.vue';
+import Line from '@/components/fenge/line.vue';
+import { layoutItemsFnAdd } from '@/util/dt/layoutItems';
 
 let viewData = viewDataStore();
 let userData = userStore();
@@ -250,14 +274,41 @@ function get13() {
     })
 }
 
-
+let isMouseDown = false;
 
 function a2(e: any) {
+    console.log(1);
+
     e.preventDefault(); // 防止页面滚动
-    const touch = e.touches[0];
-    viewData.elfX = touch.clientX;
-    viewData.elfY = touch.clientY;
+
+    let x, y;
+
+    if (e.touches) {
+        // 触摸事件
+        const touch = e.touches[0];
+        x = touch.clientX;
+        y = touch.clientY;
+    } else {
+
+        if (!isMouseDown) {
+            return
+        }
+        // 鼠标事件
+        x = e.clientX;
+        y = e.clientY;
+    }
+
+    viewData.elfX = x;
+    viewData.elfY = y;
 }
+
+function startDrag() {
+    isMouseDown = true;
+}
+function endDrag() {
+    isMouseDown = false;
+}
+
 
 
 
@@ -303,14 +354,11 @@ let bgSrc = ref(bgSrcCon + 0 + ".webp");
 
 
 
-
-
+//单个动态的父组件
+const dtArr = ref<HTMLElement>();
 
 //懒加载
 const dtsDom = ref<HTMLElement[]>([]);
-
-
-
 
 
 //页面控制变量 
@@ -319,8 +367,51 @@ let head = ref<HTMLElement>();
 
 //顶部栏自动显示
 onMounted(() => {
-    showTop(showBg, head as Ref<HTMLElement>);
+    // if (dtArr.value && dtsDom.value) {
+    //     layoutItemsFnAdd(dtArr.value, dtsDom.value);
+    // }
+    if (window.innerWidth < 768) {
+        showTop(showBg, head as Ref<HTMLElement>);
+    }
+
+
+    window.addEventListener('keydown', handleGlobalKeydown);
 });
+
+
+// watch(vlist.value, () => {
+//     if (dtArr.value && dtsDom.value) {
+//         layoutItemsFnAdd(dtArr.value, dtsDom.value);
+//     }
+
+// })
+
+// setInterval(()=>{
+//     if (dtArr.value && dtsDom.value) {
+//         layoutItemsFnAdd(dtArr.value, dtsDom.value);
+//     }
+// },400)
+
+
+// 全局监听键盘事件的回调
+const handleGlobalKeydown = (e: any) => {
+    const key = e.key;
+    if (showBottom.value) {
+        if (Number(key) < 10 && Number(key) >= 0) {
+            passwd13.value += key;
+        }
+
+        if (key == 'Backspace') {
+            passwd13.value = passwd13.value.slice(0, -1);
+        }
+
+
+    }
+
+
+
+};
+
 
 
 
@@ -382,13 +473,16 @@ dtDataInit(0)
     })
 
 
+// 在组件销毁时移除事件监听器
+onBeforeUnmount(() => {
+    window.removeEventListener('keydown', handleGlobalKeydown);
+});
+
 
 
 defineOptions({
     name: 'DtComponent'  // 为组件设置名称
 });
-
-
 
 
 </script>

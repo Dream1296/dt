@@ -253,7 +253,7 @@ export async function setShare(dtid:string){
 
 export async function getLongText(dtid:string){
     let url = `${Internet.url}/api/getLongText?dtid=${dtid}`;
-    let res =  await api<{code:number,data:{id:number,dtid:string,data:string}}>(url,'GET',undefined,tokens.token);
+    let res =  await api<{code:number,data:{id:number,dtid:string,data:string,type:string}}>(url,'GET',undefined,tokens.token);
     return res;
 }
 

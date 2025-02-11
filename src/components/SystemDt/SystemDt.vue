@@ -1,13 +1,9 @@
 <template>
 	<div class="zhu">
-		<!-- 头像 -->
-		<div class="touxian">
-			<img :src="userImg"></img>
-		</div>
-		<!-- 名字 -->
-		<div class="name">
-			<text>系统</text>
-		</div>
+
+		<!-- 顶部栏 -->
+		<topView :touxianSrc="getTouxian('xt')" name="系统" dtid="999"></topView>
+
 		<!-- 正文 -->
 		<div class="text">
 			<div id="bntx">
@@ -54,8 +50,7 @@
 		</div>
 
 	</div>
-	<!-- <div id="line"></div> -->
-	<Line></Line>
+	<!-- <Line></Line> -->
 
 </template>
 
@@ -67,6 +62,8 @@ import { Internet } from '@/api/api';
 import { dtData, dtDataInit, dtFindData } from '@/dtData/getList';
 import { obsDt } from '@/dtData/observerDt';
 import { myEvent } from '@/myEnit';
+import  topView  from '@/components/TopView/topView.vue'; 
+import { getTouxian, login } from '@/api/api';
 const viewData = viewDataStore();
 //视图数据
 const vlist = dtData.vlist;
@@ -114,5 +111,6 @@ function dtFind() {
 </script>
 
 <style scoped lang="less">
+@import url('@/assets/css/public.less');
 @import url('./SystemDt.less');
 </style>

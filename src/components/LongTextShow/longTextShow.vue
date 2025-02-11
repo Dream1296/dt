@@ -1,5 +1,5 @@
 <template>
-    <div class="article-container_long_text" v-html="data">
+    <div class="article-container_long_text" v-html="props.data">
 
     </div>
 
@@ -7,26 +7,13 @@
 
 
 <script setup lang="ts">
-import { getLongText } from '@/api/api';
-import { ref } from 'vue';
 
-
-let data = ref("<h1>正在加载</h1>");
 
 const props = defineProps<{
-    dtid: string,
+    data: string,
 }>();
 
-let redHtml = `
-         <!-- 结束标志 -->
-  <div class="end-mark_long_text">
-    <span>--END--</span>
-  </div>`;
 
-getLongText(props.dtid)
-    .then(res => {
-        data.value = res.data.data + redHtml;
-    })
 
 
 
@@ -41,7 +28,7 @@ getLongText(props.dtid)
 /* 文章容器样式 */
 .article-container_long_text {
     background-color: white;
-    padding: 30px;
+    padding: 20px;
     /* 内边距稍微增加 */
     border-radius: 12px;
     /* 圆角更柔和 */
@@ -79,11 +66,10 @@ getLongText(props.dtid)
 
 /* 文章段落样式 */
 .article-container_long_text p {
-    font-size: 1.2rem;
     /* 稍微增大正文字体 */
     color: #6f4a8e;
     /* 深紫色，增加可读性 */
-    margin-bottom: 20px;
+    margin: 5px 0 !important;
     /* 段落间隔略微增大 */
     text-align: justify;
     /* 自然对齐 */
@@ -150,22 +136,115 @@ getLongText(props.dtid)
 
 
 .end-mark_long_text {
-  margin-top: 30px;
-  text-align: center;
-  font-size: 1.2rem;  /* 小巧的字体大小 */
-  font-weight: bold;
-  color: #8b2a5c;  /* 深粉色 */
-  position: relative;
+    margin-top: 30px;
+    text-align: center;
+    font-size: 1.2rem;
+    /* 小巧的字体大小 */
+    font-weight: bold;
+    color: #8b2a5c;
+    /* 深粉色 */
+    position: relative;
 }
+
 /*  */
 
 .end-mark_long_text span {
-  letter-spacing: 2px;  /* 字符间距 */
-  text-transform: uppercase;  /* 全部大写 */
+    letter-spacing: 2px;
+    /* 字符间距 */
+    text-transform: uppercase;
+    /* 全部大写 */
 }
 
 .end-mark_long_text:hover {
-  color: #ff6b81;  /* 鼠标悬停时颜色变化 */
-  cursor: pointer;
+    color: #ff6b81;
+    /* 鼠标悬停时颜色变化 */
+    cursor: pointer;
 }
+
+
+/* 用户输入样式 */
+/* 用户输入样式 */
+.gpt_user {
+    background-color: #f7c6d1;
+    /* 淡粉色背景 */
+    color: #4e1e64;
+    /* 深紫色字体，增强可读性 */
+    padding: 15px 20px;
+    /* 增加内边距，让文本更舒适 */
+    border-radius: 12px;
+    /* 圆角 */
+    margin-bottom: 15px;
+    /* 适当的底部间距 */
+    width: 85%;
+    /* 宽度占85% */
+    align-self: flex-end;
+    /* 用户输入靠右显示 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* 柔和的阴影效果 */
+    font-size: 1.2rem;
+    /* 字体大小适中 */
+    text-align: left;
+    /* 左对齐 */
+    word-wrap: break-word;
+    /* 防止长单词溢出 */
+    display: flex;
+    /* 使用flex布局 */
+    flex-direction: column;
+    /* 垂直排列对话 */
+    gap: 10px;
+    /* 增加对话框之间的间距 */
+    position: relative; /* 让时间可以相对于这个框进行定位 */
+}
+
+/* AI输出样式 */
+.gpt_ai {
+    background-color: #fce4ec;
+    /* 淡粉色背景，比用户输入更浅 */
+    color: #6a2c84;
+    /* 深紫色字体，增强可读性 */
+    padding: 15px 20px;
+    /* 增加内边距 */
+    border-radius: 12px;
+    /* 圆角 */
+    margin-bottom: 15px;
+    /* 适当的底部间距 */
+    text-align: center;
+    /* 中心对齐AI文本 */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    /* 柔和的阴影效果 */
+    font-size: 1.2rem;
+    /* 字体大小适中 */
+    word-wrap: break-word;
+    /* 防止长单词溢出 */
+    display: flex;
+    /* 使用flex布局 */
+    flex-direction: column;
+    /* 垂直排列对话 */
+    gap: 10px;
+    /* 增加对话框之间的间距 */
+    position: relative; /* 让时间可以相对于这个框进行定位 */
+}
+
+/* 时间样式，绝对定位到对话框的顶部 */
+.chatDate {
+    font-size: 0.8rem;
+    color: #999;
+    position: absolute;
+    top: 6px; /* 让时间悬浮在对话框上方 */
+    right: 10px; /* 右对齐 */
+}
+
+.bold{
+    font-weight:800;
+}
+.my_hr{
+    width: 100%;
+    height: 2px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+
+    background-color: rgb(0, 0, 0);
+}
+
+
 </style>

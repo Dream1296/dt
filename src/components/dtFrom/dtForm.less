@@ -1,5 +1,6 @@
 .zhu {
-    width: 100vw;
+  width: 100%;
+    // width: 100vw;
     position: relative;
     // background-image: url("../../assets/img/dtbg.png");
     /* background-color: bisque; */
@@ -8,25 +9,7 @@
   
   @leftTap: 35px;
   
-  .touxian {
-    width: 200px;
-    position: relative;
-    left: @leftTap;
-    top: 10px;
-    img {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
-    }
-  }
   
-  .name {
-    color: rgb(87, 107, 149);
-    font-size: 16px;
-    position: absolute;
-    left: @leftTap + 50;
-    top: 12px;
-  }
   
   .text {
     font-size: 15px;
@@ -46,7 +29,7 @@
   }
   
   .imgs {
-    width: 70vw;
+    width: 86%;
     position: relative;
     top: 10px;
     left: @leftTap + 0;
@@ -54,7 +37,7 @@
     flex-wrap: wrap;
     .image {
       img{
-        width: 86vw;
+        width: 86%;
       }
     }
     .imgsAdd {
@@ -129,18 +112,6 @@
   }
   
   .di {
-    width: 100vw;
-    height: 50px;
-    /* background-color: blue; */
-    position: relative;
-    .date {
-      width: 70px;
-      font-size: 10px;
-      height: 25px;
-      position: absolute;
-      left: calc(100vw - 80px);
-      top: 18px;
-    }
     .xuan {
       width: 130px;
       position: absolute;
@@ -240,15 +211,6 @@
       font-size: 15px;
   
     }
-  }
-  
-  #line{
-    width: 100vw;
-    height: 8px;
-    margin: 0 auto;
-    // height: 1px;
-    background-color: rgb(244, 244, 244);
-    // border: 2px solid rgb(244, 244, 244);
   }
   
   // @font-face {  

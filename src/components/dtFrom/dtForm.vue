@@ -32,9 +32,6 @@
 		
         
 	</div>
-	<!-- <div id="line"></div> -->
-	<!-- <hr> -->
-	 <Line></Line>
 
 
 </template>
@@ -103,5 +100,6 @@ function getV() {
 
 
 <style lang="less" scoped>
+@import url('@/assets/css/public.less');
 @import url('./dtForm.less');
 </style>

@@ -24,7 +24,6 @@
     </div>
     <!-- <div id="date">2024-11-28</div> -->
 
-    <Line></Line>
 
 
 </template>

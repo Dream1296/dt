@@ -1,11 +1,74 @@
 #head {
-  width: 100vw;
+  width: 100%;
   height: 250px;
   /* background-color: aqua; */
   // background-image: url('../img/bg2.png');
   background-position: center;
   background-size: cover;
 }
+
+.zhujian {
+  width: 360px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  // background-color: antiquewhite;
+  border-radius: 10px;
+  // position: absolute;
+  // left: 0;
+  // top: 0;
+}
+
+#dtArr {
+  // width: 90vw;
+  // background-color: #039be5;
+  
+  position: relative;
+}
+
+.line{
+  width: 360px;
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .zhujian {
+    width: 580px;
+
+  }
+  #dtArr {
+
+  }
+  .line{
+    width: 580px;
+    margin-top: 5px;
+    margin-bottom: 5px;
+  }
+  .zhujian {
+    width: 580px;
+    padding: 20px 30px;    /* 内边距，保证文章内容不贴边 */
+    // background: linear-gradient(135deg, #f8e1f4, #ece7e7); /* 默认渐变背景：淡粉色到白色 */
+    border-radius: 16px;   /* 圆角，使用更大的圆角 */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* 更深的阴影效果，增强立体感 */
+    border: 1px solid #e0e0e0; /* 边框添加一个浅灰色边框 */
+    overflow: hidden;      /* 防止内容溢出 */
+    // animation: backgroundAnimation 10s ease-in-out infinite; /* 背景渐变动画 */
+  }
+  
+}
+
+/* 动画：渐变背景从淡粉色到白色循环变化 */
+@keyframes backgroundAnimation {
+  0% {
+    background: linear-gradient(135deg, #f8e1f4, #ffffff); /* 初始渐变：淡粉色到白色 */
+  }
+  50% {
+    background: linear-gradient(135deg, #ffffff, #f8e1f4); /* 中间渐变：白色到淡粉色 */
+  }
+  100% {
+    background: linear-gradient(135deg, #f8e1f4, #ffffff); /* 结束时恢复初始渐变 */
+  }
+}
+
 
 #kz {
   width: 100vw;
@@ -61,15 +124,10 @@
 }
 
 #nulls {
-  width: 100vw;
+  width: 90vw;
   height: 18px;
 }
 
-.zhu {
-  width: 100vw;
-  position: relative;
-  /* background-color: bisque; */
-}
 
 .touxian {
   position: relative;

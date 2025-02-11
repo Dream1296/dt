@@ -39,7 +39,7 @@ watch(() => {
         viewData.elfX = r.value / 2;
         allLeft.value = r.value / 2;
     }
-
+ 
     allTop.value = viewData.elfY - r.value / 2;
     allLeft.value = viewData.elfX - r.value / 2;
     console.log(allTop.value, allLeft.value);

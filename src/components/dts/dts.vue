@@ -1,6 +1,8 @@
 <template>
 	<div class="zhu" v-if="data">
+		<!-- 顶部小样式 -->
 		<StyleTop :bgStyle="data.bgStyle"></StyleTop>
+		<!-- 头像与名字 -->
 		<topView :touxianSrc="getTouxian('yw')" :name="data.name" :dtid="data.id.toString()"></topView>
 
 		<!-- 正文 -->
@@ -94,7 +96,6 @@
 		<!-- <hr> -->
 		<!-- <div id="line"></div> -->
 		<!-- <div style="height: 20px;"></div> -->
-		<Line></Line>
 
 		<div class="ding" v-show="data.po != 0">
 			<img src="../../assets/img/ding.png">
@@ -305,5 +306,6 @@ function setPls() {
 
 
 <style lang="less" scoped>
+@import url('@/assets/css/public.less');
 @import url('./dts.less');
 </style>
