@@ -1,4 +1,4 @@
-import { createRouter, createWebHashHistory, type RouteRecordRaw } from 'vue-router';
+import { createRouter, createWebHashHistory, createWebHistory, type RouteRecordRaw } from 'vue-router';
 import dt from '../views/dt.vue';
 // import imgs from '../views/imgs.vue';
 // import test from '../views/text.vue';
@@ -62,7 +62,8 @@ const routes: Array<RouteRecordRaw> = [
 ];
 
 const router = createRouter({
-  history: createWebHashHistory(),  // 改为 hash 模式
+  // history: createWebHashHistory(),  // 改为 hash 模式
+  history: createWebHistory(),
   routes
 });
 

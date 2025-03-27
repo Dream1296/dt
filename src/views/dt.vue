@@ -4,13 +4,17 @@
 
 
         <!-- 顶部栏 -->
-        <div id="kz" :class="{ kzs: showBg }">
+        <!-- <div id="kz" :class="{ kzs: showBg }">
             <topDh :showBg='showBg' @clicks="updt" @longpress1='upvideo'></topDh>
-        </div>
+        </div> -->
 
-        <!-- 背景图 -->
-        <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
-        </div>
+        <!-- 背景图  -->
+       <!-- <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
+        </div> -->
+
+         <!-- <div>
+            {{ userData.isPc  }}
+        </div>  -->
 
         <!-- 背景图山的头像部分 -->
         <!-- <div id="touxian">
@@ -22,6 +26,7 @@
                 <img src="../assets/img/guajianc.png">
             </div>
         </div> -->
+        <homePage></homePage>
 
         <!-- 空白间隔 -->
         <div id="nulls"></div>
@@ -34,7 +39,7 @@
 
 
 
-            <div class="zhujian" v-show="!userData.isLogin && false">
+            <div class="zhujian" v-show="!userData.isLogin && showLogin">
                 <login @success="logins"></login>
             </div>
 
@@ -45,8 +50,16 @@
                 <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
                     <div class="zhujian">
 
-                        <div v-if="a.type == 'A'">
+                        <div v-if="a.type == 'A' && !a.KeepRun && !a.KeepBadminton">
                             <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
+                        </div>
+
+                        <div v-if="a.type == 'A' && a.KeepRun">
+                            <KeepRun :datas="a"></KeepRun>
+                        </div>
+
+                        <div v-if="a.type == 'A' && a.KeepBadminton">
+                            <KeepBadminton :datas="a"></KeepBadminton>
                         </div>
 
                         <div v-if="a.type == 'dataImg'">
@@ -115,10 +128,10 @@
     <!-- 信息标识 -->
     <div class="footer-info" v-show="footer_show" :style="{ bottom: `${Number(footer_show_num)}px` }">
         <p>
-            <span>ICP备案号：<a href="https://www.beian.gov.cn" target="_blank">ICP 备案号 12345678</a></span>
+            <span>ICP备案号：<a href="https://beian.miit.gov.cn" target="_blank">豫ICP备2025111164号</a></span>
         </p>
         <p>
-            <span>萌国ICP备案号：<a href="https://www.mg-beian.gov.cn" target="_blank">MG ICP 备案号 87654321</a></span>
+            <span>萌国ICP备案号：<a href="https://icp.gov.moe" target="_blank">20250247</a></span>
         </p>
 
         <p>
@@ -168,16 +181,29 @@ import threeView from '@/components/threeView/threeView.vue';
 import configV from '@/components/configV/configV.vue';
 import Line from '@/components/fenge/line.vue';
 import { layoutItemsFnAdd } from '@/util/dt/layoutItems';
+import { useRoute } from 'vue-router';
+import KeepRun from '@/components/keepRun/keepRun.vue';
+import KeepBadminton from '@/components/KeepBadminton/KeepBadminton.vue';
+import homePage from '@/components/homePage/homePage.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();
 
+const route = useRoute();
+let showLogin = ref(false);
 
+console.log(route.query.login);
+
+if (route.query.login && route.query.login == 'login') {
+    showLogin.value = true;
+}
 
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
 const passwd13Text = '143323';
+
+
 
 
 

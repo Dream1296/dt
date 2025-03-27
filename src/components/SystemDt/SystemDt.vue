@@ -64,6 +64,8 @@ import { obsDt } from '@/dtData/observerDt';
 import { myEvent } from '@/myEnit';
 import  topView  from '@/components/TopView/topView.vue'; 
 import { getTouxian, login } from '@/api/api';
+import { token } from '@/api/token';
+import { showFailToast } from 'vant';
 const viewData = viewDataStore();
 //视图数据
 const vlist = dtData.vlist;
@@ -98,6 +100,11 @@ function tzs() {
 }
 //查询
 function dtFind() {
+
+	if (token.istoken == 'false') {
+            showFailToast('仅用于内部维护使用');
+            return
+        }
 	if (sr.value == '' || sr.value == ' ') {
 		dtDataInit(0).then(() => {
 			myEvent.emit('upDtList');

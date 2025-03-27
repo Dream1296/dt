@@ -32,7 +32,7 @@ const app = createApp(App);
 import { CellGroup } from 'vant';
 import { apiInit } from './api/apiIng'
 
-import {testNw} from '@/api/api';
+import { testNw } from '@/api/api';
 testNw();
 
 app.use(Form);
@@ -40,6 +40,10 @@ app.use(Field);
 app.use(CellGroup);
 
 app.use(createPinia());
+
+// 设备检测
+const deviceStore = userStore();
+deviceStore.isPcFn();
 
 
 app.use(router);
@@ -78,6 +82,7 @@ app.use(Checkbox);
 
 
 import { ShareSheet } from 'vant';
+import { userStore } from './stores/userStore'
 app.use(ShareSheet);
 
 

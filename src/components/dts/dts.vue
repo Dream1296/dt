@@ -56,6 +56,14 @@
 
 		</div>
 
+		<div class="lvLogos" v-if="data.File">
+
+			<div class="lvLogo" @click="dowFile(data.File.fileId)">
+				{{ data.File.name }}
+			</div>
+
+		</div>
+
 		<div class="di">
 			<!-- 日期 -->
 			<div class="date" @click="showX">
@@ -110,8 +118,8 @@ import { onMounted, ref, watch } from 'vue';
 import { type A } from '../../type/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
-import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
-import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, imgSrcs } from '@/api/api';
+import { showSuccessToast, showFailToast, showConfirmDialog, Toast, Dialog, showToast } from 'vant';
+import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, imgSrcs, dtFileDow } from '@/api/api';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
@@ -122,6 +130,7 @@ import StyleTop from '../styleTop/styleTop.vue';
 import threeView from '@/components/threeView/threeView.vue';
 import { token } from '@/api/token';
 import { emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
+import axios from 'axios';
 
 let imgTemp = tempStore();
 
@@ -152,6 +161,22 @@ function tzlt(id: number) {
 	router.push({ path: '/longText', query: { id: id } });
 
 }
+
+function dowFile(id: string) {
+	showConfirmDialog({
+		title: '确定要下载吗？',
+		message:
+			'如果解决方法是丑陋的，那就肯定还有更好的解决方法，只是还没有发现而已。',
+	})
+		.then(() => {
+			dtFileDow(id)
+		})
+		.catch(() => {
+			showSuccessToast('用户取消');
+		});
+
+}
+
 
 
 

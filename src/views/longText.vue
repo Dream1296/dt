@@ -33,11 +33,15 @@ let redHtml = `
 if (dtid.value != '-1') {
     getLongText(dtid.value)
         .then(res => {
+            if(res.code == 400){
+                data.value = "<h1>403</h1>" + redHtml;
+            }
             if(res.data.type == 'chatgpt' && allDom.value){
                 allDom.value.style.padding = '0px';
             }
             data.value = res.data.data + redHtml;
         })
+        
 }
 
 

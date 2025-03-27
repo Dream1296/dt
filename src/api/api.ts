@@ -17,7 +17,7 @@ if (typeof window === 'undefined') {
     axios = axioss;
 }
 
-
+// let url = "https://dlhe.top";
 let url = "https://frp-fix.top:20047";
 // let url = "https://192.168.0.105:3012"
 // let url = "https://192.168.0.105:3013";
@@ -25,6 +25,9 @@ let url = "https://frp-fix.top:20047";
 // let url = "https://10.36.40.224:3012";
 // let url = "https://10.36.40.224:3012";
 // let url = 'https://172.16.3.12:3010';
+// let url = "http://10.42.0.1:3000";
+// let url = "";
+
 
 export let Internet = {
     url,
@@ -33,19 +36,18 @@ export let Internet = {
 
 
 //主简单请求发送函数
-export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?: any, token?: string,signal?:AbortSignal): Promise<T> {
+export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?: any, token?: string, signal?: AbortSignal): Promise<T> {
     if (token == 'unknown') {
         await tokens.tokenPro;
     }
     if (token != undefined && tokens.istoken == 'false') {
         console.log('跳转到登录');
-
     }
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
 
     const response = await axios({
         url: url,
-        signal:signal,
+        signal: signal,
         method: method,
         headers: headers,
         data: method === 'POST' ? data : undefined, // 只有在 POST 请求时才传递数据
@@ -74,7 +76,7 @@ export async function yz(token: string) {
 }
 
 //动态主数据
-export async function dtDate(loa: string | number, aes: number , signal?:AbortSignal) {
+export async function dtDate(loa: string | number, aes: number, signal?: AbortSignal) {
     if (!aes) {
         aes = 0;
     }
@@ -82,12 +84,15 @@ export async function dtDate(loa: string | number, aes: number , signal?:AbortSi
 
     const urls = Internet.url + "/api/getDtList?loa=" + loa + "&aes=" + aes;
     type T = {
-        code : number,
-        loa:number,
+        code: number,
+        loa: number,
         message: string,
-        data : (A | dataImg)[],
+        data: (A | dataImg)[],
     }
-    let res = await api<T>(urls, 'GET', undefined, tokens.token , signal);
+    let res = await api<T>(urls, 'GET', undefined, tokens.token, signal);
+    if (!tokens.token) {
+        res.data = res.data.slice(0, 30);
+    }
     return res;
 }
 
@@ -107,7 +112,7 @@ export async function addDtindex(dtid: number, text: string) {
 }
 
 //单个动态
-export async function getdt(id: string | number,loa?:number): Promise<A> {
+export async function getdt(id: string | number, loa?: number): Promise<A> {
     loa = loa == undefined ? 0 : loa
     let urls = Internet.url + "/api/getdt?id=" + String(id) + "&loa=" + loa;
     let res = (await api(urls, 'GET', undefined, tokens.token)) as { data: A };
@@ -129,13 +134,13 @@ export async function delDts(dtId: string) {
 }
 
 //修改背景样式
-export async function setDtBgStyle(dtId:number,dtBgStyle:number){
+export async function setDtBgStyle(dtId: number, dtBgStyle: number) {
     let urls = Internet.url + '/api/setBgStyle';
     let body = {
-        id:dtId,
-        dtBgStyle:dtBgStyle
+        id: dtId,
+        dtBgStyle: dtBgStyle
     };
-    let res = await api<{tf:number}>(urls,'POST',body,tokens.token);
+    let res = await api<{ tf: number }>(urls, 'POST', body, tokens.token);
     return res;
 }
 
@@ -215,81 +220,93 @@ export async function emoList(): Promise<string[]> {
 
 
 // 服务器性能sse
-export function getXN(){
-    return  new EventSource(`${Internet.url}/api/xnlist`); // 建立连接，监听服务器推送的事件
+export function getXN() {
+    return new EventSource(`${Internet.url}/api/xnlist`); // 建立连接，监听服务器推送的事件
 }
 
 
-export async function setFan(num:number|string){
+export async function setFan(num: number | string) {
     let url = `${Internet.url}/api/setFan?Fan=${num.toString()}`;
-    let res = await api<{code:number,fan:number}>(url, 'GET');
+    let res = await api<{ code: number, fan: number }>(url, 'GET');
     return res;
 }
 
-export async function setMood(mood:string){
+export async function setMood(mood: string) {
     let url = `${Internet.url}/api/setMood`;
-    let res = await api<{code:number,tf:number}>(url, 'POST',{mood:mood},tokens.token);
+    let res = await api<{ code: number, tf: number }>(url, 'POST', { mood: mood }, tokens.token);
     return res;
 }
 
 
-export async function setDtData(dtid:string,loa?:string,dtBgStyle?:string,date?:string){
+export async function setDtData(dtid: string, loa?: string, dtBgStyle?: string, date?: string) {
     let url = `${Internet.url}/api/setDt`;
     let data = {
-        id:dtid,
-        loa:loa,
-        bg_style:dtBgStyle,
-        date:date
+        id: dtid,
+        loa: loa,
+        bg_style: dtBgStyle,
+        date: date
     }
-    let res = await api<{code:number,tf:number}>(url,'POST',data,tokens.token);
+    let res = await api<{ code: number, tf: number }>(url, 'POST', data, tokens.token);
     return res;
 }
 
-export async function setShare(dtid:string){
+export async function setShare(dtid: string) {
     let url = `${Internet.url}/api/setShare`;
-    let res = await api<{code:number,tf:number,token:string}>(url,'POST',{dtid:dtid},tokens.token);
+    let res = await api<{ code: number, tf: number, token: string }>(url, 'POST', { dtid: dtid }, tokens.token);
     return res;
 }
 
-export async function getLongText(dtid:string){
+export async function getLongText(dtid: string) {
     let url = `${Internet.url}/api/getLongText?dtid=${dtid}`;
-    let res =  await api<{code:number,data:{id:number,dtid:string,data:string,type:string}}>(url,'GET',undefined,tokens.token);
+    let res = await api<{ code: number, data: { id: number, dtid: string, data: string, type: string } }>(url, 'GET', undefined, tokens.token);
     return res;
 }
 
 
-export async function getShare(key:string){
+export async function getShare(key: string) {
     let url = `${Internet.url}/api/getShare?key=${key}`;
-    let res = await api<{code:number,tf:number,token:string}>(url,'GET');
+    let res = await api<{ code: number, tf: number, token: string }>(url, 'GET');
     return res;
 }
 
+export function dtFileDow(id: string) {
+    const url = `${Internet.url}/api/dtFile?dtid=${id}`;
 
-export async function testNw(){
-    return
+    const a = document.createElement('a');
+    a.href = url;
+    a.style.display = 'none';
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+}
+
+
+
+export async function testNw() {
     // let url = "https://10.36.40.224:3012";
     // let url = "https://192.168.0.105:3016";
-    let a= await axiosGetWithTimeout(url +'/api/ipv6',500);
-    if(a){
+    let url = "http://10.42.0.1:3000"
+    let a = await axiosGetWithTimeout(url + '/api/ipv6', 500);
+    if (a) {
         Internet.url = url;
     }
 }
 
 // 定义一个带有超时机制的 GET 请求函数
-async function axiosGetWithTimeout  (url:string, timeout = 500){
+async function axiosGetWithTimeout(url: string, timeout = 500) {
     try {
-      // 使用 Promise.race 实现超时控制
-      const response = await Promise.race([
-        axios.get(url), // 发起请求
-        new Promise((_, reject) => setTimeout(() => reject(new Error('Request Timeout')), timeout)) // 超时处理
-      ]);
-      return response.data;
-    } catch (error:any) {
-      if (error.message === 'Request Timeout') {
-        console.error('Request Timed Out');
-      } else {
-        console.error('Request Failed:', error.message);
-      }
-      return null; // 返回 null 表示请求失败或超时
+        // 使用 Promise.race 实现超时控制
+        const response = await Promise.race([
+            axios.get(url), // 发起请求
+            new Promise((_, reject) => setTimeout(() => reject(new Error('Request Timeout')), timeout)) // 超时处理
+        ]);
+        return response.data;
+    } catch (error: any) {
+        if (error.message === 'Request Timeout') {
+            console.error('Request Timed Out');
+        } else {
+            console.error('Request Failed:', error.message);
+        }
+        return null; // 返回 null 表示请求失败或超时
     }
-  };
+};

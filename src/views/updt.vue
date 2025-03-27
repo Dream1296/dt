@@ -27,7 +27,7 @@
 
         <!-- 表情包菜单 -->
         <div id="emojiC" v-show="showEmo">
-            <div v-for="(a,index) in emojiList" @click.stop="insEmoji(a)">
+            <div v-for="(a, index) in emojiList" @click.stop="insEmoji(a)">
                 <img v-if="emojiNamesUrl[index]" :src="emojiNamesUrl[index]">
             </div>
         </div>
@@ -78,6 +78,8 @@
                 {{ timeArr.join(':') }}
             </p>
 
+            <van-button type="success" @click="huishuText">上次的文本</van-button>
+
 
 
         </div>
@@ -114,9 +116,9 @@ import { emojiSrc, emoList } from '@/api/api';
 import { ac, postDt, upfile, upfiles } from '@/api/upapi';
 import { text } from 'stream/consumers';
 import { onMounted, ref } from 'vue';
-import { closeToast, showFailToast, showLoadingToast, showSuccessToast, Toast } from 'vant';
+import { closeToast, showConfirmDialog, showFailToast, showLoadingToast, showSuccessToast, Toast } from 'vant';
 import router from '@/router';
-import {getemojiImg,emojiNamesUrl,emojiNames} from '@/util/dt/emoji';
+import { getemojiImg, emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
 // emojiSrc
 
 let shuru = ref<HTMLDivElement>();
@@ -151,18 +153,35 @@ let configV = ref(false);
 
 let a = ref<number[]>([0]);
 
-//图片获取
+
+// 从本地存储中获取上一次内容
+function huishuText() {
+
+    showConfirmDialog({
+        title: '确定要加载吗？',
+        message:
+            '如果解决方法是丑陋的，那就肯定还有更好的解决方法，只是还没有发现而已。',
+    })
+        .then(() => {
+            let updTtText = localStorage.getItem('updTtText');
+
+            if (updTtText && shuru.value) {
+                shuru.value.innerHTML = updTtText;
+            }
+            showSuccessToast("完成");
+        })
+        .catch(() => {
+            showFailToast('用户取消');
+        });
+
+}
 
 
 onMounted(() => {
 
-    let updTtText = localStorage.getItem('updTtText');
 
-    if (updTtText && shuru.value) {
-        shuru.value.innerHTML = updTtText;
-    }
 
-    shuru.value?.addEventListener('input', (e) => {        
+    shuru.value?.addEventListener('input', (e) => {
         let shuruText = shuru.value?.innerHTML;
         if (!shuruText) {
             return
@@ -173,19 +192,19 @@ onMounted(() => {
     initialHeight = window.innerHeight;
 
     //表情包处理
-    let lists:string[] = [];
+    let lists: string[] = [];
     emoList()
-    .then((list) =>{
-        emojiList.value = list;
-        lists = list;
-    })
-    .then( async ()=>{
-        // for(let emo of lists){
-        //     let url = await getemojiImg(emo);
-        //     let index = lists.findIndex((obj)=> obj == emo);
-        //     getemojiImgArr.value[index] = url;
-        // }
-    })
+        .then((list) => {
+            emojiList.value = list;
+            lists = list;
+        })
+        .then(async () => {
+            // for(let emo of lists){
+            //     let url = await getemojiImg(emo);
+            //     let index = lists.findIndex((obj)=> obj == emo);
+            //     getemojiImgArr.value[index] = url;
+            // }
+        })
 })
 
 
