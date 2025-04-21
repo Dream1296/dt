@@ -22,4 +22,7 @@ import StatusBar from './components/StatusBar/StatusBar.vue';
 
 </script>
 
-<style scoped lang="less"></style>
+<style scoped lang="less">
+
+
+</style>

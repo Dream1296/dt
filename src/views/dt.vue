@@ -4,17 +4,14 @@
 
 
         <!-- 顶部栏 -->
-        <!-- <div id="kz" :class="{ kzs: showBg }">
+        <div id="kz" :class="{ kzs: showBg }">
             <topDh :showBg='showBg' @clicks="updt" @longpress1='upvideo'></topDh>
+        </div>
+
+        <!-- 背景图 
+        <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
         </div> -->
 
-        <!-- 背景图  -->
-       <!-- <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
-        </div> -->
-
-         <!-- <div>
-            {{ userData.isPc  }}
-        </div>  -->
 
         <!-- 背景图山的头像部分 -->
         <!-- <div id="touxian">
@@ -26,7 +23,18 @@
                 <img src="../assets/img/guajianc.png">
             </div>
         </div> -->
-        <homePage></homePage>
+
+        <div id="head" ref="head">
+            <div v-if="userData.isPc">
+                <homePage></homePage>
+            </div>
+            <div v-if="!userData.isPc">
+                <homePageMo></homePageMo>
+            </div>
+        </div>
+
+
+
 
         <!-- 空白间隔 -->
         <div id="nulls"></div>
@@ -126,21 +134,9 @@
     </van-popup>
 
     <!-- 信息标识 -->
-    <div class="footer-info" v-show="footer_show" :style="{ bottom: `${Number(footer_show_num)}px` }">
-        <p>
-            <span>ICP备案号：<a href="https://beian.miit.gov.cn" target="_blank">豫ICP备2025111164号</a></span>
-        </p>
-        <p>
-            <span>萌国ICP备案号：<a href="https://icp.gov.moe" target="_blank">20250247</a></span>
-        </p>
 
-        <p>
-            <a href="/feedback" class="feedback-link">内容反馈</a> |
-            <span>运行时长：<span id="run-time"></span></span> |
-            <!-- <span>总访问：<span id="total-visits"></span></span> |
-            <span>今日访问：<span id="daily-visits"></span></span> -->
-        </p>
-        <p>© 2024-2025</p>
+    <div>
+        <footers :show_num="footer_show_num"></footers>
     </div>
 
 
@@ -185,6 +181,8 @@ import { useRoute } from 'vue-router';
 import KeepRun from '@/components/keepRun/keepRun.vue';
 import KeepBadminton from '@/components/KeepBadminton/KeepBadminton.vue';
 import homePage from '@/components/homePage/homePage.vue';
+import footers from '@/components/footer/footer.vue';
+import homePageMo from '@/components/homePageMo/homePageMo.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();
@@ -211,7 +209,8 @@ const passwd13Text = '143323';
 const vlist = dtData.vlist;
 
 // 底部信息是否显示
-const footer_show = ref(true);
+// const footer_show = ref(true);
+
 // 底部信息是否显示
 const footer_show_num = ref(0);
 
@@ -471,18 +470,15 @@ function configs() {
 
 
 let guanbi_footer_show = () => {
-    console.log(1);
 
     obsDt.guanbi_footer_show = () => {
-        console.log(2);
         setTimeout(() => {
-            footer_show_num.value = -100;
+            footer_show_num.value = 1;
             setTimeout(() => {
-                footer_show.value = false;
+                footer_show_num.value = 2;
             }, 2000);
         }, 1500)
         obsDt.guanbi_footer_show = () => {
-            console.log(3);
         };
     }
 

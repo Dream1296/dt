@@ -187,6 +187,7 @@ onMounted(() => {
             return
         }
         localStorage.setItem('updTtText', shuruText);
+        textInputHeightAuto();
     })
 
     initialHeight = window.innerHeight;
@@ -206,6 +207,19 @@ onMounted(() => {
             // }
         })
 })
+
+
+function textInputHeightAuto() {
+    let shuruDom = shuru.value;
+    if (shuruDom == null) {
+        return
+    }
+    let shuruDomHO = window.getComputedStyle(shuruDom);
+    // 重置高度以便重新计算
+    shuruDom.style.height = 'auto';
+    // 设置新的高度，确保文本框不小于最小高度
+    shuruDom.style.height = Math.max((shuruDom.scrollHeight + 40), 150) + 'px';
+}
 
 
 

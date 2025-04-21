@@ -1,10 +1,15 @@
 #head {
   width: 100%;
-  height: 250px;
+  height: 100%;
+  // height: 100vh;
   /* background-color: aqua; */
   // background-image: url('../img/bg2.png');
   background-position: center;
   background-size: cover;
+}
+
+* {
+  scrollbar-color: #ff0000 #dddddd;
 }
 
 .zhujian {
@@ -21,11 +26,11 @@
 #dtArr {
   // width: 90vw;
   // background-color: #039be5;
-  
+
   position: relative;
 }
 
-.line{
+.line {
   width: 360px;
   margin: 0 auto;
 }
@@ -35,37 +40,48 @@
     width: 580px;
 
   }
-  #dtArr {
 
-  }
-  .line{
+  #dtArr {}
+
+  .line {
     width: 580px;
     margin-top: 5px;
     margin-bottom: 5px;
   }
+
   .zhujian {
     width: 580px;
-    padding: 20px 30px;    /* 内边距，保证文章内容不贴边 */
+    padding: 20px 30px;
+    /* 内边距，保证文章内容不贴边 */
     // background: linear-gradient(135deg, #f8e1f4, #ece7e7); /* 默认渐变背景：淡粉色到白色 */
-    border-radius: 16px;   /* 圆角，使用更大的圆角 */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15); /* 更深的阴影效果，增强立体感 */
-    border: 1px solid #e0e0e0; /* 边框添加一个浅灰色边框 */
-    overflow: hidden;      /* 防止内容溢出 */
+    border-radius: 16px;
+    /* 圆角，使用更大的圆角 */
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+    /* 更深的阴影效果，增强立体感 */
+    border: 1px solid #e0e0e0;
+    /* 边框添加一个浅灰色边框 */
+    overflow: hidden;
+    /* 防止内容溢出 */
     // animation: backgroundAnimation 10s ease-in-out infinite; /* 背景渐变动画 */
   }
-  
+
 }
 
 /* 动画：渐变背景从淡粉色到白色循环变化 */
 @keyframes backgroundAnimation {
   0% {
-    background: linear-gradient(135deg, #f8e1f4, #ffffff); /* 初始渐变：淡粉色到白色 */
+    background: linear-gradient(135deg, #f8e1f4, #ffffff);
+    /* 初始渐变：淡粉色到白色 */
   }
+
   50% {
-    background: linear-gradient(135deg, #ffffff, #f8e1f4); /* 中间渐变：白色到淡粉色 */
+    background: linear-gradient(135deg, #ffffff, #f8e1f4);
+    /* 中间渐变：白色到淡粉色 */
   }
+
   100% {
-    background: linear-gradient(135deg, #f8e1f4, #ffffff); /* 结束时恢复初始渐变 */
+    background: linear-gradient(135deg, #f8e1f4, #ffffff);
+    /* 结束时恢复初始渐变 */
   }
 }
 
@@ -454,33 +470,33 @@
 
 // 底部标识
 
-/* 固定底部，蓝色风格，添加圆角和毛玻璃效果 */
-.footer-info {
-  position: fixed;
-  left: 0;
-  bottom: 30px;
-  width: 100%;
-  background-color: rgba(224, 247, 250, 0.8);
-  /* 毛玻璃效果的背景色 */
-  backdrop-filter: blur(8px);
-  /* 毛玻璃模糊效果 */
-  color: #333;
-  text-align: center;
-  padding: 10px 0;
-  font-size: 14px;
-  line-height: 1.5;
-  z-index: 9999;
-  font-family: 'Arial', sans-serif;
-  border-top: 2px solid #80deea;
-  /* 增加的边框对比色 */
-  border-radius: 15px 15px 15px 15px;
-  /* 添加圆角，顶部圆角 */
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-  /* 添加轻微阴影 */
+// /* 固定底部，蓝色风格，添加圆角和毛玻璃效果 */
+// .footer-info {
+//   position: fixed;
+//   left: 0;
+//   bottom: 30px;
+//   width: 100%;
+//   background-color: rgba(224, 247, 250, 0.8);
+//   /* 毛玻璃效果的背景色 */
+//   backdrop-filter: blur(8px);
+//   /* 毛玻璃模糊效果 */
+//   color: #333;
+//   text-align: center;
+//   padding: 10px 0;
+//   font-size: 14px;
+//   line-height: 1.5;
+//   z-index: 9999;
+//   font-family: 'Arial', sans-serif;
+//   border-top: 2px solid #80deea;
+//   /* 增加的边框对比色 */
+//   border-radius: 15px 15px 15px 15px;
+//   /* 添加圆角，顶部圆角 */
+//   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+//   /* 添加轻微阴影 */
 
-  /* 过渡效果：让 bottom 属性平滑过渡 */
-  transition: bottom 2s cubic-bezier(0.86, -0.87, 0.14, 1.31);
-}
+//   /* 过渡效果：让 bottom 属性平滑过渡 */
+//   transition: bottom 2s cubic-bezier(0.86, -0.87, 0.14, 1.31);
+// }
 
 .footer-info p {
   margin: 6px 0;

@@ -48,10 +48,14 @@
 
 		</div>
 
-		<div class="lvLogos" v-if="data.textTile">
+		<!-- 长文本显示 -->
+		<div class="lvLogos" v-if="data.textTile || data.text.length > 200">
 
-			<div class="lvLogo" @click="tzlt(data.id)">
+			<div class="lvLogo" v-if="data.textTile" @click="tzlt(data.id)">
 				{{ data.textTile }}
+			</div>
+			<div class="lvLogo" v-else @click="tzlt(data.id,data.text)">
+				在长文本中查看动态
 			</div>
 
 		</div>
@@ -82,7 +86,8 @@
 		</div>
 		<!-- 评论输入 -->
 		<div class="shhuru" @click.stop='nulls' v-show="getV()!.isInput">
-			<textarea v-model="getV()!.plText" @click.stop='nulls'></textarea>
+			<textarea ref="textarea" @input="textInputHeightAuto" v-model="getV()!.plText"
+				@click.stop='nulls'></textarea>
 			<van-button @click.stop="setPls()" type="primary">发送</van-button>
 		</div>
 
@@ -141,6 +146,10 @@ let data = ref<A>();
 
 let isMo = ref(false);
 
+const textarea = ref<HTMLTextAreaElement>();
+
+
+
 
 
 
@@ -157,9 +166,12 @@ function tzlv(id: number) {
 	router.push({ path: '/Lvi', query: { id: id } });
 }
 
-function tzlt(id: number) {
-	router.push({ path: '/longText', query: { id: id } });
-
+function tzlt(id: number,data?:string) {
+	if(data){
+		router.push({ path: '/longText', query: { id: id , data:data} });
+	}else{
+		router.push({ path: '/longText', query: { id: id} });
+	}
 }
 
 function dowFile(id: string) {
@@ -239,6 +251,18 @@ function playVideo(temp: number) {
 	});
 }
 
+// 自动调整 textarea 高度
+const textInputHeightAuto = () => {
+	const textareas = textarea.value;
+	if (textareas == null) {
+		return
+	}
+	// 重置高度以便重新计算
+	textareas.style.height = 'auto';
+	// 设置新的高度，确保文本框不小于最小高度
+	textareas.style.height = Math.max((textareas.scrollHeight + 40), 150) + 'px';
+
+};
 
 
 function getV() {
