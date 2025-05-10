@@ -24,6 +24,14 @@
 						<img v-show="viewData.loa != 1" src="../../assets/img/yangjin1.png"></img>
 						<img v-show="viewData.loa == 1" src="../../assets/img/yangjin2.png"></img>
 					</div>
+
+					 <div class="break"></div> 
+
+					<div id="alist">
+						<div v-html="svgArr[0]">
+						</div>
+						
+					</div>
 				</div>
 			</div>
 			<div id="find" v-show="showSs">
@@ -66,6 +74,7 @@ import  topView  from '@/components/TopView/topView.vue';
 import { getTouxian, login } from '@/api/api';
 import { token } from '@/api/token';
 import { showFailToast } from 'vant';
+import {svgArr} from './svgArr';
 const viewData = viewDataStore();
 //视图数据
 const vlist = dtData.vlist;

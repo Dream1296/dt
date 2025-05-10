@@ -28,6 +28,8 @@ let url = "https://frp-fix.top:20047";
 // let url = "http://10.42.0.1:3000";
 // let url = "";
 
+let urlIPV6 = '';
+
 
 export let Internet = {
     url,
@@ -285,14 +287,23 @@ export function dtFileDow(id: string) {
 export async function testNw() {
     // let url = "https://10.36.40.224:3012";
     // let url = "https://192.168.0.105:3016";
-    let url = "http://10.42.0.1:3000"
+    let url = "http://192.168.1.1:3000";
+
     let a = await axiosGetWithTimeout(url + '/api/ipv6', 500);
     if (a) {
+        urlIPV6 = a;
         Internet.url = url;
+        return true;
     }
+    return false;
 }
 
-// 定义一个带有超时机制的 GET 请求函数
+/**
+ * 带有超时功能的判断接口是否能访问
+ * @param url 请求接口地址
+ * @param timeout 超时毫秒数
+ * @returns 接口返回内容，失败为null
+ */
 async function axiosGetWithTimeout(url: string, timeout = 500) {
     try {
         // 使用 Promise.race 实现超时控制
@@ -310,3 +321,4 @@ async function axiosGetWithTimeout(url: string, timeout = 500) {
         return null; // 返回 null 表示请求失败或超时
     }
 };
+

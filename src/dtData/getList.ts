@@ -106,7 +106,7 @@ export async function dtDataInit(loa: string | number,): Promise<(A | dataImg)[]
     for (let a of datas) {
         if (a.type == 'A') {
             if (!guoli(a)) {
-                let index = data.findIndex(obj => obj.id == a.id);                
+                let index = data.findIndex(obj => obj.id == a.id);
                 if (index != -1) {
                     data.splice(index, 1);
                 }
@@ -114,8 +114,9 @@ export async function dtDataInit(loa: string | number,): Promise<(A | dataImg)[]
             }
             dataA.push(a);
         }
-    }    
+    }
     Asetcl(dataA);
+    setCom(dataA);
     //将主数据改为带修改数据
     dtData.set(data);
     VcDataInit(data);
@@ -130,6 +131,15 @@ function Asetcl(data: A[]) {
 
 }
 
+//临时处理，让com不为空
+function setCom(data: A[]) {
+    data.forEach(a => {
+        if (!a.com) {
+            a.com = [];
+        }
+    });
+
+}
 
 
 

@@ -9,9 +9,10 @@
   font-size: 15px;
   width: 70%;
   position: relative;
-  font-family: 'nlt', sans-serif; 
+  font-family: 'nlt', sans-serif;
   left: @leftTap + 50;
   top: 0px;
+
   img {
     width: 26px;
     height: 26px;
@@ -27,12 +28,14 @@
   left: @leftTap + 50;
   display: flex;
   flex-wrap: wrap;
+
   .image {
     width: 100px;
     height: 100px;
     margin-bottom: 10px;
     margin-right: 10px;
   }
+
   .imgsAdd {
     width: 100px;
     height: 100px;
@@ -45,27 +48,32 @@
     align-content: center;
     flex-wrap: wrap;
   }
+
   span {
     font-size: 24px;
     color: white;
     font-weight: 700;
   }
 }
-@videoW:160px;
-@videoH:130px;
+
+@videoW: 160px;
+@videoH: 130px;
+
 .video {
   width: 60%;
   position: relative;
   top: 5px;
   left: @leftTap + 50;
-  div{
+
+  div {
     width: @videoW;
     height: @videoH;
-    img{
+
+    img {
       position: absolute;
       left: (@videoW / 2 - 25);
       top: (@videoH / 2 - 25);
-      
+
       z-index: 100;
       width: 50px;
       height: 50px;
@@ -99,6 +107,7 @@
     width: 100%;
     height: 100%;
   }
+
   video {
     width: 100%;
   }
@@ -124,17 +133,22 @@
   /* background-color: aqua; */
   border: 1px solid blue;
   border-radius: 10px;
+
   textarea {
     /* background-color: black; */
     width: 95%;
     height: 150px;
     margin: 5px;
-    border: none;       /* 隐藏边框 */
-  outline: none;      /* 移除焦点时的外轮廓 */
-  resize: none;       /* 禁止手动调整大小 */
+    border: none;
+    /* 隐藏边框 */
+    outline: none;
+    /* 移除焦点时的外轮廓 */
+    resize: none;
+    /* 禁止手动调整大小 */
   }
+
   button {
-    position: absolute; 
+    position: absolute;
     left: 80%;
     bottom: 6%;
     width: 60px;
@@ -152,15 +166,22 @@
   border-radius: 10px;
 
   .pls {
+    width: 100%;
     margin-top: 10px;
     margin-left: 10px;
+    display: inline-block;
+
+    .plText {
+      display: block;
+      word-break: break-word;
+    }
   }
 
-  .pls > :first-child {
+  .pls> :first-child {
     color: rgb(87, 107, 147);
   }
 
-  .pls > :nth-child(3) {
+  .pls> :nth-child(3) {
     color: black;
   }
 
@@ -175,20 +196,21 @@
   }
 }
 
-.ding{
+.ding {
   width: 60px;
   // height: 100px;
   position: absolute;
   left: 266px;
   top: 0px;
-  img{
+
+  img {
     width: 100%;
     height: 100%;
-    opacity:0.5;
+    opacity: 0.5;
   }
 }
 
-.lvLogos{
+.lvLogos {
   width: 200px;
   // height: 50px;
   border-radius: 10px;
@@ -196,8 +218,9 @@
   left: 85px;
   top: 5px;
   cursor: pointer;
+
   // background-color: antiquewhite;
-  .lvLogo{
+  .lvLogo {
     width: 200px;
     height: 50px;
     border-radius: 10px;
@@ -214,7 +237,7 @@
 
 
 
-#thressV{
+#thressV {
   width: 100%;
   height: 280px;
   margin-top: 10px;

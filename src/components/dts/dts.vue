@@ -7,13 +7,13 @@
 
 		<!-- 正文 -->
 		<div class="text">
-			<template v-for="(a, temp) in data.textArr.slice(0, textLen)">
+			<template v-for="(a, temp) in data.textArr">
 				<span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
 				<br v-if="a.type == 'text' && a.text == '\n'">
 				<img v-if="a.type == 'emoji' && emojiNamesUrl[emojiNames.findIndex(obj => obj == a.text)]"
 					:src="emojiNamesUrl[emojiNames.findIndex(obj => obj == a.text)]" />
 			</template>
-			<span style="color: blueviolet;" v-if="data.textArr.length > textLen"
+			<span style="color: blueviolet;" v-if="data.textArr?.length > textLen"
 				@click="textLen = 10000">。。。(显示更多)</span>
 		</div>
 
@@ -99,7 +99,7 @@
 					{{ pl.name }}
 				</span>
 				<span>:</span>
-				<span>
+				<span class="plText">
 					{{ pl.content }}
 				</span>
 			</div>
@@ -124,7 +124,7 @@ import { type A } from '../../type/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog, Toast, Dialog, showToast } from 'vant';
-import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, imgSrcs, dtFileDow } from '@/api/api';
+import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, imgSrcs, dtFileDow, Internet } from '@/api/api';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
@@ -136,6 +136,7 @@ import threeView from '@/components/threeView/threeView.vue';
 import { token } from '@/api/token';
 import { emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
 import axios from 'axios';
+import {userStore} from '@/stores/userStore';
 
 let imgTemp = tempStore();
 
@@ -147,6 +148,8 @@ let data = ref<A>();
 let isMo = ref(false);
 
 const textarea = ref<HTMLTextAreaElement>();
+
+const userStoreData = userStore();
 
 
 
@@ -234,6 +237,11 @@ function showImg(temp: number) {
 	let id = data.value?.id;
 	imgTemp.imgLog = imgSrcsc(temp);
 	imgTemp.imgSrc = imgSrcs(Number(id), temp);
+	if(userStoreData.isPc){
+		window.open(imgTemp.imgSrc, '_blank');
+		return
+	}
+	
 
 	router.push({
 		path: '/imgs', query: {
@@ -244,6 +252,14 @@ function showImg(temp: number) {
 }
 
 function playVideo(temp: number) {
+	let url = Internet.url;
+	let a = `${url}/api/dtvideo?dtid=${data.value?.id}&index=${temp}`;
+	if(userStoreData.isPc){
+		window.open(a, '_blank');
+		return
+	}
+
+
 	let id = data.value?.id;
 	emit('showVideo', {
 		dtid: id,

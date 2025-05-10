@@ -57,6 +57,9 @@ const routes: Array<RouteRecordRaw> = [
     path:'/longText',
     // component:longVideo,
     component : () => import('@/views/longText.vue')
+  },{
+    path:'/date',
+    component : () => import('@/views/calendarV.vue')
   }
 
 ];

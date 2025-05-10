@@ -17,7 +17,7 @@ import { TimePicker } from 'vant';
 import { Popup } from 'vant';
 import { Stepper } from 'vant';
 import { Switch } from 'vant';
-
+import NaiveUI from 'naive-ui'
 
 
 
@@ -32,8 +32,8 @@ const app = createApp(App);
 import { CellGroup } from 'vant';
 import { apiInit } from './api/apiIng'
 
-import { testNw } from '@/api/api';
-testNw();
+
+
 
 app.use(Form);
 app.use(Field);
@@ -42,8 +42,14 @@ app.use(CellGroup);
 app.use(createPinia());
 
 // 设备检测
-const deviceStore = userStore();
-deviceStore.isPcFn();
+const user = userStore();
+user.isPcFn();
+
+// 网络检测
+user.isHomeFn();
+
+
+app.use(NaiveUI)
 
 
 app.use(router);

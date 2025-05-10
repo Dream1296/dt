@@ -1,6 +1,11 @@
 // import { dtVideo, dtVideoImg, imgSrc } from "../api/api";
 import type { A } from "../type/dtType";
 
+/**
+ * 分离表情包与正文
+ * @param content 正文文本
+ * @returns 
+ */
 export function splitContent(content: string) {
     // 确保 content 是字符串
     if (typeof content !== "string") {
@@ -49,15 +54,22 @@ export function splitContent(content: string) {
 
 //分离表情包与正文
 export function settext(key: 'textArr', value: 'text', dtData: A[]) {
-
+    
     let arr: { type: string, text: string }[][] = [];
     for (let i = 0; i < dtData.length; i++) {
+        // debugger;
+        // if(dtData[i].id == 902){
+            // console.log(dtData[i].id);
+            
+            // debugger;
+        // }
         arr[i] = splitContent(dtData[i][value]);
     }
     for (let i = 0; i < arr.length; i++) {
         dtData[i][key] = fn(arr[i]);
     }
 
+    //再次处理文本字段，拆为一个一个字符
     function fn(arrs: { type: string; text: string; }[]) {
         let arrsc: { type: string; text: string; }[] = [];
         // arrs.forEach(e => {
