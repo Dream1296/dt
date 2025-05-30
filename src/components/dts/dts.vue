@@ -91,21 +91,11 @@
 			<van-button @click.stop="setPls()" type="primary">发送</van-button>
 		</div>
 
-
-		<!-- 评论显示 -->
-		<div class="pl">
-			<div class="pls" v-for="pl in data.com">
-				<span>
-					{{ pl.name }}
-				</span>
-				<span>:</span>
-				<span class="plText">
-					{{ pl.content }}
-				</span>
-			</div>
-
+		<div v-if="data.com && data.com.length > 0">
+			<CommentShow :data="data.com"></CommentShow>
 		</div>
-
+		
+	
 		<!-- <hr> -->
 		<!-- <div id="line"></div> -->
 		<!-- <div style="height: 20px;"></div> -->
@@ -124,7 +114,7 @@ import { type A } from '../../type/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog, Toast, Dialog, showToast } from 'vant';
-import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, imgSrcs, dtFileDow, Internet } from '@/api/api';
+import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, dtFileDow, Internet } from '@/api/api';
 import { dtData } from '@/dtData/getList';
 import router from '@/router';
 import { styleText } from 'util';
@@ -137,6 +127,8 @@ import { token } from '@/api/token';
 import { emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
 import axios from 'axios';
 import {userStore} from '@/stores/userStore';
+import CommentShow from '../comment/commentShow.vue';
+
 
 let imgTemp = tempStore();
 
@@ -220,7 +212,7 @@ function emosrc(name: string) {
 
 function imgSrcsc(index: number) {
 	let dtid = data.value?.id || 0;
-	return imgSrc(dtid, index);
+	return imgSrc(dtid, index , '0');
 }
 
 function videoSrc(index: number) {
@@ -236,7 +228,7 @@ function tzXq(index: number) {
 function showImg(temp: number) {
 	let id = data.value?.id;
 	imgTemp.imgLog = imgSrcsc(temp);
-	imgTemp.imgSrc = imgSrcs(Number(id), temp);
+	imgTemp.imgSrc = imgSrc(Number(id), temp, '1');
 	if(userStoreData.isPc){
 		window.open(imgTemp.imgSrc, '_blank');
 		return
@@ -354,7 +346,9 @@ function setPls() {
 				content: uptext,
 				commentsUser: '',
 				date: '',
-				diId: 0
+				dtId: 0,
+				imgAllNum:0,
+				id:-1,
 			})
 		} else {
 			showFailToast('失败');

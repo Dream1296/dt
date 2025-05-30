@@ -105,6 +105,17 @@
 
 
 
+
+
+
+    </div>
+    <div v-show="isupIng" id="overlay">
+        <div class="wrapper">
+            <van-circle v-model:current-rate="upfilejd" :rate="0" :speed="100" :text="upfilejd + '%'">
+            </van-circle>
+        </div>
+
+
     </div>
 </template>
 
@@ -114,11 +125,11 @@
 
 import { emojiSrc, emoList } from '@/api/api';
 import { ac, postDt, upfile, upfiles } from '@/api/upapi';
-import { text } from 'stream/consumers';
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import { closeToast, showConfirmDialog, showFailToast, showLoadingToast, showSuccessToast, Toast } from 'vant';
 import router from '@/router';
 import { getemojiImg, emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
+import { watch } from 'vue';
 // emojiSrc
 
 let shuru = ref<HTMLDivElement>();
@@ -126,6 +137,11 @@ let upImg = ref<HTMLInputElement>();
 let upVideo = ref<HTMLInputElement>();
 let emojiList = ref<string[]>();
 emojiList.value = emojiNames;
+const gradientColor = {
+    '0%': '#3fecff',
+    '100%': '#6149f6',
+};
+
 //视图高度
 let initialHeight: number;
 let diTop = ref('calc(100% - 40px  )');
@@ -143,6 +159,9 @@ let showSetDate = ref(false);
 let showSetTime = ref(false);
 
 let showPopup = false;
+
+//是否显示上传
+let isupIng = ref(false);
 
 
 //
@@ -251,6 +270,9 @@ function upimgs() {
 
 let isUp = false;
 
+let upfilejd = ref(0);
+
+
 async function updts() {
 
     if (isUp) {
@@ -264,18 +286,26 @@ async function updts() {
         return
     }
 
-    showLoadingToast({
-        duration: 0,
-        message: '正在上传...',
-        forbidClick: true,
-        loadingType: 'spinner',
-    });
-
     isUp = true;
 
     //上传媒体资源
     let pro = upfiles(imgArr, videoArr);
+    let allNum = imgArr.length + videoArr.length;
+
+    watch(
+        () => pro.percentCompleteArr.value.reduce((acc: number, cur: number) => acc + cur, 0),
+        (val) => {
+            let temp = 0;
+            pro.percentCompleteArr.value.forEach((item, index) => {
+                temp += item;
+            });
+            upfilejd.value = Math.floor(temp / allNum * 100);
+            console.log(upfilejd.value);
+        })
+    isupIng.value = true;
+
     let bool = await Promise.all(pro.upPromise.map(task => task()));
+
     num = pro.percentCompleteArr;
     if (!bool) {
         return console.log('错误');
@@ -287,11 +317,11 @@ async function updts() {
     postDt(txt, pro.imgNameArr, showImgNum.value.toString(), time, loa.value, pro.videoNumArr, isImgDir.value)
         .then((a: any) => {
             if (a.tf == 1) {
-                closeToast(false);
+                isupIng.value = false;
                 showSuccessToast('上传成功！');
                 setTimeout(() => {
                     router.push({ path: '/' });
-                }, 800);
+                }, 500);
             }
 
         })

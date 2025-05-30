@@ -37,7 +37,9 @@ export interface Com {
   commentsUser: string;
   content: string;
   date: string;
-  diId: number;
+  dtId: number;
+  id:number;
+  imgAllNum:number;
   name: string;
 }
 

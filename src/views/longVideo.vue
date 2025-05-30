@@ -17,9 +17,10 @@
 
 
 <script setup lang="ts">
-import { getlvObj } from '@/api/api';
+import { getlvObj ,Internet } from '@/api/api';
 import { ref } from 'vue';
 import { useRoute } from 'vue-router';
+
 
 
 const route = useRoute();
@@ -31,7 +32,7 @@ let videoType = 'video/mp4';
 
 
 getlvObj(lvid).then(data =>{
-  videoSrc.value = 'https://frp-fix.top:20047/api/lvi?src=' + data.src;
+  videoSrc.value = Internet.url + '/api/lvi?src=' + data.src;
   title.value = data.name;
 })
 

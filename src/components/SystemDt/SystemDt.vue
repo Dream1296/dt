@@ -6,31 +6,48 @@
 
 		<!-- 正文 -->
 		<div class="text">
-			<div id="bntx">
-				<div id="bntxs">
-					<div id="xuanx2" @click="shownewdt(13)">
-						<img src="../../assets/img/ah_x.png"></img>
+			<div class="bntx">
+				<div id="xuanx2" @click="shownewdt(13)">
+					<img src="../../assets/img/ah_x.png"></img>
+				</div>
+
+				<div id="xuanx4" @click="config()">
+					<img src="../../assets/img/configs.png"></img>
+				</div>
+
+				<div id="xuanx3" @click="showSs = !showSs">
+					<img src="../../assets/img/sousuo.png"></img>
+				</div>
+
+				<div id="xuanx1" @click="tzs()">
+					<img v-show="viewData.loa != 1" src="../../assets/img/yangjin1.png"></img>
+					<img v-show="viewData.loa == 1" src="../../assets/img/yangjin2.png"></img>
+				</div>
+
+
+
+
+			</div>
+
+			<div class="bntx">
+
+				<div id="alist" :class="{  disabled : !userData.isHome }" @click="openAlist()">
+					<div v-html="svgArr[0]">
 					</div>
+				</div>
 
-					<div id="xuanx4" @click="config()">
-						<img src="../../assets/img/configs.png"></img>
+				<div class="unX">
+					<div v-html="svgArr[1]">
 					</div>
+				</div>
 
-					<div id="xuanx3" @click="showSs = !showSs">
-						<img src="../../assets/img/sousuo.png"></img>
+				<div class="unX">
+					<div v-html="svgArr[2]">
 					</div>
+				</div>
 
-					<div id="xuanx1" @click="tzs()">
-						<img v-show="viewData.loa != 1" src="../../assets/img/yangjin1.png"></img>
-						<img v-show="viewData.loa == 1" src="../../assets/img/yangjin2.png"></img>
-					</div>
-
-					 <div class="break"></div> 
-
-					<div id="alist">
-						<div v-html="svgArr[0]">
-						</div>
-						
+				<div class="unX">
+					<div v-html="svgArr[3]">
 					</div>
 				</div>
 			</div>
@@ -66,16 +83,18 @@
 import { ref } from 'vue';
 import Line from '../fenge/line.vue';
 import { viewDataStore } from '@/stores/viewDataStore';
+import { userStore } from '@/stores/userStore';
 import { Internet } from '@/api/api';
 import { dtData, dtDataInit, dtFindData } from '@/dtData/getList';
 import { obsDt } from '@/dtData/observerDt';
 import { myEvent } from '@/myEnit';
-import  topView  from '@/components/TopView/topView.vue'; 
+import topView from '@/components/TopView/topView.vue';
 import { getTouxian, login } from '@/api/api';
 import { token } from '@/api/token';
 import { showFailToast } from 'vant';
-import {svgArr} from './svgArr';
+import { svgArr } from './svgArr';
 const viewData = viewDataStore();
+const userData = userStore();
 //视图数据
 const vlist = dtData.vlist;
 
@@ -107,13 +126,22 @@ function tzs() {
 		viewData.loa = 0;
 	}
 }
+
+function openAlist(){
+	if(!userData.isHome){
+		showFailToast('仅在内网可用');
+		return
+	}
+	let url = 'http://dlhe.top:5244';
+	window.open(url, '_blank');
+}
 //查询
 function dtFind() {
 
 	if (token.istoken == 'false') {
-            showFailToast('仅用于内部维护使用');
-            return
-        }
+		showFailToast('仅用于内部维护使用');
+		return
+	}
 	if (sr.value == '' || sr.value == ' ') {
 		dtDataInit(0).then(() => {
 			myEvent.emit('upDtList');
@@ -124,6 +152,8 @@ function dtFind() {
 		});
 	}
 }
+
+
 </script>
 
 <style scoped lang="less">

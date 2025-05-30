@@ -1,168 +1,179 @@
 #all {
-  width: 100vw;
-  height: 100vh;
-  font-family: 'nlt', sans-serif; 
-  // background-image: url("../../assets/img/updtbgs.png");
-  /* 设置背景图片不重复 */
-  background-repeat: no-repeat;
-  /* 设置背景图片始终位于中心 */
-  background-position: center;
+    width: 100vw;
+    height: 100vh;
+    font-family: 'nlt', sans-serif;
+    // background-image: url("../../assets/img/updtbgs.png");
+    /* 设置背景图片不重复 */
+    background-repeat: no-repeat;
+    /* 设置背景图片始终位于中心 */
+    background-position: center;
 }
 
 #shuru {
-  width: 75%;
-  height: 55%;
-  margin: 0 auto;
-  // border: 1px solid black;
-  position: relative;
-  top: 130px;
-  // background-color: aqua;
-  outline: none;
-  font-size: 20px;
+    width: 75%;
+    height: 55%;
+    margin: 0 auto;
+    // border: 1px solid black;
+    position: relative;
+    top: 130px;
+    // background-color: aqua;
+    outline: none;
+    font-size: 20px;
 }
 
 .emoji {
-  width: 25px;
+    width: 25px;
 }
 
 #test {
-  width: 50px;
-  height: 50px;
-  background-color: aqua;
-  position: fixed;
-  left: 20%;
-  top: 0%;
+    width: 50px;
+    height: 50px;
+    background-color: aqua;
+    position: fixed;
+    left: 20%;
+    top: 0%;
 }
+
 //底部栏高度
 @topH: 40px;
+
 #di {
-  width: 100%;
-  height: @topH;
-  background-color: antiquewhite;
-  position: fixed;
-  top: ~"calc(100% - @{topH})";
-  display: flex;
-  align-content: center;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  div {
-    width: 40px;
-    height: 40px;
-    img {
-      width: 100%;
-      height: 100%;
+    width: 100%;
+    height: @topH;
+    background-color: antiquewhite;
+    position: fixed;
+    top:~"calc(100% - @{topH})";
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+
+    div {
+        width: 40px;
+        height: 40px;
+
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
-  }
 }
+
 @topEmoji: 300px;
 
 #emojiC {
-  width: 90%;
-  height: @topEmoji;
-  // margin: 0 auto;
-  border-radius: 25px;
-  background-color: antiquewhite;
-  position: fixed;
-  top: ~"calc(100% - @{topEmoji})";
-  left: 50%;
-  transform: translate(-50%, 0%);
-  padding: 10px;
+    width: 90%;
+    height: @topEmoji;
+    // margin: 0 auto;
+    border-radius: 25px;
+    background-color: antiquewhite;
+    position: fixed;
+    top:~"calc(100% - @{topEmoji})";
+    left: 50%;
+    transform: translate(-50%, 0%);
+    padding: 10px;
 
-  display: flex;
-  flex-wrap: wrap;
-  align-content: space-around;
-  overflow: auto;
-  div {
-    margin-left: 3px;
-    margin-right: 3px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-    width: 8%;
-    // height: 20px;
-    img {
-      width: 100%;
-      height: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    overflow: auto;
+
+    div {
+        margin-left: 3px;
+        margin-right: 3px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        width: 8%;
+
+        // height: 20px;
+        img {
+            width: 100%;
+            height: 100%;
+        }
     }
-  }
 }
 
 #imgs {
-  width: 90%;
-  height: 520px;
-  // margin: 0 auto;
-  border-radius: 25px;
-  background-color: antiquewhite;
-  position: fixed;
-  top: ~"calc(100% - 600px)";
-  left: 50%;
-  transform: translate(-50%, 0%);
-  padding: 10px;
-  overflow: auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  justify-content: center;
-  div {
-    display: inline-block;
-    margin: 10px;
-    border-radius: 10px;
-    width: 80px;
-    height: 80px;
-    overflow: hidden;
-    img {
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
+    width: 90%;
+    height: 520px;
+    // margin: 0 auto;
+    border-radius: 25px;
+    background-color: antiquewhite;
+    position: fixed;
+    top: ~"calc(100% - 600px)";
+    left: 50%;
+    transform: translate(-50%, 0%);
+    padding: 10px;
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+
+    div {
+        display: inline-block;
+        margin: 10px;
+        border-radius: 10px;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
     }
-  }
 }
 
 #videos {
-  width: 90%;
-  height: 520px;
-  // margin: 0 auto;
-  border-radius: 25px;
-  background-color: antiquewhite;
-  position: fixed;
-  top: ~"calc(100% - 600px)";
-  left: 50%;
-  transform: translate(-50%, 0%);
-  padding: 10px;
-  overflow: auto;
-  display: flex;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  justify-content: center;
-  div {
-    display: inline-block;
-    margin: 10px;
-    border-radius: 10px;
-    width: 80px;
-    height: 80px;
-    overflow: hidden;
-    img {
-      object-fit: cover;
-      width: 100%;
-      height: 100%;
+    width: 90%;
+    height: 520px;
+    // margin: 0 auto;
+    border-radius: 25px;
+    background-color: antiquewhite;
+    position: fixed;
+    top: ~"calc(100% - 600px)";
+    left: 50%;
+    transform: translate(-50%, 0%);
+    padding: 10px;
+    overflow: auto;
+    display: flex;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
+
+    div {
+        display: inline-block;
+        margin: 10px;
+        border-radius: 10px;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
+
+        img {
+            object-fit: cover;
+            width: 100%;
+            height: 100%;
+        }
     }
-  }
 }
 
 #configs {
-  width: 90%;
-  height: 520px;
-  // margin: 0 auto;
-  border-radius: 25px;
-  background-color: antiquewhite;
-  position: fixed;
-  top: ~"calc(100% - 600px)";
-  left: 50%;
-  transform: translate(-50%, 0%);
-  padding: 10px;
-  overflow: auto;
-  flex-wrap: wrap;
-  align-content: flex-start;
-  justify-content: center;
+    width: 90%;
+    height: 520px;
+    // margin: 0 auto;
+    border-radius: 25px;
+    background-color: antiquewhite;
+    position: fixed;
+    top: ~"calc(100% - 600px)";
+    left: 50%;
+    transform: translate(-50%, 0%);
+    padding: 10px;
+    overflow: auto;
+    flex-wrap: wrap;
+    align-content: flex-start;
+    justify-content: center;
 }
 
 // #imgs{
@@ -184,26 +195,28 @@
     position: absolute;
     left: 84%;
     top: 40px;
-    img{
+
+    img {
         width: 100%;
         height: 100%;
     }
 }
 
 
-#bj{
-  position: absolute;
-  left: 0;
-  top: 0;
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  display: flex;
-  justify-content: center;
-  img{
-    width: 100%;
-    height: 100%;
-  }
+#bj {
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
 }
 
 
@@ -214,3 +227,32 @@
 //   font-weight: normal; /* 字体权重，可以是normal或指定的数字，如400 */  
 //   font-style: normal; /* 字体样式，可以是normal（正常）、italic（斜体）等 */  
 // }
+
+.wrapper {
+    width: 200px;
+    height: 200px;
+    background-color: antiquewhite;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-wrap: wrap;
+    align-content: center;
+    justify-content: center;
+    border-radius: 5%;
+}
+
+
+
+#overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 1000;
+    /* 比一般元素大 */
+    background-color: rgba(0, 0, 0, 0.5);
+    
+}

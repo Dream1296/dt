@@ -34,7 +34,7 @@ export default defineConfig({
     }),
     visualizer({
       filename: './dist/stats.html',  // 生成的模块分析图
-      open: true,  // 构建完成后自动打开分析图
+      open: false,  // 构建完成后自动打开分析图
     }),
   ],
   // base: '/dts/', // 设置基础路径

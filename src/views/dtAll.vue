@@ -1,7 +1,7 @@
 <template>
 
     <div id="top">
-        <button @click="fh">← 返回</button>
+        <button @click="back">← 返回</button>
         <h1 @click="showBottom2 = true">动态详情</h1>
         <button @click="showShare = true">分享</button>
     </div>
@@ -46,9 +46,8 @@
 
 
         <!-- 全部图片区 -->
-        <!-- <p @click="isAllsho">全部图片</p> -->
         <div class="imgalllogo">
-            <img v-if="data.imgAllNum" @click="isAllsho('img')" src="../assets/img/imgall.png">
+            <img v-if="data.imgAllNum && data.imgAllNum > 4" @click="isAllsho('img')" src="../assets/img/imgall.png">
             <img v-if="data.videoNum && data.videoNum > 1" @click="isAllsho('video')" src="../assets/img/videoA.png">
         </div>
         <div class="imgAll" v-if="isShowType != ''" v-show="isShowImg">
@@ -65,18 +64,13 @@
 
         </div>
 
+        <van-button icon="plus" type="primary" @click="showPlAdd = true">添加评论</van-button>
+
         <!-- 评论显示 -->
-        <div class="pl">
-            <div class="pls" v-for="pl in data.com">
-                <span>
-                    {{ pl.name }}
-                </span>
-                <span>:</span>
-                <span>
-                    {{ pl.content }}
-                </span>
-            </div>
+        <div v-if="data.com.length > 0">
+            <CommentShow :data="data.com" :showImg="true"></CommentShow>
         </div>
+
     </div>
 
     <!-- 圆角弹窗（底部） -->
@@ -127,6 +121,23 @@
 
     </van-popup>
 
+    <van-popup v-model:show="showPlAdd" round position="bottom" :style="{ height: '80%' }">
+        <div id="plAddTitle">评论添加</div>
+        <div id="commentInput">
+            <CommentInput @up="upCom" :disabled="isUpImgNum != 0"></CommentInput>
+        </div>
+
+        <div id="imgUp">
+            <van-uploader :after-read="afterRead" v-model="fileList" />
+        </div>
+
+        <div v-for="a in percentCompleteArr">
+            {{ a }}
+
+        </div>
+
+    </van-popup>
+
 
     <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
 
@@ -135,7 +146,7 @@
 
 
 <script setup lang="ts">
-import { addDtindex, dtVideoImg, getdt, getEmoSrc, getShare, imgSrc, setDtBgStyle, setDtData, setShare } from '@/api/api';
+import { addDtindex, dtVideoImg, getdt, getEmoSrc, getShare, imgSrc, postCom, setDtBgStyle, setDtData, setShare } from '@/api/api';
 import { useRoute } from 'vue-router';
 import Myimage from '../components/image/Myimage.vue';
 import Pbl from '@/components/pbl/Pbl.vue';
@@ -143,10 +154,13 @@ import type { A } from '@/type/dtType';
 import { ref, watch } from 'vue';
 import { splitContent } from '@/dtData/dtUtils';
 import router from '@/router';
-import { showFailToast, showSuccessToast, showToast, type ToastOptions } from 'vant';
+import { showFailToast, showSuccessToast, showToast, type ToastOptions, type UploaderFileListItem } from 'vant';
 import { dtData } from '@/dtData/getList';
 import { viewDataStore } from '@/stores/viewDataStore';
 import { token } from '@/api/token';
+import CommentShow from '@/components/comment/commentShow.vue';
+import CommentInput from '@/components/comment/commentInput.vue';
+import { upfile } from '@/api/upapi';
 
 let viewData = viewDataStore();
 const route = useRoute();
@@ -161,6 +175,58 @@ let nowDate = ref<string>("");
 let nowTime = ref<string>("");
 
 let showShare = ref(false);
+
+let showPlAdd = ref(false);
+
+const fileList = ref<UploaderFileListItem[]>([])
+
+
+async function upCom(text: string) {
+    let imgNameArr: string[] = [];
+    fileList.value.forEach(element => {
+        if (element.file?.name) {
+            imgNameArr.push(element.file?.name);
+        }
+    });
+
+    postCom(text, String(data.value?.id), imgNameArr)
+        .then(data => {
+            showSuccessToast('成功文案');
+            console.log(data);
+            console.log('ok');
+            showPlAdd.value = false;
+        })
+
+
+
+}
+
+// watch(fileList,(oldValue, newValue)=>{
+//     console.log(newValue);
+// } );
+
+let percentCompleteArr = ref<number[]>(new Array(20));
+let fileNameArr: string[] = [];
+let index = 0;
+
+//当前正在上传的图片数
+let isUpImgNum = ref(0);
+
+const afterRead = (fileItem: UploaderFileListItem) => {
+    isUpImgNum.value += 1;
+    fileItem.status = 'uploading';
+    upfile(fileItem.file, 'img', percentCompleteArr, fileNameArr, index++)
+        .then((data) => {
+            fileItem.status = 'done';
+            isUpImgNum.value -= 1;
+        })
+        .catch((err) => {
+            fileItem.status = 'failed';
+        })
+
+};
+
+
 const options = [
     { name: '复制链接', icon: 'link' },
     // { name: '二维码', icon: 'qrcode' },
@@ -169,7 +235,7 @@ const onSelect = (option: { name: string | ToastOptions | undefined; }) => {
     if (option.name == '复制链接') {
         setShare(dtid.toString())
             .then(res => {
-                let text = `https://frp-fix.top:20047/dts/#/dts?dtid=${dtid}&share=${res.token}`;
+                let text = `https://dlhe.top/dts/#/dts?dtid=${dtid}&share=${res.token}`;
                 console.log(text);
                 navigator.clipboard.writeText(text)
                     .then(() => {
@@ -222,15 +288,15 @@ function init() {
         getdts().then(fn);
     }
 
-    function fn(){
-        if(!data.value){
+    function fn() {
+        if (!data.value) {
             return
         }
         imgShow(data.value);
         newLoa.value = data.value.loa.toString();
         groupChecked.value = data.value.bgStyle.toString();
         parseISO8601ToDateTimeWithDelimiters(data.value.date);
-        if(!data.value.keyword){
+        if (!data.value.keyword) {
             data.value.keyword = [
                 {
                     keyword: 'null',
@@ -246,20 +312,20 @@ function init() {
 
 
 function getdts() {
-    return new Promise<void>(( resolve,reject )=>{
+    return new Promise<void>((resolve, reject) => {
         let obj = dtData.values.find(res => res.id == dtid);
-    if (obj && obj.type == 'A') {
-        data.value = obj;
-        resolve()
-        return
-        
-    }
-    getdt(dtid, viewData.loa).then(res => {
-        data.value = res;
-        res.textArr = splitContent(res.text);
-        resolve()
-        return
-    })
+        if (obj && obj.type == 'A') {
+            data.value = obj;
+            resolve()
+            return
+
+        }
+        getdt(dtid, viewData.loa).then(res => {
+            data.value = res;
+            res.textArr = splitContent(res.text);
+            resolve()
+            return
+        })
     })
 }
 
@@ -345,7 +411,7 @@ function imgShow(res: A) {
 
 
 function dtindextijiao() {
-    if(token.istoken == 'false'){
+    if (token.istoken == 'false') {
         showFailToast('拒绝访问');
         return
     }
@@ -396,7 +462,10 @@ function addKeyworld() {
     showBottom.value = true;
 }
 
-function fh() {
+/**
+ * 返回
+ */
+function back() {
     router.back();
 }
 
@@ -409,16 +478,22 @@ function GetImg(ids: {
     router.push({ path: '/imgs', query: ids });
 }
 
+/**
+ * 打开图视频页面
+ * @param ids 
+ */
 function Getvideo(ids: {
     dtid: string,
     index: number,
 }) {
-    //打开图片页面
+    //打开视频
     router.push({ path: '/videoPlay', query: ids });
 }
 
 
-
+/**
+ * 将日期和时间字符串转换为 ISO8601 格式的字符串
+ */
 function combineToISO8601ForMySQL(dateStr: string, timeStr: string): string {
     // 检查日期和时间是否为空
     if (!dateStr || !timeStr) {
@@ -428,16 +503,6 @@ function combineToISO8601ForMySQL(dateStr: string, timeStr: string): string {
     // 解析日期和时间字符串
     const dateParts = dateStr.split('-').map(Number);
     const timeParts = timeStr.split(':').map(Number);
-
-    // 创建一个 Date 对象（注意：这里假设时间是 24 小时制的，并且不考虑时区偏移）
-    // 由于我们不需要时区信息，我们可以简单地使用 Date 构造函数，而不是 Date.UTC
-    // 但是，为了保持一致性（即日期部分使用 UTC），我们仍然可以使用 Date.UTC 来设置时间部分
-    // 然后我们可以将这些 UTC 值转换为一个 Date 对象（这将隐式地设置为本地时间，但我们可以忽略这一点）
-    // 然而，由于我们只需要 YYYY-MM-DD HH:MM:SS 格式，并且假设输入是 UTC（或不需要时区转换）
-    // 我们可以直接拼接字符串而不需要创建一个完整的 Date 对象（这样做更高效）
-
-    // 但为了保持函数的一致性（尽管不是最高效），我们还是使用 Date 对象，只是不设置时区
-    // 并确保在格式化输出时不包含时区信息
     const year = dateParts[0];
     const month = String(dateParts[1]).padStart(2, '0'); // 确保月份是两位数
     const day = String(dateParts[2]).padStart(2, '0'); // 确保日期是两位数
@@ -448,7 +513,10 @@ function combineToISO8601ForMySQL(dateStr: string, timeStr: string): string {
     // 拼接成 MySQL DATETIME 格式的字符串
     return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 }
-
+/**
+ * 将iso8601格式的时间字符串解析为日期和时间，并返回一个包含日期和时间的数组。
+ * @param isoString ISO8601格式的时间字符串
+ */
 function parseISO8601ToDateTimeWithDelimiters(isoString: string) {
     const date = new Date(isoString);
 

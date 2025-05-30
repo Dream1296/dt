@@ -18,14 +18,16 @@ if (typeof window === 'undefined') {
 }
 
 // let url = "https://dlhe.top";
-let url = "https://frp-fix.top:20047";
+// let url = "https://frp-fix.top:20047";
 // let url = "https://192.168.0.105:3012"
 // let url = "https://192.168.0.105:3013";
 // let url = "http://192.168.0.105:3010"
 // let url = "https://10.36.40.224:3012";
 // let url = "https://10.36.40.224:3012";
-// let url = 'https://172.16.3.12:3010';
+// let url = 'http://172.16.3.12:3011';
 // let url = "http://10.42.0.1:3000";
+// let url = 'http://192.168.1.1:3010'
+let url = 'http://192.168.1.1:3011'
 // let url = "";
 
 let urlIPV6 = '';
@@ -122,9 +124,15 @@ export async function getdt(id: string | number, loa?: number): Promise<A> {
 }
 
 //提交动态评论内容
-export async function postCom(content: string, dtId: string) {
+export async function postCom(content: string, dtId: string, imgArr?: string[]) {
+    let imgNameArr: string[] = [];
+    if (imgArr && imgArr.length > 0) {
+        imgArr.forEach(item => {
+            imgNameArr.push(item);
+        });
+    }
     let urls = Internet.url + '/api/postCom';
-    let res = await api(urls, 'POST', { content, dtId }, tokens.token);
+    let res = await api(urls, 'POST', { content, dtId, imgNameArr }, tokens.token);
     return res;
 }
 
@@ -154,26 +162,38 @@ export async function getName() {
 }
 
 export async function getlvObj(id: number) {
-    let url = 'https://frp-fix.top:20047/api/lviobj?id=' + id;
+    let url = Internet.url + '/api/lviobj?id=' + id;
     let res = await api<{ id: number, dt_id: number, name: string, src: string }>(url, 'GET', undefined, undefined);
     return res;
 }
 
-// 缩略图
-export function imgSrc(dtid: number, index: number) {
-    if (tokens.tempToken) {
-        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&token=' + tokens.tempToken;
-    }
-    return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index;
 
+
+/**
+ * 
+ * @param comId 评论id
+ * @param index 个数
+ * @param size '0'为缩略图，'1'为原图
+ * @returns 
+ */
+export function imgSrc(dtid: number, index: number, size?: '0' | '1') {
+    let tokenStr = tokens.tempToken ? '&token=' + tokens.tempToken : '';
+    let sizeStr = size != undefined ? `&size=${size}` : '';
+
+    return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + sizeStr + tokenStr;
 }
 
-//原图
-export function imgSrcs(dtid: number, index: number) {
-    if (tokens.tempToken) {
-        return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&a=1' + "&token=" + tokens.tempToken;
-    }
-    return Internet.url + '/api/dtimg?dtid=' + dtid + '&index=' + index + '&a=1';
+/**
+ * 
+ * @param comId 评论id
+ * @param index 个数
+ * @param size '0'为缩略图，'1'为原图
+ * @returns 
+ */
+export function imgSrcCom(comId: number, index: number, size?: '0' | '1') {
+    let tokenStr = tokens.tempToken ? '&token=' + tokens.tempToken : '';
+    let sizeStr = size != undefined ? `&size=${size}` : '';
+    return `${Internet.url}/api/dtimgCom?comid=${comId}&index=${index}${sizeStr}${tokenStr}`
 }
 
 //视频
@@ -280,6 +300,13 @@ export function dtFileDow(id: string) {
     document.body.appendChild(a);
     a.click();
     document.body.removeChild(a);
+}
+
+//判断是否为内网
+export async function isHomeFn() {
+    const url = `${Internet.url}/api/getip`;
+    let res = await api<{ code: number, ip: string }>(url, 'GET');
+    return res.ip.includes('192.168') || res.ip.includes('127.0.0.1');
 }
 
 

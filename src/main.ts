@@ -91,6 +91,12 @@ import { ShareSheet } from 'vant';
 import { userStore } from './stores/userStore'
 app.use(ShareSheet);
 
+import { Uploader } from 'vant';
+app.use(Uploader);
+
+import { Overlay } from 'vant';
+app.use(Overlay);
+
 
 
 

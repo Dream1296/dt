@@ -62,8 +62,9 @@ export function upfiles(imgArr: any[], videoArr: any[]) {
 export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: Ref<number[]>, fileNameArr: string[], index: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
         const date = new Date();
-        const fileExtension = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2); // 获取文件扩展名
-        const filename = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}.${date.getTime()}.${file.name}.${fileExtension}`;
+        let filename = file.name;
+        // const fileExtension = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2); // 获取文件扩展名
+        // const filename = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}.${date.getTime()}.${file.name}.${fileExtension}`;
         var formData = new FormData(); // 创建一个FormData对象
         formData.append('filename', filename);
         fileNameArr.push( filename );

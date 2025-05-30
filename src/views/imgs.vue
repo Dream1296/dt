@@ -5,7 +5,7 @@
         </div>
 
         <div>
-            <imgsf :load="Shows" :imageSrc="imgSrc"></imgsf>
+            <imgsf :load="Shows" :imageSrc="imgSrcRef"></imgsf>
         </div>
 
     </div>
@@ -14,7 +14,7 @@
 </template>
 
 <script setup lang="ts">
-import { getdt, imgSrcs } from '@/api/api';
+import { getdt, imgSrc } from '@/api/api';
 import { useRoute } from 'vue-router';
 import { dtData } from '@/dtData/getList';
 import imgsf from '@/components/imgsf/imgsf.vue';
@@ -31,7 +31,7 @@ const route = useRoute();
 let dtid = Number(route.query.dtid);
 let index = Number(route.query.index);
 
-let imgSrc = ref(" ");
+let imgSrcRef = ref(" ");
 
 
 
@@ -40,9 +40,9 @@ let imgSrc = ref(" ");
 
 onMounted(() => {
     if (isNaN(dtid) || isNaN(index) || dtid === undefined || index === undefined) {
-        imgSrc.value = tempStores.imgSrc;
+        imgSrcRef.value = tempStores.imgSrc;
     } else {
-        imgSrc.value = imgSrcs(dtid, index);
+        imgSrcRef.value = imgSrc(dtid, index,'1');
     }
 
     const img = new Image();
@@ -61,7 +61,7 @@ onMounted(() => {
         Shows.value = false;
     };
 
-    img.src = imgSrc.value;
+    img.src = imgSrcRef.value;
 
 })
 

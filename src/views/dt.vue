@@ -47,7 +47,7 @@
 
 
 
-            <div class="zhujian" v-show="!userData.isLogin && showLogin">
+            <div class="zhujian" v-show=" showLogin">
                 <login @success="logins"></login>
             </div>
 
@@ -190,7 +190,6 @@ let userData = userStore();
 const route = useRoute();
 let showLogin = ref(false);
 
-console.log(route.query.login);
 
 if (route.query.login && route.query.login == 'login') {
     showLogin.value = true;
