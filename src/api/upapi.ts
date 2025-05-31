@@ -37,18 +37,18 @@ export function ac() {
 export function upfiles(imgArr: any[], videoArr: any[]) {
     let len = imgArr.length + videoArr.length;
     let imgNameArr: string[] = [];
-    let videoNumArr :string[] = [];
+    let videoNumArr: string[] = [];
     // let percentCompleteArr: number[] = new Array(len).fill(0);
-    let percentCompleteArr = ref<number[]>(new Array(len).fill(0));
+    let percentCompleteArr = ref<number[][]>([new Array(imgArr.length).fill(0), new Array(videoArr.length).fill(0)]);
     let upPromise: (() => Promise<boolean>)[] = new Array(len);
 
     for (let i = 0; i < imgArr.length; i++) {
         upPromise[i] =
-            () => upfile(imgArr[i], 'img', percentCompleteArr, imgNameArr, i);
+            () => upfile(imgArr[i], 'img', percentCompleteArr.value[0], imgNameArr, i);
     }
     for (let i = 0; i < videoArr.length; i++) {
         upPromise[imgArr.length + i] =
-            () => upfile(videoArr[i], 'video', percentCompleteArr, videoNumArr, imgArr.length + i);
+            () => upfile(videoArr[i], 'video', percentCompleteArr.value[1], videoNumArr, i);
     }
     return {
         upPromise,
@@ -59,15 +59,12 @@ export function upfiles(imgArr: any[], videoArr: any[]) {
 }
 
 
-export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: Ref<number[]>, fileNameArr: string[], index: number): Promise<boolean> {
+export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: number[], fileNameArr: string[], index: number): Promise<boolean> {
     return new Promise((resolve, reject) => {
         const date = new Date();
         let filename = file.name;
-        // const fileExtension = file.name.slice((file.name.lastIndexOf(".") - 1 >>> 0) + 2); // 获取文件扩展名
-        // const filename = `${date.getFullYear()}.${date.getMonth() + 1}.${date.getDate()}.${date.getTime()}.${file.name}.${fileExtension}`;
         var formData = new FormData(); // 创建一个FormData对象
         formData.append('filename', filename);
-        fileNameArr.push( filename );
         formData.append('file', file);
 
         let url = '';
@@ -89,14 +86,16 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: Ref
         xhr.upload.addEventListener('progress', function (e) {
             if (e.lengthComputable) {
                 const percentComplete = (e.loaded / e.total);
-                percentCompleteArr.value[index] = percentComplete;
+                percentCompleteArr[index] = percentComplete;
             }
         });
 
         // 监听请求完成
         xhr.onload = function () {
             if (xhr.status === 200) {
-                console.log('文件上传成功！');
+                const responseData: { fileName: string, tf: number } = JSON.parse(xhr.responseText);
+                fileNameArr[index] = responseData.fileName;
+
                 resolve(true);
             } else {
                 console.error('文件上传失败！');
@@ -110,13 +109,13 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: Ref
 
 }
 
-export function postDt(text: string, img: string[], imgShowNum: string, date: string, loa: string, video: string[],imgDir:boolean) {
-    return new Promise((resolve,rejects)=>{
+export function postDt(text: string, img: string[], imgShowNum: string, date: string, loa: string, video: string[], imgDir: boolean) {
+    return new Promise((resolve, rejects) => {
         fetch(Internet.url + '/api/postdt', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // 请求头  
-                'Authorization': 'B ' + token, 
+                'Authorization': 'B ' + token,
             },
             body: JSON.stringify({
                 text,
@@ -125,14 +124,14 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
                 date,
                 loa,
                 video,
-                imgDir:imgDir,
+                imgDir: imgDir,
             })
         })
-        .then(po => po.json())
-        .then(res => {
-            console.log(res);
-            resolve(res);
-        })
+            .then(po => po.json())
+            .then(res => {
+                console.log(res);
+                resolve(res);
+            })
     })
-   
+
 }

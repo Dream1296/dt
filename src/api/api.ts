@@ -26,8 +26,8 @@ if (typeof window === 'undefined') {
 // let url = "https://10.36.40.224:3012";
 // let url = 'http://172.16.3.12:3011';
 // let url = "http://10.42.0.1:3000";
-// let url = 'http://192.168.1.1:3010'
-let url = 'http://192.168.1.1:3011'
+let url = 'http://192.168.1.1:3010'
+// let url = 'http://192.168.1.1:3011'
 // let url = "";
 
 let urlIPV6 = '';
@@ -132,7 +132,7 @@ export async function postCom(content: string, dtId: string, imgArr?: string[]) 
         });
     }
     let urls = Internet.url + '/api/postCom';
-    let res = await api(urls, 'POST', { content, dtId, imgNameArr }, tokens.token);
+    let res = await api<{tf:number}>(urls, 'POST', { content, dtId, imgNameArr }, tokens.token);
     return res;
 }
 

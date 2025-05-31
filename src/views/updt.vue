@@ -293,20 +293,25 @@ async function updts() {
     let allNum = imgArr.length + videoArr.length;
 
     watch(
-        () => pro.percentCompleteArr.value.reduce((acc: number, cur: number) => acc + cur, 0),
+        () => pro.percentCompleteArr.value[0].reduce((acc: number, cur: number) => acc + cur, 0) + pro.percentCompleteArr.value[1].reduce((acc: number, cur: number) => acc + cur, 0)
+        ,
         (val) => {
-            let temp = 0;
-            pro.percentCompleteArr.value.forEach((item, index) => {
-                temp += item;
-            });
-            upfilejd.value = Math.floor(temp / allNum * 100);
-            console.log(upfilejd.value);
-        })
+        let temp = 0;
+        pro.percentCompleteArr.value[0].forEach((item, index) => {
+            temp += item;
+        });
+        pro.percentCompleteArr.value[1].forEach((item, index) => {
+            temp += item;
+        });
+        upfilejd.value = Math.floor(temp / allNum * 100);
+        console.log(upfilejd.value);
+    })
     isupIng.value = true;
 
     let bool = await Promise.all(pro.upPromise.map(task => task()));
 
-    num = pro.percentCompleteArr;
+
+    // num = pro.percentCompleteArr;
     if (!bool) {
         return console.log('错误');
     }

@@ -227,7 +227,7 @@ function tzXq(index: number) {
 
 function showImg(temp: number) {
 	let id = data.value?.id;
-	imgTemp.imgLog = imgSrcsc(temp);
+	imgTemp.imgLog = imgSrc(Number(id), temp, '0');
 	imgTemp.imgSrc = imgSrc(Number(id), temp, '1');
 	if(userStoreData.isPc){
 		window.open(imgTemp.imgSrc, '_blank');

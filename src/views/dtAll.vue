@@ -127,9 +127,12 @@
             <CommentInput @up="upCom" :disabled="isUpImgNum != 0"></CommentInput>
         </div>
 
-        <div id="imgUp">
-            <van-uploader :after-read="afterRead" v-model="fileList" />
+        <div id="imgUpDiv">
+            <div id="imgUp">
+                <van-uploader multiple="true" :after-read="afterRead" v-model="fileList" />
+            </div>
         </div>
+
 
         <div v-for="a in percentCompleteArr">
             {{ a }}
@@ -178,21 +181,65 @@ let showShare = ref(false);
 
 let showPlAdd = ref(false);
 
+// watch(fileList,(oldValue, newValue)=>{
+//     console.log(newValue);
+// } );
+
+let percentCompleteArr = ref<number[]>([]);
+
+let index = 0;
+
+//当前正在上传的图片数
+let isUpImgNum = ref(0);
+
+let fileNameArrMap: Map<string, string> = new Map();
+
+function afterRead(fileItems: UploaderFileListItem | UploaderFileListItem[]) {
+    let fileItemArr = Array.isArray(fileItems) ? fileItems : [fileItems];
+    for (let fileItem of fileItemArr) {
+        let fileNameArr: string[] = [];
+        isUpImgNum.value += 1;
+        fileItem.status = 'uploading';
+        let indexa = index++;
+        let file = fileItem.file;
+        upfile(file, 'img', percentCompleteArr.value, fileNameArr, indexa)
+            .then((data) => {
+                if (fileNameArr && fileItem && fileItem.file) {
+                    fileNameArrMap.set(fileItem.file?.name, fileNameArr[indexa]);
+                }
+                fileItem.status = 'done';
+                isUpImgNum.value -= 1;
+            })
+            .catch((err) => {
+                fileItem.status = 'failed';
+            })
+    }
+};
+
+
 const fileList = ref<UploaderFileListItem[]>([])
 
 
 async function upCom(text: string) {
     let imgNameArr: string[] = [];
-    fileList.value.forEach(element => {
+    for (let element of fileList.value) {
         if (element.file?.name) {
-            imgNameArr.push(element.file?.name);
+            let newName = fileNameArrMap.get(element.file?.name);
+            if (newName) {
+                imgNameArr.push(newName);
+            }
+
         }
-    });
+    }
+
 
     postCom(text, String(data.value?.id), imgNameArr)
         .then(data => {
-            showSuccessToast('成功文案');
-            console.log(data);
+            if (data.tf == 1) {
+                showSuccessToast('成功文案');
+            } else {
+                showFailToast('错误')
+            }
             console.log('ok');
             showPlAdd.value = false;
         })
@@ -201,30 +248,6 @@ async function upCom(text: string) {
 
 }
 
-// watch(fileList,(oldValue, newValue)=>{
-//     console.log(newValue);
-// } );
-
-let percentCompleteArr = ref<number[]>(new Array(20));
-let fileNameArr: string[] = [];
-let index = 0;
-
-//当前正在上传的图片数
-let isUpImgNum = ref(0);
-
-const afterRead = (fileItem: UploaderFileListItem) => {
-    isUpImgNum.value += 1;
-    fileItem.status = 'uploading';
-    upfile(fileItem.file, 'img', percentCompleteArr, fileNameArr, index++)
-        .then((data) => {
-            fileItem.status = 'done';
-            isUpImgNum.value -= 1;
-        })
-        .catch((err) => {
-            fileItem.status = 'failed';
-        })
-
-};
 
 
 const options = [
