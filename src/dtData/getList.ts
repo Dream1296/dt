@@ -23,6 +23,7 @@ type DataL = {
 
 }
 
+// 核心数据存储列表
 export let dtData: DataL = {
     //总数据
     values: [],
@@ -30,9 +31,11 @@ export let dtData: DataL = {
     vlist: ref(<(A | dataImg | Mood | Top)[]>[]),
     //取消api
     signal: (new AbortController()).signal,
+    //更新总数据
     set: (newData: (A | dataImg)[]) => {
         dtData.values = newData;
     },
+    //将总数据中第i位添加到渲染视图数据中
     addVlist: (i: number) => {
         dtData.vlist.value.push(dtData.values[i]);
     },

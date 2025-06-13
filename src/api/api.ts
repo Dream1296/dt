@@ -24,10 +24,11 @@ if (typeof window === 'undefined') {
 // let url = "http://192.168.0.105:3010"
 // let url = "https://10.36.40.224:3012";
 // let url = "https://10.36.40.224:3012";
-// let url = 'http://172.16.3.12:3011';
+let url = 'http://172.16.3.12:3011';
 // let url = "http://10.42.0.1:3000";
-let url = 'http://192.168.1.1:3010'
+// let url = 'http://192.168.1.1:3010'
 // let url = 'http://192.168.1.1:3011'
+// let url = 'http://127.0.0.1:3011'
 // let url = "";
 
 let urlIPV6 = '';
@@ -48,13 +49,13 @@ export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?:
         console.log('跳转到登录');
     }
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
-
     const response = await axios({
         url: url,
         signal: signal,
         method: method,
         headers: headers,
         data: method === 'POST' ? data : undefined, // 只有在 POST 请求时才传递数据
+        validateStatus: () => true
     });
     return response.data as T;
 }
@@ -116,11 +117,11 @@ export async function addDtindex(dtid: number, text: string) {
 }
 
 //单个动态
-export async function getdt(id: string | number, loa?: number): Promise<A> {
+export async function getdt(id: string | number, loa?: number): Promise<{ code: number, data: A }> {
     loa = loa == undefined ? 0 : loa
     let urls = Internet.url + "/api/getdt?id=" + String(id) + "&loa=" + loa;
-    let res = (await api(urls, 'GET', undefined, tokens.token)) as { data: A };
-    return res.data;
+    let res = (await api(urls, 'GET', undefined, tokens.token)) as { code: number, data: A };
+    return res;
 }
 
 //提交动态评论内容
@@ -132,7 +133,7 @@ export async function postCom(content: string, dtId: string, imgArr?: string[]) 
         });
     }
     let urls = Internet.url + '/api/postCom';
-    let res = await api<{tf:number}>(urls, 'POST', { content, dtId, imgNameArr }, tokens.token);
+    let res = await api<{ tf: number }>(urls, 'POST', { content, dtId, imgNameArr }, tokens.token);
     return res;
 }
 

@@ -5,6 +5,19 @@
         <h1 @click="showBottom2 = true">动态详情</h1>
         <button @click="showShare = true">分享</button>
     </div>
+    <div class="show40x" v-if="show403 || show404">
+        <div v-if="show403">
+            <n-result status="403" title="403 禁止访问" description="总有些门是对你关闭的"></n-result>
+        </div>
+
+        <div v-if="show404">
+            <n-result status="404" v-if="show404" title="404 资源不存在" description="生活总归带点荒谬"></n-result>
+        </div>
+    </div>
+
+
+
+
 
     <!-- 内容区 -->
     <div class="content" v-if="data">
@@ -129,7 +142,7 @@
 
         <div id="imgUpDiv">
             <div id="imgUp">
-                <van-uploader multiple="true" :after-read="afterRead" v-model="fileList" />
+                <van-uploader :multiple="true" :after-read="afterRead" v-model="fileList" />
             </div>
         </div>
 
@@ -164,10 +177,13 @@ import { token } from '@/api/token';
 import CommentShow from '@/components/comment/commentShow.vue';
 import CommentInput from '@/components/comment/commentInput.vue';
 import { upfile } from '@/api/upapi';
+import { NResult } from "naive-ui";
 
 let viewData = viewDataStore();
 const route = useRoute();
 let dtid = Number(route.query.dtid);
+console.log(dtid);
+
 let share = route.query.share;
 let srcShow = ref<string[]>([]);
 let srcVideoImg = ref<string[]>([]);
@@ -180,6 +196,9 @@ let nowTime = ref<string>("");
 let showShare = ref(false);
 
 let showPlAdd = ref(false);
+
+let show403 = ref(false);
+let show404 = ref(false);
 
 // watch(fileList,(oldValue, newValue)=>{
 //     console.log(newValue);
@@ -258,7 +277,7 @@ const onSelect = (option: { name: string | ToastOptions | undefined; }) => {
     if (option.name == '复制链接') {
         setShare(dtid.toString())
             .then(res => {
-                let text = `https://dlhe.top/dts/#/dts?dtid=${dtid}&share=${res.token}`;
+                let text = `http://dlhe.top/dts?dtid=${dtid}&share=${res.token}`;
                 console.log(text);
                 navigator.clipboard.writeText(text)
                     .then(() => {
@@ -292,10 +311,12 @@ let newKeyWorld = ref('');
 init();
 
 function init() {
+    //必须参数
     if (!dtid) {
         showFailToast('参数错误');
     }
 
+    //判断是否有分享链接
     if (share) {
         getShare(share.toString())
             .then(data => {
@@ -344,8 +365,21 @@ function getdts() {
 
         }
         getdt(dtid, viewData.loa).then(res => {
-            data.value = res;
-            res.textArr = splitContent(res.text);
+            console.log(res.code);
+
+            if (res.code == 403) {
+                show403.value = true;
+            }
+            if (res.code == 404) {
+                show404.value = true;
+            }
+            if (res.code == 200) {
+                data.value = res.data;
+                data.value.textArr = splitContent(res.data.text);
+
+            }
+            console.log(show403.value);
+
             resolve()
             return
         })
