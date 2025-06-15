@@ -85,7 +85,7 @@ import Line from '../fenge/line.vue';
 import { viewDataStore } from '@/stores/viewDataStore';
 import { userStore } from '@/stores/userStore';
 import { Internet } from '@/api/api';
-import { dtData, dtDataInit, dtFindData } from '@/dtData/getList';
+import {  dtDataInit, dtFindData } from '@/dtData/getList';
 import { obsDt } from '@/dtData/observerDt';
 import { myEvent } from '@/myEnit';
 import topView from '@/components/TopView/topView.vue';
@@ -93,6 +93,7 @@ import { getTouxian, login } from '@/api/api';
 import { token } from '@/api/token';
 import { showFailToast } from 'vant';
 import { svgArr } from './svgArr';
+import { dtData } from '@/dtData/dtList';
 const viewData = viewDataStore();
 const userData = userStore();
 //视图数据

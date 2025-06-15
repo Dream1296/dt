@@ -145,7 +145,7 @@
 </template>
 
 <script setup lang="ts">
-import { dtDataInit, dtData, dtFindData } from '../dtData/getList';
+import { dtDataInit, dtFindData } from '../dtData/getList';
 import { VcDataInit, vData } from '../dtData/VcData';
 import type { A } from '../type/dtType';
 import { nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
@@ -180,6 +180,7 @@ import KeepBadminton from '@/components/KeepBadminton/KeepBadminton.vue';
 import homePage from '@/components/homePage/homePage.vue';
 import footers from '@/components/footer/footer.vue';
 import homePageMo from '@/components/homePageMo/homePageMo.vue';
+import { dtData } from '@/dtData/dtList';
 
 let viewData = viewDataStore();
 let userData = userStore();
@@ -291,7 +292,6 @@ function get13() {
     bgSrc.value = bgSrcCon + "1" + ".png";
 
     dtDataInit(13).then((datas) => {
-        VcDataInit(datas);
         obsDt.init();
         vlist.value = [];
         obsDt.dtAdd(dtsDom);

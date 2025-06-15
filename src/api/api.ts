@@ -24,12 +24,12 @@ if (typeof window === 'undefined') {
 // let url = "http://192.168.0.105:3010"
 // let url = "https://10.36.40.224:3012";
 // let url = "https://10.36.40.224:3012";
-let url = 'http://172.16.3.12:3011';
+// let url = 'http://172.16.3.12:3010';
 // let url = "http://10.42.0.1:3000";
-// let url = 'http://192.168.1.1:3010'
+let url = 'http://192.168.0.1:3010'
 // let url = 'http://192.168.1.1:3011'
 // let url = 'http://127.0.0.1:3011'
-// let url = "";
+// let url = '';
 
 let urlIPV6 = '';
 

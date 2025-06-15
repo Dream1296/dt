@@ -8,6 +8,7 @@ export let vData = ref<As[]>([]);
 export function VcDataInit(dtData:(A | dataImg)[]) {
     
     let data:A[] = [];
+    
     for(let a of dtData){
         if(a.type == 'A'){
             data.push(a);

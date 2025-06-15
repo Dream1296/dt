@@ -7,11 +7,10 @@
 
 		<!-- 正文 -->
 		<div class="text">
-			<template v-for="(a, temp) in data.textArr">
+			<template v-for="(a, temp) in (data.textArr.slice(0,textLen))">
 				<span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
 				<br v-if="a.type == 'text' && a.text == '\n'">
-				<img v-if="a.type == 'emoji' && emojiNamesUrl[emojiNames.findIndex(obj => obj == a.text)]"
-					:src="emojiNamesUrl[emojiNames.findIndex(obj => obj == a.text)]" />
+				<img v-if="a.type == 'emoji'" :src="getEmojiSrc(a.text)" />
 			</template>
 			<span style="color: blueviolet;" v-if="data.textArr?.length > textLen"
 				@click="textLen = 10000">。。。(显示更多)</span>
@@ -54,7 +53,7 @@
 			<div class="lvLogo" v-if="data.textTile" @click="tzlt(data.id)">
 				{{ data.textTile }}
 			</div>
-			<div class="lvLogo" v-else @click="tzlt(data.id,data.text)">
+			<div class="lvLogo" v-else @click="tzlt(data.id, data.text)">
 				在长文本中查看动态
 			</div>
 
@@ -94,8 +93,8 @@
 		<div v-if="data.com && data.com.length > 0">
 			<CommentShow :data="data.com"></CommentShow>
 		</div>
-		
-	
+
+
 		<!-- <hr> -->
 		<!-- <div id="line"></div> -->
 		<!-- <div style="height: 20px;"></div> -->
@@ -115,7 +114,7 @@ import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog, Toast, Dialog, showToast } from 'vant';
 import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, dtFileDow, Internet } from '@/api/api';
-import { dtData } from '@/dtData/getList';
+import { dtData } from '@/dtData/dtList';
 import router from '@/router';
 import { styleText } from 'util';
 import Line from '../fenge/line.vue';
@@ -124,9 +123,9 @@ import topView from '../TopView/topView.vue';
 import StyleTop from '../styleTop/styleTop.vue';
 import threeView from '@/components/threeView/threeView.vue';
 import { token } from '@/api/token';
-import { emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
+import { emojiNamesUrl, emojiNames, getEmojiSrc } from '@/util/dt/emoji';
 import axios from 'axios';
-import {userStore} from '@/stores/userStore';
+import { userStore } from '@/stores/userStore';
 import CommentShow from '../comment/commentShow.vue';
 
 
@@ -161,11 +160,11 @@ function tzlv(id: number) {
 	router.push({ path: '/Lvi', query: { id: id } });
 }
 
-function tzlt(id: number,data?:string) {
-	if(data){
-		router.push({ path: '/longText', query: { id: id , data:data} });
-	}else{
-		router.push({ path: '/longText', query: { id: id} });
+function tzlt(id: number, data?: string) {
+	if (data) {
+		router.push({ path: '/longText', query: { id: id, data: data } });
+	} else {
+		router.push({ path: '/longText', query: { id: id } });
 	}
 }
 
@@ -212,7 +211,7 @@ function emosrc(name: string) {
 
 function imgSrcsc(index: number) {
 	let dtid = data.value?.id || 0;
-	return imgSrc(dtid, index , '0');
+	return imgSrc(dtid, index, '0');
 }
 
 function videoSrc(index: number) {
@@ -229,11 +228,11 @@ function showImg(temp: number) {
 	let id = data.value?.id;
 	imgTemp.imgLog = imgSrc(Number(id), temp, '0');
 	imgTemp.imgSrc = imgSrc(Number(id), temp, '1');
-	if(userStoreData.isPc){
+	if (userStoreData.isPc) {
 		window.open(imgTemp.imgSrc, '_blank');
 		return
 	}
-	
+
 
 	router.push({
 		path: '/imgs', query: {
@@ -246,7 +245,7 @@ function showImg(temp: number) {
 function playVideo(temp: number) {
 	let url = Internet.url;
 	let a = `${url}/api/dtvideo?dtid=${data.value?.id}&index=${temp}`;
-	if(userStoreData.isPc){
+	if (userStoreData.isPc) {
 		window.open(a, '_blank');
 		return
 	}
@@ -347,8 +346,8 @@ function setPls() {
 				commentsUser: '',
 				date: '',
 				dtId: 0,
-				imgAllNum:0,
-				id:-1,
+				imgAllNum: 0,
+				id: -1,
 			})
 		} else {
 			showFailToast('失败');

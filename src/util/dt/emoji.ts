@@ -16,6 +16,8 @@ export const emojiNames = [
     "福", "烟花", "爆竹", "猪头", "跳跳", "发抖", "转圈"
 ];
 
+
+
 export const emojiNamesUrl = ref<string[]>([]);
 
 async function fn() {
@@ -93,4 +95,15 @@ function cropEmoji(imageSrc: string, x: number, y: number, width: number, height
             reject("Image loading failed");
         };
     });
+}
+
+
+
+export function getEmojiSrc(emojiName: string) {
+    let obj = emojiNamesUrl.value[emojiNames.findIndex(obj => obj == emojiName)];
+    if(obj){
+        return obj;
+    }else{
+        emojiNamesUrl.value[0];
+    }
 }

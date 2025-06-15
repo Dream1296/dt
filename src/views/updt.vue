@@ -111,7 +111,8 @@
     </div>
     <div v-show="isupIng" id="overlay">
         <div class="wrapper">
-            <van-circle v-model:current-rate="upfilejd" :rate="0" :speed="100" :text="upfilejd + '%'">
+            <van-circle v-model:current-rate="upfilejd" :rate="0" :speed="100"
+                :text="upfilejd == 100 ? '即将完成' : upfilejd + '%'">
             </van-circle>
         </div>
 
@@ -296,16 +297,16 @@ async function updts() {
         () => pro.percentCompleteArr.value[0].reduce((acc: number, cur: number) => acc + cur, 0) + pro.percentCompleteArr.value[1].reduce((acc: number, cur: number) => acc + cur, 0)
         ,
         (val) => {
-        let temp = 0;
-        pro.percentCompleteArr.value[0].forEach((item, index) => {
-            temp += item;
-        });
-        pro.percentCompleteArr.value[1].forEach((item, index) => {
-            temp += item;
-        });
-        upfilejd.value = Math.floor(temp / allNum * 100);
-        console.log(upfilejd.value);
-    })
+            let temp = 0;
+            pro.percentCompleteArr.value[0].forEach((item, index) => {
+                temp += item;
+            });
+            pro.percentCompleteArr.value[1].forEach((item, index) => {
+                temp += item;
+            });
+            upfilejd.value = Math.floor(temp / allNum * 100);
+            console.log(upfilejd.value);
+        })
     isupIng.value = true;
 
     let bool = await Promise.all(pro.upPromise.map(task => task()));

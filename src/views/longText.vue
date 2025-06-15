@@ -1,7 +1,6 @@
 <template>
     <div v-if="dtid != '-1'" id="all" ref="allDom">
         <longTextShow :data="data"></longTextShow>
-
     </div>
 
 

@@ -1,20 +1,21 @@
 import { nextTick, type Ref } from "vue";
-import { dtData } from "./getList";
+import { dtData } from "./dtList";
 
-
-
-export let obsDt: {
+type obsDtType = {
     index: number,
     observer: IntersectionObserver | null,
     addNum: number,
-    dtAdd:  (dtsDom: Ref<HTMLElement[]>) => void,
+    dtAdd: (dtsDom: Ref<HTMLElement[]>) => void,
     init: Function,
-    guanbi_footer_show:Function,
-} = {
+    guanbi_footer_show: Function,
+}
+
+
+export let obsDt: obsDtType = {
     index: 0,
     observer: null,
-    addNum: 5,
-    guanbi_footer_show:()=>{},
+    addNum: 10,
+    guanbi_footer_show: () => { },
     init() {
         this.index = 0;
     },
@@ -22,7 +23,7 @@ export let obsDt: {
     dtAdd(dtsDom: Ref<HTMLElement[]>) {
         this.guanbi_footer_show();
         for (let i = this.index; i < this.index + this.addNum; i++) {
-            if (i == dtData.values.length) {
+            if (i == dtData.list.length) {
                 this.observer!.disconnect();
                 return
             }
@@ -30,7 +31,7 @@ export let obsDt: {
         }
         this.index += this.addNum;
 
-        nextTick(() => {            
+        nextTick(() => {
             // 如果 observer 已经存在，断开之前的观察
             if (this.observer) {
                 this.observer.disconnect();

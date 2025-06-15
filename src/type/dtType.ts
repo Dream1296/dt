@@ -26,6 +26,8 @@ export interface A {
   KeepBadminton?:BadmintonData;
   loa: number;
 }
+
+// 评论状态与选项状态记录
 export interface As {
   id: number;
   isPlss: boolean;

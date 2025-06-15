@@ -25,7 +25,7 @@
             <template v-for="a in data.textArr">
                 <span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
                 <br v-if="a.type == 'text' && a.text == '\n'">
-                <img v-if="a.type == 'emoji'" :src="emosrc(a.text)" />
+                <img v-if="a.type == 'emoji'" :src="getEmojiSrc(a.text)" />
             </template>
         </div>
         <hr>
@@ -171,13 +171,14 @@ import { ref, watch } from 'vue';
 import { splitContent } from '@/dtData/dtUtils';
 import router from '@/router';
 import { showFailToast, showSuccessToast, showToast, type ToastOptions, type UploaderFileListItem } from 'vant';
-import { dtData } from '@/dtData/getList';
+import { dtData } from '@/dtData/dtList';
 import { viewDataStore } from '@/stores/viewDataStore';
 import { token } from '@/api/token';
 import CommentShow from '@/components/comment/commentShow.vue';
 import CommentInput from '@/components/comment/commentInput.vue';
 import { upfile } from '@/api/upapi';
 import { NResult } from "naive-ui";
+import { emojiNames, getEmojiSrc } from '@/util/dt/emoji';
 
 let viewData = viewDataStore();
 const route = useRoute();
@@ -357,7 +358,7 @@ function init() {
 
 function getdts() {
     return new Promise<void>((resolve, reject) => {
-        let obj = dtData.values.find(res => res.id == dtid);
+        let obj = dtData.list.find(res => res.id == dtid);
         if (obj && obj.type == 'A') {
             data.value = obj;
             resolve()

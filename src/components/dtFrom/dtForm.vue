@@ -44,7 +44,7 @@ import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog } from 'vant';
 import { delDts, postCom, getTouxian, getEmoSrc, imgSrc,dtVideoImg, Internet } from '@/api/api';
-import { dtData } from '@/dtData/getList';
+import { dtData } from '@/dtData/dtList';
 import router from '@/router';
 import { styleText } from 'util';
 import Line from '../fenge/line.vue';

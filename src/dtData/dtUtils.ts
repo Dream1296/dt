@@ -87,6 +87,22 @@ export function settext(key: 'textArr', value: 'text', dtData: A[]) {
     }
 }
 
+export function Asetcl(data: A[]) {
+    //处理正文字符串
+    settext('textArr', 'text', data);
+
+}
+
+//临时处理，让com不为空
+export function setCom(data: A[]) {
+    data.forEach(a => {
+        if (!a.com) {
+            a.com = [];
+        }
+    });
+
+}
+
 
 // export function setvideo(dtData:A[]){
 //     for(let i = 0; i < dtData.length; i++){
