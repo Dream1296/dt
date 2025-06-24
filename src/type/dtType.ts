@@ -17,13 +17,18 @@ export interface A {
   videoNum: number;
   com: Com[];
   bgStyle: number;
-  textTile: string;
-  File?:{
-    name:string,
-    fileId:string
+  // textTile: string;
+  longText: {
+    id: number,
+    dtid: number,
+    tetile: string
+  }[];
+  File?: {
+    name: string,
+    fileId: string
   };
-  KeepRun?:KeepRunRecord;
-  KeepBadminton?:BadmintonData;
+  KeepRun?: KeepRunRecord;
+  KeepBadminton?: BadmintonData;
   loa: number;
 }
 
@@ -40,8 +45,8 @@ export interface Com {
   content: string;
   date: string;
   dtId: number;
-  id:number;
-  imgAllNum:number;
+  id: number;
+  imgAllNum: number;
   name: string;
 }
 
@@ -72,7 +77,7 @@ export type Top = {
 
 
 export interface KeepRunRecord {
-  dt_id:string,
+  dt_id: string,
   type: string; // 运动类型
   date: string; // 时间和日期
   location: string; // 位置
@@ -92,11 +97,11 @@ export interface KeepRunRecord {
   xunlanxiaoguo_you: string; // 训练效果，有氧
   xunlanxiaoguo_wu: string; // 训练效果，无氧
   cut: string; // 跑步能力评估
-  ocr_text?:string;
+  ocr_text?: string;
 }
 
 export type BadmintonData = {
-  dt_id:string;
+  dt_id: string;
   type: string; // 运动类型
   date: string; // 运动日期时间段
   xiaohao: number; // 运动消耗（单位：千卡）

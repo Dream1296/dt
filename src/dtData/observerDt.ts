@@ -14,7 +14,7 @@ type obsDtType = {
 export let obsDt: obsDtType = {
     index: 0,
     observer: null,
-    addNum: 10,
+    addNum: 6,
     guanbi_footer_show: () => { },
     init() {
         this.index = 0;

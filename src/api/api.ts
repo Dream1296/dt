@@ -26,9 +26,10 @@ if (typeof window === 'undefined') {
 // let url = "https://10.36.40.224:3012";
 // let url = 'http://172.16.3.12:3010';
 // let url = "http://10.42.0.1:3000";
-let url = 'http://192.168.0.1:3010'
+// let url = 'http://192.168.0.1:3010'
 // let url = 'http://192.168.1.1:3011'
 // let url = 'http://127.0.0.1:3011'
+let url = 'http://192.168.1.180:3010'
 // let url = '';
 
 let urlIPV6 = '';
@@ -281,8 +282,21 @@ export async function setShare(dtid: string) {
 
 export async function getLongText(dtid: string) {
     let url = `${Internet.url}/api/getLongText?dtid=${dtid}`;
-    let res = await api<{ code: number, data: { id: number, dtid: string, data: string, type: string } }>(url, 'GET', undefined, tokens.token);
-    return res;
+    type T = {
+        code: number,
+        data: {
+            id: number,
+            dtid: string,
+            loa: number,
+            title: string,
+            user: string,
+            data: string,
+            type: string,
+            notes:string,
+        }
+    };
+    let res = await api<T>(url, 'GET', undefined, tokens.token);
+    return res.data;
 }
 
 

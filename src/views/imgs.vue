@@ -18,7 +18,7 @@ import { getdt, imgSrc } from '@/api/api';
 import { useRoute } from 'vue-router';
 import { dtData } from '@/dtData/dtList';
 import imgsf from '@/components/imgsf/imgsf.vue';
-import { onMounted, onUnmounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import { tempStore } from '@/stores/tempStore';
 import { showFailToast, Toast } from 'vant';
 
@@ -28,8 +28,10 @@ let Shows = ref(false);
 
 const route = useRoute();
 
-let dtid = Number(route.query.dtid);
-let index = Number(route.query.index);
+const dtid = computed(() => route.params.dtid as string);
+// let dtid = Number(route.query.dtid);
+// let index = Number(route.query.index);
+const index = computed(() => route.params.index as string);
 
 let imgSrcRef = ref(" ");
 
@@ -39,10 +41,10 @@ let imgSrcRef = ref(" ");
 
 
 onMounted(() => {
-    if (isNaN(dtid) || isNaN(index) || dtid === undefined || index === undefined) {
+    if (isNaN(Number(dtid.value)) || isNaN(Number(index.value)) || dtid === undefined || index === undefined) {
         imgSrcRef.value = tempStores.imgSrc;
     } else {
-        imgSrcRef.value = imgSrc(dtid, index,'1');
+        imgSrcRef.value = imgSrc( Number(dtid.value) , Number(index.value),'1');
     }
 
     const img = new Image();

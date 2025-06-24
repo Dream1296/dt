@@ -167,7 +167,7 @@ import { useRoute } from 'vue-router';
 import Myimage from '../components/image/Myimage.vue';
 import Pbl from '@/components/pbl/Pbl.vue';
 import type { A } from '@/type/dtType';
-import { ref, watch } from 'vue';
+import { computed, ref, watch } from 'vue';
 import { splitContent } from '@/dtData/dtUtils';
 import router from '@/router';
 import { showFailToast, showSuccessToast, showToast, type ToastOptions, type UploaderFileListItem } from 'vant';
@@ -182,7 +182,7 @@ import { emojiNames, getEmojiSrc } from '@/util/dt/emoji';
 
 let viewData = viewDataStore();
 const route = useRoute();
-let dtid = Number(route.query.dtid);
+let dtid = Number( (computed(() => route.params.dtid as string)).value );
 console.log(dtid);
 
 let share = route.query.share;
@@ -533,7 +533,7 @@ function GetImg(ids: {
     index: number,
 }) {
     //打开图片页面
-    router.push({ path: '/imgs', query: ids });
+    router.push({ path: '/imgs/' + ids.dtid + '/' + ids.index });
 }
 
 /**

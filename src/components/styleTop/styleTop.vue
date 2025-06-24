@@ -16,6 +16,12 @@
             <!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
             <img class="bgIco3" src="../../assets/img/pigYellow.png">
         </div>
+
+        <div id="bg" v-if="props.bgStyle == 5">
+            <img class="bgDi" src="../../assets/img/dtbg1000.webp">
+            <!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
+            <img class="bgIco3" src="../../assets/img/dt1000a.webp">
+        </div>
     </div>
 
 
@@ -29,7 +35,7 @@ import type { A } from '@/type/dtType';
 
 
 //获取父组件传入数据
-const props = defineProps<{ bgStyle:number }>();
+const props = defineProps<{ bgStyle: number }>();
 
 </script>
 

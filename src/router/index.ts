@@ -16,7 +16,7 @@ const routes: Array<RouteRecordRaw> = [
     component: dt
   },
   {
-    path: '/imgs',
+    path: '/imgs/:dtid/:index',
     // component: imgs,
     component: () => import('../views/imgs.vue'), // 懒加载
   },
@@ -46,7 +46,7 @@ const routes: Array<RouteRecordRaw> = [
     component : () => import('../views/updt.vue')
   },
   {
-    path:'/dts',
+    path:'/dts/:dtid',
     // component:dtAll,
     component : () => import("@/views/dtAll.vue")
   },{
@@ -54,7 +54,7 @@ const routes: Array<RouteRecordRaw> = [
     // component:longVideo,
     component : () => import('@/views/longVideo.vue')
   },{
-    path:'/longText',
+    path:'/longText/:type/:id',
     // component:longVideo,
     component : () => import('@/views/longText.vue')
   },{

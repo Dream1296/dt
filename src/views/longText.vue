@@ -1,6 +1,6 @@
 <template>
-    <div v-if="dtid != '-1'" id="all" ref="allDom">
-        <longTextShow :data="data"></longTextShow>
+    <div v-if="text != ''" id="all">
+        <longTextShow :data="text" :title='title'></longTextShow>
     </div>
 
 
@@ -8,40 +8,80 @@
 
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import longTextShow from '@/components/LongTextShow/longTextShow.vue';
-import { getLongText } from '@/api/api';
+import { getdt, getLongText } from '@/api/api';
+// import { get } from 'node_modules/axios/index.cjs';
 
-let dtid = ref("-1");
 const route = useRoute();
+const type = computed(() => route.params.type as string);
+const id = computed(() => route.params.id as string);
 
-dtid.value = route.query.id as string;
-
-let allDom = ref<HTMLDivElement>();
-
-let data = ref("<h1>正在加载</h1>");
+let text = ref('');
+let title = ref('');
 
 
-let redHtml = `
-         <!-- 结束标志 -->
-  <div class="end-mark_long_text">
-    <span>--END--</span>
-  </div>`;
+console.log(type,id);
 
-if (dtid.value != '-1') {
-    getLongText(dtid.value)
-        .then(res => {
-            if(res.code == 400){
-                data.value = "<h1>403</h1>" + redHtml;
-            }
-            if(res.data.type == 'chatgpt' && allDom.value){
-                allDom.value.style.padding = '0px';
-            }
-            data.value = res.data.data + redHtml;
-        })
-        
+if(type.value == 'a'){
+    getLongTextFn();
 }
+
+if(type.value == 'b'){
+    lookTextLong();
+}
+
+
+
+
+
+function getLongTextFn(){
+        getLongText(id.value)
+        .then(res => {
+            document.title = res.title;
+            text.value = res.data;
+            title.value = res.title;
+           
+
+        })
+}
+
+function lookTextLong(){
+    getdt(id.value, 1)
+        .then(res => { 
+            document.title = '正在查看动态' + res.data.id;
+            title.value = '#' + res.data.id;
+            text.value = res.data.text;
+
+        })
+}
+
+
+
+
+// let allDom = ref<HTMLDivElement>();
+
+// let data = ref("<h1>正在加载</h1>");
+
+
+
+
+
+
+// if (dtid.value != '-1') {
+    // getLongText(dtid.value)
+    //     .then(res => {
+    //         if(res.code == 400){
+    //             data.value = "<h1>403</h1>" + redHtml;
+    //         }
+    //         if(res.data.type == 'chatgpt' && allDom.value){
+    //             allDom.value.style.padding = '0px';
+    //         }
+    //         data.value = res.data.data + redHtml;
+    //     })
+        
+// }
 
 
 

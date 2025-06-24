@@ -7,7 +7,7 @@
 
 		<!-- 正文 -->
 		<div class="text">
-			<template v-for="(a, temp) in (data.textArr.slice(0,textLen))">
+			<template v-for="(a, temp) in (data.textArr.slice(0, textLen))">
 				<span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
 				<br v-if="a.type == 'text' && a.text == '\n'">
 				<img v-if="a.type == 'emoji'" :src="getEmojiSrc(a.text)" />
@@ -48,16 +48,20 @@
 		</div>
 
 		<!-- 长文本显示 -->
-		<div class="lvLogos" v-if="data.textTile || data.text.length > 200">
-
-			<div class="lvLogo" v-if="data.textTile" @click="tzlt(data.id)">
-				{{ data.textTile }}
-			</div>
-			<div class="lvLogo" v-else @click="tzlt(data.id, data.text)">
+		<div class="lvLogos" v-if="data.text.length > textLen">
+			<div class="lvLogo" @click="tzlt(data.id)">
 				在长文本中查看动态
 			</div>
-
 		</div>
+
+		<div class="lvLogos" v-for="(longText, temp) in data.longText" :id="longText.id.toString()">
+			<div class="lvLogo" @click="tzlongtext(data.id, temp)">
+				{{ longText.tetile }}
+			</div>
+		</div>
+
+
+
 
 		<div class="lvLogos" v-if="data.File">
 
@@ -160,12 +164,13 @@ function tzlv(id: number) {
 	router.push({ path: '/Lvi', query: { id: id } });
 }
 
-function tzlt(id: number, data?: string) {
-	if (data) {
-		router.push({ path: '/longText', query: { id: id, data: data } });
-	} else {
-		router.push({ path: '/longText', query: { id: id } });
-	}
+function tzlt(id: number) {
+	router.push({ path: '/longText/b/' + id, });
+}
+
+
+function tzlongtext(id: number, index: number) {
+	router.push({ path: '/longText/a/' + id });
 }
 
 function dowFile(id: string) {
@@ -220,7 +225,7 @@ function videoSrc(index: number) {
 }
 
 function tzXq(index: number) {
-	router.push({ path: '/dts', query: { dtid: index } });
+	router.push({ path: '/dts/' + index });
 }
 
 
@@ -234,11 +239,16 @@ function showImg(temp: number) {
 	}
 
 
+	// router.push({
+	// 	path: '/imgs', query: {
+	// 		dtid: id,
+	// 		index: temp
+	// 	}
+	// });
+
 	router.push({
-		path: '/imgs', query: {
-			dtid: id,
-			index: temp
-		}
+		path: '/imgs/' + id + '/' + temp, 
+		
 	});
 }
 

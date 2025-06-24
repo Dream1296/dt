@@ -1,5 +1,5 @@
 <template>
-    <div class="article-container_long_text" v-html="props.data">
+    <div class="article-container_long_text" v-html="showText">
 
     </div>
 
@@ -7,14 +7,29 @@
 
 
 <script setup lang="ts">
+import { computed } from 'vue';
+
 
 
 const props = defineProps<{
+    title:string,
     data: string,
 }>();
 
 
+let redHtml = `
+         <!-- 结束标志 -->
+  <div class="end-mark_long_text">
+    <span>--END--</span>
+  </div>`;
 
+  let title = `
+  <h3>${props.title}</h3>
+  `
+
+let showText = computed(() => {
+    return title + props.data + redHtml;
+})
 
 
 
@@ -193,7 +208,8 @@ const props = defineProps<{
     /* 垂直排列对话 */
     gap: 10px;
     /* 增加对话框之间的间距 */
-    position: relative; /* 让时间可以相对于这个框进行定位 */
+    position: relative;
+    /* 让时间可以相对于这个框进行定位 */
 }
 
 /* AI输出样式 */
@@ -222,7 +238,8 @@ const props = defineProps<{
     /* 垂直排列对话 */
     gap: 10px;
     /* 增加对话框之间的间距 */
-    position: relative; /* 让时间可以相对于这个框进行定位 */
+    position: relative;
+    /* 让时间可以相对于这个框进行定位 */
 }
 
 /* 时间样式，绝对定位到对话框的顶部 */
@@ -230,14 +247,17 @@ const props = defineProps<{
     font-size: 0.8rem;
     color: #999;
     position: absolute;
-    top: 6px; /* 让时间悬浮在对话框上方 */
-    right: 10px; /* 右对齐 */
+    top: 6px;
+    /* 让时间悬浮在对话框上方 */
+    right: 10px;
+    /* 右对齐 */
 }
 
-.bold{
-    font-weight:800;
+.bold {
+    font-weight: 800;
 }
-.my_hr{
+
+.my_hr {
     width: 100%;
     height: 2px;
     margin-top: 5px;
@@ -245,6 +265,4 @@ const props = defineProps<{
 
     background-color: rgb(0, 0, 0);
 }
-
-
 </style>
