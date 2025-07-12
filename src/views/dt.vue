@@ -44,12 +44,14 @@
 
 
 
-            <div class="zhujian" v-show=" showLogin">
+            <div class="zhujian" v-show="showLogin">
                 <login @success="logins"></login>
             </div>
 
 
             <hr>
+
+
 
             <div id="dtArr" ref="dtArr">
                 <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
@@ -80,6 +82,11 @@
                         <div v-if="a.type == 'top'">
                             <Top :datas="a"></Top>
                         </div>
+
+                        <div v-if="a.type == 'year'">
+                            <YearSign :year="a.year"></YearSign>
+                        </div>
+
                     </div>
                     <div class="line">
                         <Line v-if="index < vlist.length - 1"></Line>
@@ -181,6 +188,7 @@ import homePage from '@/components/homePage/homePage.vue';
 import footers from '@/components/footer/footer.vue';
 import homePageMo from '@/components/homePageMo/homePageMo.vue';
 import { dtData } from '@/dtData/dtList';
+import YearSign from '@/components/yearSign/yearSign.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();
@@ -199,8 +207,36 @@ let touxianSrc = Internet.url + "/api/userImg?name=yw";
 const passwd13Text = '143323';
 
 
+//处理路径搜索
+let wd = route.query.wd;
+let loaQ = route.query.loa;
+setTimeout(() => {
+    if (loaQ && Number(loaQ) == 1) {
+        viewData.loa = 1;
+    }
+    if (wd) {
+        myEvent.emit('dtFind', wd)
+    }
+})
 
+myEvent.on('dtFind', (e) => {
+    routerPush('wd', e as string);
 
+})
+
+function routerPush(key: string, value: string | null) {
+  const currentQuery = { ...router.currentRoute.value.query };
+
+  if (value === null) {
+    // 删除参数
+    delete currentQuery[key];
+  } else {
+    // 添加或修改参数
+    currentQuery[key] = value;
+  }
+
+  router.push({ query: currentQuery });
+}
 
 //视图数据
 const vlist = dtData.vlist;
@@ -242,6 +278,13 @@ watch(() => viewData.loa,
 
         if (newVal == 12) {
             showBottom.value = true;
+        }
+
+        if (newVal == 1) {
+            routerPush('loa', '1');
+        }
+        if(newVal == 0){
+            routerPush('loa',null);
         }
 
 
@@ -466,15 +509,17 @@ function configs() {
     router.push({ path: '/config' });
 }
 
-
+setTimeout(() => {
+    footer_show_num.value += 1;
+}, 1500)
 
 let guanbi_footer_show = () => {
 
     obsDt.guanbi_footer_show = () => {
         setTimeout(() => {
-            footer_show_num.value = 1;
+            footer_show_num.value += 1;
             setTimeout(() => {
-                footer_show_num.value = 2;
+                footer_show_num.value += 2;
             }, 2000);
         }, 1500)
         obsDt.guanbi_footer_show = () => {

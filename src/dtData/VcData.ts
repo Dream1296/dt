@@ -1,11 +1,11 @@
 import { ref } from "vue";
-import type { A, As, dataImg } from "../type/dtType";
+import type { A, As, dataImg, Dt } from "../type/dtType";
 
 // 处理和存储类别中的选项数据
 
 export let vData = ref<As[]>([]);
 
-export function VcDataInit(dtData:(A | dataImg)[]) {
+export function VcDataInit(dtData:(Dt)[]) {
     
     let data:A[] = [];
     

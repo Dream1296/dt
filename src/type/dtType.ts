@@ -1,3 +1,8 @@
+export type Dt = A | dataImg | Mood | Top | Year;
+
+
+
+
 // 标准动态类型
 export interface A {
   type: "A";
@@ -73,6 +78,17 @@ export type Top = {
   touxian: string;
   name: string;
 };
+
+//年份标识
+export type Year = {
+  type: "year";
+  id: number;
+  year:number
+};
+
+
+
+
 
 
 

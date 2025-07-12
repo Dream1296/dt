@@ -1,7 +1,7 @@
 <template>
   <!-- <StatusBar></StatusBar> -->
     <router-view v-slot="{ Component }">
-      <keep-alive include="DtComponent,DtAllComponent">
+      <keep-alive include="DtComponent">
         <component :is="Component" />
       </keep-alive>
     </router-view>

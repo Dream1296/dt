@@ -1,16 +1,28 @@
 <template>
-    <div id="all" :style="{ left: allLeft + 'px', top: allTop + 'px' }" v-show="viewData.showV">
+    <div class="all" :style="{ left: allLeft + 'px', top: allTop + 'px' }" v-show="viewData.showV">
         <div class="dy" @click="upData">
             <img src="../../assets/img/dy.png" v-show="viewData.isShowDy">
             <img src="../../assets/img/dy0.png" v-show="!viewData.isShowDy">
         </div>
+
+        <div class="toTop" @click="toTop">
+            <img src="../../assets/img/ic_回到顶部.png">
+        </div>
+
+
     </div>
 
-    <div id="alls" :style="{ left: allLefts + 'px', top: allTops + 'px' }" v-show="viewData.showV">
+    <div class="all" :style="{ left: allLefts + 'px', top: allTops + 'px' }" v-show="viewData.showV">
         <div class="dy" @click="upData">
             <img src="../../assets/img/dy.png" v-show="viewData.isShowDy">
             <img src="../../assets/img/dy0.png" v-show="!viewData.isShowDy">
         </div>
+
+        <div class="toTop" @click="toTop">
+            <img src="../../assets/img/ic_回到顶部.png">
+        </div>
+
+
     </div>
 
 </template>
@@ -32,7 +44,7 @@ let allTops = ref(0);
 let widths = window.innerWidth * 0.8;
 let heights = 90;
 
-function upData(){
+function upData() {
     viewData.isShowDy = !viewData.isShowDy;
     dtDataInit(viewData.loa).then((data) => {
         myEvent.emit('upDtList');
@@ -45,6 +57,27 @@ function upV() {
 
     allLefts.value = allLeft.value + window.innerWidth;
     allTops.value = allTop.value;
+}
+
+function toTop() {
+    // 可设定滚动动画时长（毫秒）
+    const duration = 500
+    const start = window.scrollY || window.pageYOffset
+    const startTime = performance.now()
+
+    function animate(currentTime:any) {
+        const elapsed = currentTime - startTime
+        const progress = Math.min(elapsed / duration, 1)
+        const ease = 1 - Math.pow(1 - progress, 3) // easeOutCubic
+
+        window.scrollTo(0, start * (1 - ease))
+
+        if (progress < 1) {
+            requestAnimationFrame(animate)
+        }
+    }
+
+    requestAnimationFrame(animate)
 }
 
 upV();
@@ -62,39 +95,5 @@ watch(() => viewData.elfX + viewData.elfY, (newVal, oldValue) => {
 
 
 <style lang="less" scoped>
-#all {
-    width: 80vw;
-    height: 90px;
-    z-index: 900;
-    position: fixed;
-    background-color: bisque;
-    display: flex;
-}
-
-img {
-    width: 100%;
-    height: 100%;
-}
-
-.dy {
-    width: 30px;
-    height: 30px;
-}
-
-#alls {
-    width: 80vw;
-    height: 90px;
-    z-index: 900;
-    position: fixed;
-    background-color: bisque;
-    display: flex;
-}
-
-.kuai {
-    width: 10px;
-    height: 10px;
-    background-color: aqua;
-    margin-left: 10px;
-
-}
+@import "./configV.less";
 </style>

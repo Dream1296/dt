@@ -31,7 +31,7 @@
 
 			<div class="bntx">
 
-				<div id="alist" :class="{  disabled : !userData.isHome }" @click="openAlist()">
+				<div id="alist" :class="{ disabled: !userData.isHome }" @click="openAlist()">
 					<div v-html="svgArr[0]">
 					</div>
 				</div>
@@ -85,7 +85,7 @@ import Line from '../fenge/line.vue';
 import { viewDataStore } from '@/stores/viewDataStore';
 import { userStore } from '@/stores/userStore';
 import { Internet } from '@/api/api';
-import {  dtDataInit, dtFindData } from '@/dtData/getList';
+import { dtDataInit, dtFindData } from '@/dtData/getList';
 import { obsDt } from '@/dtData/observerDt';
 import { myEvent } from '@/myEnit';
 import topView from '@/components/TopView/topView.vue';
@@ -128,16 +128,18 @@ function tzs() {
 	}
 }
 
-function openAlist(){
-	if(!userData.isHome){
+function openAlist() {
+	if (!userData.isHome) {
 		showFailToast('仅在内网可用');
 		return
 	}
 	let url = 'http://dlhe.top:5244';
 	window.open(url, '_blank');
 }
-//查询
-function dtFind() {
+//查询事件监听
+myEvent.on('dtFind', (e) => {
+	showSs.value = true;
+	sr.value = e as string;
 
 	if (token.istoken == 'false') {
 		showFailToast('仅用于内部维护使用');
@@ -152,6 +154,10 @@ function dtFind() {
 			myEvent.emit('upDtList');
 		});
 	}
+
+})
+function dtFind() {
+	myEvent.emit('dtFind', sr.value);
 }
 
 

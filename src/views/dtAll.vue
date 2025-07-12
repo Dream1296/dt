@@ -182,8 +182,7 @@ import { emojiNames, getEmojiSrc } from '@/util/dt/emoji';
 
 let viewData = viewDataStore();
 const route = useRoute();
-let dtid = Number( (computed(() => route.params.dtid as string)).value );
-console.log(dtid);
+let dtid = Number((computed(() => route.params.dtid as string)).value);
 
 let share = route.query.share;
 let srcShow = ref<string[]>([]);
@@ -309,6 +308,8 @@ let groupChecked = ref('0');
 let newLoa = ref('0');
 let newKeyWorld = ref('');
 
+
+//初始化
 init();
 
 function init() {
@@ -358,16 +359,16 @@ function init() {
 
 function getdts() {
     return new Promise<void>((resolve, reject) => {
+        //先从列表中寻找
         let obj = dtData.list.find(res => res.id == dtid);
         if (obj && obj.type == 'A') {
             data.value = obj;
             resolve()
             return
-
         }
-        getdt(dtid, viewData.loa).then(res => {
-            console.log(res.code);
 
+        //网络请求
+        getdt(dtid, viewData.loa).then(res => {
             if (res.code == 403) {
                 show403.value = true;
             }
@@ -377,7 +378,6 @@ function getdts() {
             if (res.code == 200) {
                 data.value = res.data;
                 data.value.textArr = splitContent(res.data.text);
-
             }
             console.log(show403.value);
 
@@ -388,28 +388,34 @@ function getdts() {
 }
 
 
+console.log('运行');
+
+//不应该缓存
+
+// watch(() => route.query, () => {
 
 
-watch(() => route.query, () => {
-    if (route.path != '/dts' || Number(route.query.dtid) == dtid) {
-        return
-    }
-    dtid = Number(route.query.dtid);
-    share = route.query.share;
-    isShowType.value = '';
-    isShowImg.value = true;
-    showBottom.value = false;
-    newKeyWorld.value = '';
-    srcShow.value = [];
-    srcVideoImg.value = [];
-    srcAll.value = [];
-    init();
-    // getdt(dtid).then(res => {
-    //     data.value = res;
-    //     res.textArr = splitContent(res.text);
-    //     imgShow(res);
-    // })
-});
+//     // 判断是否不刷新
+//     if (!route.path.includes('/dts') || Number(route.params.dtid) == dtid) {
+//         return
+//     }
+
+//     dtid = Number((computed(() => route.params.dtid as string)).value);
+//     share = route.query.share;
+//     isShowType.value = '';
+//     isShowImg.value = true;
+//     showBottom.value = false;
+//     newKeyWorld.value = '';
+//     srcShow.value = [];
+//     srcVideoImg.value = [];
+//     srcAll.value = [];
+//     init();
+//     // getdt(dtid).then(res => {
+//     //     data.value = res;
+//     //     res.textArr = splitContent(res.text);
+//     //     imgShow(res);
+//     // })
+// });
 
 function getImgs(index: string) {
     GetImg({ dtid: dtid.toString(), index: Number(index) });

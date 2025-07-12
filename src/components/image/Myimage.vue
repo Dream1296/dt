@@ -10,7 +10,7 @@
 import { ref, watch, onMounted } from 'vue';
 
 // 默认占位图
-const imgLog = new URL('../../assets/img/img_load.png', import.meta.url).href;
+const imgLog = new URL('../../assets/img/img_load.webp', import.meta.url).href;
 
 const props = defineProps<{
   src: string;

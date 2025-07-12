@@ -1,4 +1,4 @@
-import type { A, dataImg } from '@/type/dtType';
+import type { A, dataImg, Dt } from '@/type/dtType';
 import axioss from 'axios';
 import { token as tokens } from '@/api/token';
 
@@ -29,8 +29,8 @@ if (typeof window === 'undefined') {
 // let url = 'http://192.168.0.1:3010'
 // let url = 'http://192.168.1.1:3011'
 // let url = 'http://127.0.0.1:3011'
-let url = 'http://192.168.1.180:3010'
-// let url = '';
+// let url = 'http://192.168.1.180:3010'
+let url = '';
 
 let urlIPV6 = '';
 
@@ -93,7 +93,7 @@ export async function dtDate(loa: string | number, aes: number, signal?: AbortSi
         code: number,
         loa: number,
         message: string,
-        data: (A | dataImg)[],
+        data: (Dt)[],
     }
     let res = await api<T>(urls, 'GET', undefined, tokens.token, signal);
     if (!tokens.token) {
@@ -169,6 +169,10 @@ export async function getlvObj(id: number) {
     return res;
 }
 
+export function getYearImg(year:number){
+    let url = Internet.url + '/api/getYear?year=' + year ;
+    return url;
+}
 
 
 /**

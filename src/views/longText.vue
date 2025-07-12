@@ -1,6 +1,14 @@
 <template>
-    <div v-if="text != ''" id="all">
+    <div v-if="text != '' &&  textType == 'text'" id="all">
         <longTextShow :data="text" :title='title'></longTextShow>
+    </div>
+
+    <div v-if="text != '' && textType == 'html'">
+        <LongHtmlShow :data="text" ></LongHtmlShow>
+    </div>
+
+    <div v-if="text != '' && textType == 'chatgpt'">
+        <LongChatShow :data="text" :title="title"></LongChatShow>
     </div>
 
 
@@ -12,6 +20,8 @@ import { computed, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import longTextShow from '@/components/LongTextShow/longTextShow.vue';
 import { getdt, getLongText } from '@/api/api';
+import LongHtmlShow from '@/components/LongTextShow/longHtmlShow.vue';
+import LongChatShow from '@/components/LongTextShow/longChatShow.vue';
 // import { get } from 'node_modules/axios/index.cjs';
 
 const route = useRoute();
@@ -19,6 +29,7 @@ const type = computed(() => route.params.type as string);
 const id = computed(() => route.params.id as string);
 
 let text = ref('');
+let textType = ref('');
 let title = ref('');
 
 
@@ -33,17 +44,20 @@ if(type.value == 'b'){
 }
 
 
-
+let all = ref<HTMLDivElement>();
 
 
 function getLongTextFn(){
         getLongText(id.value)
         .then(res => {
-            document.title = res.title;
-            text.value = res.data;
-            title.value = res.title;
-           
-
+                // document.title = `📖${res.title}`;
+                setDoTitle(res.title,res.type)
+                text.value = res.data;
+                title.value = res.title;
+                textType.value = res.type;
+                if(textType.value == 'chatgpt' && all.value){
+                all.value.style.padding = '0px';
+            }
         })
 }
 
@@ -55,6 +69,22 @@ function lookTextLong(){
             text.value = res.data.text;
 
         })
+}
+
+function setDoTitle(title:string,type:string){
+    let doTitle = title;
+    if(type == 'text'){
+        doTitle = '📖 ' + title;
+    }
+    if(type == 'html'){
+        doTitle = '📄 ' + title;
+    }
+    if(type == 'chatgpt'){
+        doTitle = '💬 ' + title;
+    }
+
+
+    document.title = doTitle;
 }
 
 

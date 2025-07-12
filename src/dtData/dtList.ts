@@ -1,15 +1,15 @@
-import type { A, dataImg, Mood, Top } from "@/type/dtType";
+import type { A, dataImg, Dt, Mood, Top } from "@/type/dtType";
 import { ref, type Ref } from "vue";
 
 
 
 export type dtList = {
 
-    list: (A | dataImg)[],
-    vlist: Ref<(A | dataImg | Mood | Top)[]>,
+    list: (Dt)[],
+    vlist: Ref<(Dt)[]>,
     signal: AbortSignal,
 
-    set: (newData: (A | dataImg)[]) => void,
+    set: (newData: (Dt)[]) => void,
     addVlist: (i: number) => void
     find: (id: number) => A | undefined,
     del: (id: number) => boolean,
@@ -21,11 +21,11 @@ export let dtData: dtList = {
     //总数据
     list: [],
     //渲染视图数据
-    vlist: ref(<(A | dataImg | Mood | Top)[]>[]),
+    vlist: ref(<(Dt)[]>[]),
     //取消api
     signal: (new AbortController()).signal,
     //更新总数据
-    set: (newData: (A | dataImg)[]) => {
+    set: (newData: (Dt)[]) => {
         dtData.list = newData;
     },
     //将总数据中第i位添加到渲染视图数据中

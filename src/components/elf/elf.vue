@@ -2,6 +2,8 @@
     <div id="all" :style="{ top: allTop + 'px', left: allLeft + 'px' }" @click="setShowV">
         <img src="../../assets/img/jingling.png">
     </div>
+
+
 </template>
 
 
@@ -56,15 +58,5 @@ function setShowV(){
 
 
 <style lang="less" scoped>
-#all {
-    width: 50px;
-    height: 50px;
-    position: fixed;
-    z-index: 900;
-
-    img {
-        width: 100%;
-        height: 100%;
-    }
-}
+@import "./elf.less";
 </style>

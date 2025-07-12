@@ -3,7 +3,10 @@
         <div id="bg"></div>
 
         <div id="text1">
-            <img src="../../assets/img/homePage/text1.png">
+            <!-- <img src="../../assets/img/homePage/text1.png"> -->
+            <div v-html="svgArr[1]">
+
+            </div>
         </div>
 
         <div id="boxs">
@@ -11,7 +14,9 @@
         </div>
 
         <div id="text2">
-            <img src="../../assets/img/homePage/text2.png">
+            <!-- <img src="../../assets/img/homePage/text2.png"> -->
+             <div v-html="svgArr[0]">
+             </div>
         </div>
 
 
@@ -33,7 +38,11 @@
 
 <script setup lang="ts">
 import box from './boxs/box.vue';
+import { svgArr } from './svgArr';
 import userIn from './userIn/userIn.vue';
+
+
+
 
 </script>
 

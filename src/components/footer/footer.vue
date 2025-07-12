@@ -9,8 +9,8 @@
         <!-- </p> -->
 
         <p>
-            <span  class="feedback-link">内容反馈邮箱：dream1296@outlook.com </span> |
-            <span>运行时长：<span id="run-time"></span></span> |
+            <span  class="feedback-link">内容反馈邮箱：dream1296@outlook.com </span> 
+            <!-- <span>运行时长：<span id="run-time"></span></span> | -->
             <!-- <span>总访问：<span id="total-visits"></span></span> |
             <span>今日访问：<span id="daily-visits"></span></span> -->
         </p>
