@@ -29,8 +29,8 @@ if (typeof window === 'undefined') {
 // let url = 'http://192.168.0.1:3010'
 // let url = 'http://192.168.1.1:3011'
 // let url = 'http://127.0.0.1:3011'
-// let url = 'http://192.168.1.180:3010'
-let url = '';
+let url = 'http://192.168.1.180:3010'
+// let url = '';
 
 let urlIPV6 = '';
 

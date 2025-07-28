@@ -37,7 +37,6 @@ import { myEvent } from '@/myEnit';
 let viewData = viewDataStore();
 let allLeft = ref(0);
 let allTop = ref(0);
-
 let allLefts = ref(0);
 let allTops = ref(0);
 
@@ -71,7 +70,7 @@ function toTop() {
         const ease = 1 - Math.pow(1 - progress, 3) // easeOutCubic
 
         window.scrollTo(0, start * (1 - ease))
-
+        myEvent.emit('upLookDtId',-1);
         if (progress < 1) {
             requestAnimationFrame(animate)
         }

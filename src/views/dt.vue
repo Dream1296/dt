@@ -189,12 +189,14 @@ import footers from '@/components/footer/footer.vue';
 import homePageMo from '@/components/homePageMo/homePageMo.vue';
 import { dtData } from '@/dtData/dtList';
 import YearSign from '@/components/yearSign/yearSign.vue';
+import { routerPush } from '@/util/dt/routerUtil';
 
 let viewData = viewDataStore();
 let userData = userStore();
 
 const route = useRoute();
 let showLogin = ref(false);
+
 
 
 if (route.query.login && route.query.login == 'login') {
@@ -209,34 +211,38 @@ const passwd13Text = '143323';
 
 //处理路径搜索
 let wd = route.query.wd;
-let loaQ = route.query.loa;
+let loaQ = 0;
+let startId = 0;
+if(route.query.dtId && Number(route.query.dtId) && Number(route.query.dtId) >= 0){
+     startId = Number(route.query.dtId);
+}
 setTimeout(() => {
     if (loaQ && Number(loaQ) == 1) {
-        viewData.loa = 1;
+        loaQ = 1;
     }
     if (wd) {
         myEvent.emit('dtFind', wd)
     }
-})
+    let topNum = 0;
+    // setInterval(() => {
+    //     window.scrollTo({
+    //         top: topNum, // 滚动到最底部
+    //         behavior: 'smooth', // 平滑滚动（可选）
+    //     });
+    //     topNum += 500;
+    // }, 100)
+
+
+}, 1000)
+
+
 
 myEvent.on('dtFind', (e) => {
-    routerPush('wd', e as string);
+    // routerPush('wd', e as string);
 
 })
 
-function routerPush(key: string, value: string | null) {
-  const currentQuery = { ...router.currentRoute.value.query };
 
-  if (value === null) {
-    // 删除参数
-    delete currentQuery[key];
-  } else {
-    // 添加或修改参数
-    currentQuery[key] = value;
-  }
-
-  router.push({ query: currentQuery });
-}
 
 //视图数据
 const vlist = dtData.vlist;
@@ -271,6 +277,8 @@ watch(() => viewData.loa,
             showFailToast('仅在登录后可查看所有内容');
             return
         }
+        
+        // routerPush('wd', null);
 
         if (newVal == 0 || newVal == 1) {
             get01(newVal);
@@ -283,8 +291,8 @@ watch(() => viewData.loa,
         if (newVal == 1) {
             routerPush('loa', '1');
         }
-        if(newVal == 0){
-            routerPush('loa',null);
+        if (newVal == 0) {
+            routerPush('loa', null);
         }
 
 
@@ -307,11 +315,10 @@ function get01(newVal: number) {
 }
 
 myEvent.on('upDtList', () => {
-    obsDt.init();
-    vlist.value = [];
-    nextTick(() => {
-        obsDt.dtAdd(dtsDom);
-    })
+    // nextTick(() => {
+    
+    obsDt.init(dtsDom, 0);
+    // })
 })
 
 watch(passwd13, (newVal) => {
@@ -335,9 +342,7 @@ function get13() {
     bgSrc.value = bgSrcCon + "1" + ".png";
 
     dtDataInit(13).then((datas) => {
-        obsDt.init();
-        vlist.value = [];
-        obsDt.dtAdd(dtsDom);
+        obsDt.init(dtsDom, 0);
     })
 }
 
@@ -437,6 +442,9 @@ onMounted(() => {
     // if (dtArr.value && dtsDom.value) {
     //     layoutItemsFnAdd(dtArr.value, dtsDom.value);
     // }
+     window.scrollTo(0, 0);
+    console.log('onMounted');
+    
     if (window.innerWidth < 768) {
         showTop(showBg, head as Ref<HTMLElement>);
     }
@@ -532,10 +540,18 @@ obsDt.guanbi_footer_show = guanbi_footer_show;
 
 
 //初始化数据,初始化评论列表
-dtDataInit(0)
+dtDataInit(loaQ)
     .then(datas => {
         VcDataInit(datas);
-        obsDt.dtAdd(dtsDom);
+        obsDt.init(dtsDom, startId);
+        // setTimeout(() => {
+        //       window.scrollTo({
+        //     top: 1500, // 滚动到最底部
+        //     behavior: 'smooth', // 平滑滚动（可选）
+        // });
+        // }, 0);
+      
+        
     })
 
 
@@ -543,7 +559,6 @@ dtDataInit(0)
 onBeforeUnmount(() => {
     window.removeEventListener('keydown', handleGlobalKeydown);
 });
-
 
 
 defineOptions({

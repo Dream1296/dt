@@ -28,7 +28,7 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: '/test',
     // component: test,
-    component : () => import('../views/text.vue')
+    component : () => import('../views/test.vue')
   },
   {
     path:'/videoPlay',

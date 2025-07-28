@@ -64,9 +64,11 @@ function getLongTextFn(){
 function lookTextLong(){
     getdt(id.value, 1)
         .then(res => { 
+
             document.title = '正在查看动态' + res.data.id;
             title.value = '#' + res.data.id;
-            text.value = res.data.text;
+            text.value = textAddBr( res.data.text);
+            textType.value = 'text';
 
         })
 }
@@ -113,7 +115,13 @@ function setDoTitle(title:string,type:string){
         
 // }
 
-
+function textAddBr(text:string){
+    let res = '';
+    for(let z of text.split('\n')){
+        res += '&nbsp&nbsp&nbsp&nbsp' + z + '<br>';
+    }
+    return res;
+}
 
 
 

@@ -10,7 +10,7 @@ export type dtList = {
     signal: AbortSignal,
 
     set: (newData: (Dt)[]) => void,
-    addVlist: (i: number) => void
+    addVlist: (i: number, direction?: 'previou' | 'next') => void
     find: (id: number) => A | undefined,
     del: (id: number) => boolean,
 
@@ -29,8 +29,16 @@ export let dtData: dtList = {
         dtData.list = newData;
     },
     //将总数据中第i位添加到渲染视图数据中
-    addVlist: (i: number) => {
+    addVlist: (i: number, direction?: 'previou' | 'next') => {
+        if (direction == 'previou') {
+            console.log('插入到开头');
+            
+            dtData.vlist.value.unshift(dtData.list[i]);
+            return
+        }
+
         dtData.vlist.value.push(dtData.list[i]);
+
     },
     //查询数据
     find: (id: number) => {

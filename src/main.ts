@@ -39,7 +39,17 @@ app.use(Form);
 app.use(Field);
 app.use(CellGroup);
 
-app.use(createPinia());
+
+import piniaPluginPersistedstate from 'pinia-plugin-persistedstate'
+
+const pinia = createPinia()
+
+// 使用持久化插件
+pinia.use(piniaPluginPersistedstate)
+
+app.use(pinia)
+
+// app.use(createPinia());
 
 // 设备检测
 const user = userStore();
@@ -47,6 +57,7 @@ user.isPcFn();
 
 // 网络检测
 user.isHomeFn();
+
 
 
 app.use(NaiveUI)
