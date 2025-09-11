@@ -16,6 +16,10 @@ const routes: Array<RouteRecordRaw> = [
     component: dt
   },
   {
+    path:'/dl',
+    component: () => import('../views/login.vue'),
+  },
+  {
     path: '/imgs/:dtid/:index',
     // component: imgs,
     component: () => import('../views/imgs.vue'), // 懒加载
@@ -60,6 +64,9 @@ const routes: Array<RouteRecordRaw> = [
   },{
     path:'/date',
     component : () => import('@/views/calendarV.vue')
+  },{
+    path:'/chat/:id',
+    component : () => import('@/views/chat.vue')
   }
 
 ];

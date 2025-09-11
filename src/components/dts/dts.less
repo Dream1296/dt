@@ -22,17 +22,119 @@
   }
 }
 
+.imgs1 {
+  justify-content: center;
+  // left:10px
+  left: 15px
+}
+
+.imgs2 {
+  justify-content: center;
+  // left:10px
+  left: 25px
+}
+
+.imgs3 {
+  // justify-content: center;
+  // left:10px
+  left: 25px
+}
+
+.imgs4 {
+  justify-content: center;
+  // left:10px
+  left: 25px
+}
+
+.imgs5 {
+  justify-content: center;
+  // left:10px
+  left: 25px
+}
+
+.imgs6 {
+  justify-content: center;
+  // left:10px
+  left: 25px
+}
+
+.imgs7 {
+  justify-content: center;
+  // left:10px
+  left: 25px
+}
+
+.imgs8 {
+  justify-content: center;
+  // left:10px
+  left: 25px
+}
+
 .imgs {
-  width: 70%;
+  // width: 70%;
+  width: 90%;
   position: relative;
   top: 12px;
-  left: @leftTap + 50;
+  // left: @leftTap + 50;
+  // left: @leftTap + 0px;
   display: flex;
   flex-wrap: wrap;
 
-  .image {
-    width: 100px;
-    height: 100px;
+  //一张图片时
+  .image1 {
+    width: 56%;
+    // aspect-ratio: 4 / 3;
+  }
+
+  .image2 {
+    width: 45%;
+    // aspect-ratio: 4 / 3;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  .image3 {
+    width: 45%;
+    // aspect-ratio: 4 / 3;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+
+  //四张图片时
+  .image4 {
+    // width: 100px;
+    // height: 100px;
+    width: 45%;
+    // aspect-ratio: 4 / 3;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  .image5 {
+    width: 45%;
+    // aspect-ratio: 4 / 3;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  .image6 {
+    width: 45%;
+    // aspect-ratio: 4 / 3;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  .image7 {
+    width: 45%;
+    aspect-ratio: 4 / 3;
+    margin-bottom: 10px;
+    margin-right: 10px;
+  }
+
+  .image8 {
+    width: 45%;
+    aspect-ratio: 4 / 3;
     margin-bottom: 10px;
     margin-right: 10px;
   }
@@ -50,54 +152,87 @@
     flex-wrap: wrap;
   }
 
+  .videoCover {
+    // position: absolute;
+    // opacity: 0.6; //元素透明度
+    // left: (@videoW / 2 - 25);
+    // top: (@videoH / 2 - 25);
+
+    // z-index: 100;
+    // width: 50px;
+    // height: 50px;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .videoLogo {
+    position: absolute;
+    width: 30%;
+    // height: 30%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.6;
+  }
+
+  .imgCover {
+    width: 100%;
+    height: 100%;
+  }
+
   span {
     font-size: 24px;
     color: white;
     font-weight: 700;
   }
-}
 
-@videoW: 160px;
-@videoH: 130px;
 
-.video {
-  width: 60%;
-  position: relative;
-  top: 5px;
-  left: @leftTap + 50;
-
-  div {
-    width: @videoW;
-    height: @videoH;
-
-    img {
-      position: absolute;
-      left: (@videoW / 2 - 25);
-      top: (@videoH / 2 - 25);
-
-      z-index: 100;
-      width: 50px;
-      height: 50px;
-    }
-  }
 
 }
 
-.videos1 {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  left: 40%;
-  top: 0;
-}
+// @videoW: 160px;
+// @videoH: 130px;
 
-.videos2 {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 105%;
-  top: 30px;
-}
+// .video {
+//   width: 60%;
+//   position: relative;
+//   top: 25px;
+//   left: @leftTap + 50;
+
+//   div {
+//     width: @videoW;
+//     height: @videoH;
+
+//     img {
+//       position: absolute;
+//       opacity: 0.6; //元素透明度
+//       left: (@videoW / 2 - 25);
+//       top: (@videoH / 2 - 25);
+
+//       z-index: 100;
+//       width: 50px;
+//       height: 50px;
+//     }
+//   }
+
+// }
+
+// .videos1 {
+//   width: 40px;
+//   height: 40px;
+//   position: absolute;
+//   left: 40%;
+//   top: 0;
+// }
+
+// .videos2 {
+//   width: 20px;
+//   height: 20px;
+//   position: absolute;
+//   left: 105%;
+//   top: 30px;
+// }
 
 .videosc {
   height: 50px;

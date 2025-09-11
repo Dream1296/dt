@@ -9,8 +9,9 @@ export interface A {
   date: string;
   id: number;
   idea: string;
-  imgShowAll?: number;
-  imgAllNum?: number;
+  imgShowAll: number;
+  imgShowProportion: string[];
+  imgAllNum: number;
   name: string;
   text: string;
   textArr: { type: string; text: string }[];
@@ -19,6 +20,7 @@ export interface A {
   po: number;
   touxian: string;
   user: string;
+  videoShowAll: number;
   videoNum: number;
   com: Com[];
   bgStyle: number;
@@ -34,7 +36,14 @@ export interface A {
   };
   KeepRun?: KeepRunRecord;
   KeepBadminton?: BadmintonData;
+  chatRoot?: chatRoot[];
   loa: number;
+}
+
+
+export type chatRoot = {
+  rootId: string,
+  name: string,
 }
 
 // 评论状态与选项状态记录
@@ -83,7 +92,7 @@ export type Top = {
 export type Year = {
   type: "year";
   id: number;
-  year:number
+  year: number
 };
 
 

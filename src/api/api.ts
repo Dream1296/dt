@@ -29,8 +29,9 @@ if (typeof window === 'undefined') {
 // let url = 'http://192.168.0.1:3010'
 // let url = 'http://192.168.1.1:3011'
 // let url = 'http://127.0.0.1:3011'
-let url = 'http://192.168.1.180:3010'
-// let url = '';
+// let url = 'http://192.168.1.180:3010'
+// let url = 'http://192.168.0.1:3010'
+let url = '';
 
 let urlIPV6 = '';
 
@@ -77,7 +78,7 @@ export async function getTempTokenApi(token: string = tokens.token) {
 
 export async function yz(token: string) {
     const urls = Internet.url + '/api/userClass';
-    let userId = await api<string>(urls, 'GET', undefined, token);
+    let userId = (await api<{ coed: number, data: { username: string } }>(urls, 'GET', undefined, token)).data.username;
     return userId;
 }
 
@@ -169,8 +170,8 @@ export async function getlvObj(id: number) {
     return res;
 }
 
-export function getYearImg(year:number){
-    let url = Internet.url + '/api/getYear?year=' + year ;
+export function getYearImg(year: number) {
+    let url = Internet.url + '/api/getYear?year=' + year;
     return url;
 }
 
@@ -296,9 +297,36 @@ export async function getLongText(dtid: string) {
             user: string,
             data: string,
             type: string,
-            notes:string,
+            notes: string,
         }
     };
+    let res = await api<T>(url, 'GET', undefined, tokens.token);
+    return res.data;
+}
+
+export async function getChatNode(id: string) {
+    let url = Internet.url + '/api/getChatNode?id=' + id;
+    type nodeT = {
+        id: string,
+        parent_id: string,
+        author: string,
+        content: string,
+        date: string,
+        model_slug: string,
+    }
+    type T = {
+        code: number,
+        data: {
+            id: string,
+            title: string;
+            create_time: string;
+            update_time: string;
+            account: string;
+            tag: string;
+            nodeList: nodeT[]
+        }
+    }
+
     let res = await api<T>(url, 'GET', undefined, tokens.token);
     return res.data;
 }

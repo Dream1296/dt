@@ -52,7 +52,6 @@
             <hr>
 
 
-
             <div id="dtArr" ref="dtArr">
                 <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
                     <div class="zhujian">
@@ -211,18 +210,21 @@ const passwd13Text = '143323';
 
 //处理路径搜索
 let wd = route.query.wd;
-let loaQ = 0;
+let loaR = Number(route.query.loa);
 let startId = 0;
-if(route.query.dtId && Number(route.query.dtId) && Number(route.query.dtId) >= 0){
-     startId = Number(route.query.dtId);
+if (route.query.dtId && Number(route.query.dtId) && Number(route.query.dtId) >= 0) {
+    startId = Number(route.query.dtId);
+}
+
+if (loaR == 1) {
+    loaR = 1;
+} else {
+    loaR = 0;
 }
 setTimeout(() => {
-    if (loaQ && Number(loaQ) == 1) {
-        loaQ = 1;
-    }
-    if (wd) {
-        myEvent.emit('dtFind', wd)
-    }
+    // if (wd) {
+    //     myEvent.emit('dtFind', wd)
+    // }
     let topNum = 0;
     // setInterval(() => {
     //     window.scrollTo({
@@ -277,7 +279,7 @@ watch(() => viewData.loa,
             showFailToast('仅在登录后可查看所有内容');
             return
         }
-        
+
         // routerPush('wd', null);
 
         if (newVal == 0 || newVal == 1) {
@@ -316,7 +318,7 @@ function get01(newVal: number) {
 
 myEvent.on('upDtList', () => {
     // nextTick(() => {
-    
+
     obsDt.init(dtsDom, 0);
     // })
 })
@@ -442,9 +444,9 @@ onMounted(() => {
     // if (dtArr.value && dtsDom.value) {
     //     layoutItemsFnAdd(dtArr.value, dtsDom.value);
     // }
-     window.scrollTo(0, 0);
+    window.scrollTo(0, 0);
     console.log('onMounted');
-    
+
     if (window.innerWidth < 768) {
         showTop(showBg, head as Ref<HTMLElement>);
     }
@@ -540,7 +542,7 @@ obsDt.guanbi_footer_show = guanbi_footer_show;
 
 
 //初始化数据,初始化评论列表
-dtDataInit(loaQ)
+dtDataInit(loaR)
     .then(datas => {
         VcDataInit(datas);
         obsDt.init(dtsDom, startId);
@@ -550,8 +552,8 @@ dtDataInit(loaQ)
         //     behavior: 'smooth', // 平滑滚动（可选）
         // });
         // }, 0);
-      
-        
+
+
     })
 
 

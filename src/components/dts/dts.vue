@@ -17,25 +17,42 @@
 		</div>
 
 		<!-- 图片 -->
-		<div class="imgs">
-			<div class="image" v-for="(a, temp) in data.imgShowAll" @click="showImg(temp)">
-				<Myimage :src='imgSrcsc(temp)'></Myimage>
+		<div class="imgs" :class="['imgs', `imgs${data.imgShowAll + data.videoShowAll}`]">
+			<div :class="['image', `image${data.imgShowAll + data.videoShowAll}`]"
+				:style="{ aspectRatio: data.imgShowProportion[temp] }"
+				v-for="(a, temp) in (data.imgShowAll + data.videoShowAll)"
+				@click="showImg(data.imgShowAll, data.videoShowAll, temp)">
+
+				<div class="imgCover" v-if="temp < data.imgShowAll">
+					<Myimage :src='imgSrcsc(temp)'></Myimage>
+				</div>
+
+				<div class="videoCover" v-if="temp >= data.imgShowAll">
+					<Myimage :src='videoSrc(temp - data.imgShowAll)'></Myimage>
+					<img class="videoLogo" src="../../assets/img/videIon.png">
+				</div>
+
 			</div>
-			<div class="imgsAdd" v-if="data.imgShowAll && data.imgShowAll > 6">
+
+			<!-- <div class="imgsAdd" v-if="data.imgShowAll && data.imgShowAll > 6">
 				<span>+{{ data.imgAllNum ? data.imgAllNum - 6 : '0' }}</span>
-			</div>
+			</div> -->
+			<!-- <div class="video" v-for="(a, index) in (data.videoNum ? 1 : 0)" @click="playVideo(index)">
+				<img class="videoCover" src="../../assets/img/videIon.png">
+				<Myimage :src='videoSrc(index)'></Myimage>
+			</div> -->
 		</div>
 		<!-- 视频 -->
-		<div class="video">
+		<!-- <div class="video">
 			<div v-for="(a, index) in (data.videoNum ? 1 : 0)" @click="playVideo(index)">
 				<img src="../../assets/img/videIon.png">
 				<Myimage :src='videoSrc(index)'></Myimage>
 			</div>
-		</div>
+		</div> -->
 		<van-switch v-if="data.id == 562" v-model="isMo" />
 
 		<div id="thressV" v-if="data.id == 562 && isMo">
-			<threeView modelPath="./小凳子.glb"></threeView>
+			<!-- <threeView modelPath="./小凳子.glb"></threeView> -->
 
 		</div>
 
@@ -57,6 +74,12 @@
 		<div class="lvLogos" v-for="(longText, temp) in data.longText" :id="longText.id.toString()">
 			<div class="lvLogo" @click="tzlongtext(data.id, temp)">
 				{{ longText.tetile }}
+			</div>
+		</div>
+
+		<div class="lvLogos" v-for="(chat, temp) in data.chatRoot" :id="chat.rootId.toString()">
+			<div class="lvLogo" @click="tzChat(chat.rootId)">
+				{{ chat.name }}
 			</div>
 		</div>
 
@@ -173,6 +196,11 @@ function tzlongtext(id: number, index: number) {
 	router.push({ path: '/longText/a/' + id });
 }
 
+function tzChat(id: string) {
+	router.push({ path: '/chat/' + id });
+}
+
+
 function dowFile(id: string) {
 	showConfirmDialog({
 		title: '确定要下载吗？',
@@ -229,7 +257,11 @@ function tzXq(index: number) {
 }
 
 
-function showImg(temp: number) {
+function showImg(imgNum: number, videoNum: number, temp: number) {
+	if (temp >= imgNum) {
+		playVideo(temp - imgNum);
+		return
+	}
 	let id = data.value?.id;
 	imgTemp.imgLog = imgSrc(Number(id), temp, '0');
 	imgTemp.imgSrc = imgSrc(Number(id), temp, '1');
@@ -247,14 +279,14 @@ function showImg(temp: number) {
 	// });
 
 	router.push({
-		path: '/imgs/' + id + '/' + temp, 
-		
+		path: '/imgs/' + id + '/' + temp,
+
 	});
 }
 
 function playVideo(temp: number) {
 	let url = Internet.url;
-	let a = `${url}/api/dtvideo?dtid=${data.value?.id}&index=${temp}`;
+	let a = `${url}/api/dtvideo?dtid=${data.value?.id}&index=${temp}&token=${token.tempToken}`;
 	if (userStoreData.isPc) {
 		window.open(a, '_blank');
 		return

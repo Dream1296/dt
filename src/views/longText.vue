@@ -22,11 +22,13 @@ import longTextShow from '@/components/LongTextShow/longTextShow.vue';
 import { getdt, getLongText } from '@/api/api';
 import LongHtmlShow from '@/components/LongTextShow/longHtmlShow.vue';
 import LongChatShow from '@/components/LongTextShow/longChatShow.vue';
+import { viewDataStore } from '@/stores/viewDataStore';
 // import { get } from 'node_modules/axios/index.cjs';
 
 const route = useRoute();
 const type = computed(() => route.params.type as string);
 const id = computed(() => route.params.id as string);
+const viewData = viewDataStore();
 
 let text = ref('');
 let textType = ref('');
@@ -62,7 +64,7 @@ function getLongTextFn(){
 }
 
 function lookTextLong(){
-    getdt(id.value, 1)
+    getdt(id.value, viewData.loa)
         .then(res => { 
 
             document.title = '正在查看动态' + res.data.id;

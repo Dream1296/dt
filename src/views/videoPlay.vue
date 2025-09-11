@@ -1,36 +1,40 @@
 <template>
-  <div class="video-player" @click="handleClick" @mousedown="startFastPlay" @mouseup="stopFastPlay">
-    <video :src="src" ref="video" @timeupdate="updateProgress" @loadedmetadata="initVideo" @ended="handleEnded"></video>
-    <div class="controls">
-      <div class="time-info">
-        {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
-      </div>
-      <div class="progress-container" @click="seek">
-        <div class="progress-bar" :style="{ width: progress + '%' }"></div>
-        <input
-          type="range"
-          class="progress-slider"
-          min="0"
-          max="100"
-          step="0.1"
-          v-model="progress"
-          @input="dragSeek"
-        />
-      </div>
-      <div class="buttons">
-        <button class="play-pause" @click="togglePlay">
-          {{ isPlaying ? "❚❚" : "►" }}
-        </button>
-        <button class="fullscreen" @click="toggleFullscreen">⛶</button>
-      </div>
+    <div class="video-player" @click="handleClick" @mousedown="startFastPlay" @mouseup="stopFastPlay">
+        <video :src="src" ref="video" @timeupdate="updateProgress" @loadedmetadata="initVideo"
+            @ended="handleEnded"
+             playsinline webkit-playsinline></video>
+
+
+
+        <div class="controls" v-show="controlsShow">
+            <div class="time-info">
+                {{ formatTime(currentTime) }} / {{ formatTime(duration) }}
+            </div>
+            <div class="progress-container" @click="seek">
+                <div class="progress-bar" :style="{ width: progress + '%' }"></div>
+                <input type="range" class="progress-slider" min="0" max="100" step="0.1" v-model="progress"
+                    @input="dragSeek" />
+            </div>
+            <div class="buttons">
+                <button class="play-pause" @click="togglePlay">
+                    {{ isPlaying ? "❚❚" : "►" }}
+                </button>
+                <button class="fullscreen" @click="toggleFullscreen">⛶</button>
+            </div>
+        </div>
     </div>
-  </div>
 </template>
 
 <script setup lang="ts">
 import { useRoute } from 'vue-router';
 import { dtVideo } from '@/api/api';
-import { ref, onMounted } from 'vue';
+import { ref, onMounted, onBeforeUnmount } from 'vue';
+import { showSuccessToast } from 'vant';
+
+const customViewport = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
+const defaultViewport = 'width=device-width, initial-scale=1.0'
+
+const controlsShowTime = 3300;
 
 const route = useRoute();
 const src = ref('');
@@ -45,203 +49,280 @@ const duration = ref(0); // 视频总时长
 const currentTime = ref(0); // 当前播放时间
 const fastPlayTimeout = ref<NodeJS.Timeout | null>(null); // 长按超时控制
 
+const controlsShow = ref(true);
+const controlsHideTimeout = ref<NodeJS.Timeout | null>(null);
+
 onMounted(() => {
-  src.value = dtVideo(dtid, index);
-  setTimeout(() => {
-    video.value?.play();
-    isPlaying.value = true;
-  });
+    const meta = document.querySelector('meta[name="viewport"]')
+    // document.body.style.overflow = 'hidden'
+    if (meta) {
+        meta.setAttribute('content', customViewport)
+    }
+
+    src.value = dtVideo(dtid, index);
+    setTimeout(() => {
+        const videoEl = video.value;
+        if (!videoEl) return;
+
+        const playPromise = videoEl.play();
+        // if (playPromise !== undefined) {
+        playPromise
+            .then(() => {
+                // 播放成功
+                isPlaying.value = true;
+                controlsShowSet();
+            })
+            .catch(() => {
+                // 播放失败，提示用户
+                showSuccessToast('请点击页面播放视频');
+            });
+        // }
+
+
+    });
 });
 
 // 播放/暂停切换
 const togglePlay = () => {
-  const videoElement = video.value!;
-  if (videoElement.paused) {
-    videoElement.play();
-    isPlaying.value = true;
-  } else {
-    videoElement.pause();
-    isPlaying.value = false;
-  }
+
+
+    const videoElement = video.value!;
+
+
+    if (videoElement.paused) {
+        videoElement.play();
+        isPlaying.value = true;
+    } else {
+        videoElement.pause();
+        isPlaying.value = false;
+    }
 };
 
 // 点击屏幕切换播放/暂停
 const handleClick = (event: MouseEvent) => {
-  // 防止误触进度条容器的点击事件
-  if ((event.target as HTMLElement).classList.contains('progress-container')) return;
-  togglePlay();
+
+    //清除旧时计时器，并保持显示
+    controlsShowSet();
+
+
+
+    // 防止误触进度条容器的点击事件
+    if ((event.target as HTMLElement).classList.contains('progress-container')) return;
+    if ((event.target as HTMLElement).classList.contains('play-pause')) return;
+
+
+
+    togglePlay();
 };
 
 // 更新播放进度和当前时间
 const updateProgress = () => {
-  const videoElement = video.value!;
-  currentTime.value = videoElement.currentTime;
-  progress.value = (videoElement.currentTime / videoElement.duration) * 100;
+    console.log(1);
+    
+    const videoElement = video.value!;
+    currentTime.value = videoElement.currentTime;
+    progress.value = (videoElement.currentTime / videoElement.duration) * 100;
 };
 
 // 拖动进度条更新
 const dragSeek = () => {
-  const videoElement = video.value!;
-  videoElement.currentTime = (progress.value / 100) * videoElement.duration;
+
+    //清除旧时计时器，并保持显示
+    controlsShowSet();
+
+
+    currentTime.value = Number(progress.value) / 100 * duration.value;
+    const videoElement = video.value!;
+    videoElement.currentTime = (progress.value / 100) * videoElement.duration;
 };
 
+/**
+ * 清除旧时计时器，并保持显示
+ */
+function controlsShowSet() {
+    //清除旧计时器
+    if (controlsHideTimeout.value) {
+        clearTimeout(controlsHideTimeout.value!);
+        controlsHideTimeout.value == null
+    }
+
+
+    controlsHideTimeout.value = setTimeout(() => {
+        controlsShow.value = false;
+    }, controlsShowTime);
+
+    if (!controlsShow.value) {
+        controlsShow.value = true;
+    }
+}
 // 点击进度条跳转
 const seek = (event: MouseEvent) => {
-  const videoElement = video.value!;
-  const container = event.currentTarget as HTMLElement;
-  const rect = container.getBoundingClientRect();
-  const offsetX = event.clientX - rect.left;
-  const newTime = (offsetX / container.offsetWidth) * videoElement.duration;
-  videoElement.currentTime = newTime;
+    const videoElement = video.value!;
+    const container = event.currentTarget as HTMLElement;
+    const rect = container.getBoundingClientRect();
+    const offsetX = event.clientX - rect.left;
+    const newTime = (offsetX / container.offsetWidth) * videoElement.duration;
+    videoElement.currentTime = newTime;
 };
 
 // 初始化视频时长
 const initVideo = () => {
-  const videoElement = video.value!;
-  duration.value = videoElement.duration;
-  progress.value = 0;
-  currentTime.value = 0;
+    const videoElement = video.value!;
+    duration.value = videoElement.duration;
+    progress.value = 0;
+    currentTime.value = 0;
 };
 
 // 视频播放结束
 const handleEnded = () => {
-  isPlaying.value = false;
-  progress.value = 0;
-  currentTime.value = 0;
+    isPlaying.value = false;
+    progress.value = 0;
+    currentTime.value = 0;
 };
 
 // 长按屏幕2倍速播放
 const startFastPlay = () => {
-  fastPlayTimeout.value = setTimeout(() => {
-    const videoElement = video.value!;
-    videoElement.playbackRate = 2; // 设置为2倍速
-  }, 500); // 长按500ms触发
+    fastPlayTimeout.value = setTimeout(() => {
+        const videoElement = video.value!;
+        videoElement.playbackRate = 2; // 设置为2倍速
+    }, 500); // 长按500ms触发
 };
 
 // 松开屏幕恢复正常速度
 const stopFastPlay = () => {
-  if (fastPlayTimeout.value) {
-    clearTimeout(fastPlayTimeout.value);
-    fastPlayTimeout.value = null;
-  }
-  const videoElement = video.value!;
-  videoElement.playbackRate = 1; // 恢复正常速度
+    if (fastPlayTimeout.value) {
+        clearTimeout(fastPlayTimeout.value);
+        fastPlayTimeout.value = null;
+    }
+    const videoElement = video.value!;
+    videoElement.playbackRate = 1; // 恢复正常速度
 };
 
 // 格式化时间
 const formatTime = (time: number): string => {
-  const minutes = Math.floor(time / 60);
-  const seconds = Math.floor(time % 60);
-  return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
 };
 
 // 全屏切换
 const toggleFullscreen = () => {
-  const videoElement = video.value!;
-  if (!document.fullscreenElement) {
-    videoElement.requestFullscreen();
-  } else if (document.exitFullscreen) {
-    document.exitFullscreen();
-  }
+    const videoElement = video.value!;
+    if (!document.fullscreenElement) {
+        videoElement.requestFullscreen();
+    } else if (document.exitFullscreen) {
+        document.exitFullscreen();
+    }
 };
+
+
+onBeforeUnmount(() => {
+    const meta = document.querySelector('meta[name="viewport"]')
+    if (meta) {
+        meta.setAttribute('content', defaultViewport)
+    }
+    document.body.style.overflow = '' // 恢复滚动
+})
+
+
 </script>
 
 <style lang="less" scoped>
 .video-player {
-  position: relative;
-  width: 100vw;
-  height: 100vh;
-  display: flex;
-  flex-direction: column;
-  background-color: black;
-  overflow: hidden;
+    position: relative;
+    width: 100vw;
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    background-color: black;
+//    overflow: hidden;
 }
 
 video {
-  width: 100%;
-  height: auto;
-  flex: 1;
-  cursor: pointer;
+    width: 100%;
+    height: auto;
+    flex: 1;
+    cursor: pointer;
 }
 
 .controls {
-  position: absolute;
-  bottom: 0;
-  width: 100%;
-  padding: 0.5rem;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  flex-direction: column;
-  box-sizing: border-box;
+    position: absolute;
+    bottom: 0;
+    width: 100%;
+    padding: 0.5rem;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    flex-direction: column;
+    box-sizing: border-box;
 }
 
 .time-info {
-  color: white;
-  font-size: 0.8rem;
-  text-align: center;
-  margin-bottom: 0.5rem;
+    color: white;
+    font-size: 0.8rem;
+    text-align: center;
+    margin-bottom: 0.5rem;
 }
 
 .progress-container {
-  position: relative;
-  height: 10px;
-  background: rgba(255, 255, 255, 0.3);
-  border-radius: 5px;
-  cursor: pointer;
+    position: relative;
+    height: 10px;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 5px;
+    cursor: pointer;
 }
 
 .progress-bar {
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  background: #4caf50;
-  border-radius: 5px;
-  transition: width 0.2s;
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #4caf50;
+    border-radius: 5px;
+    transition: width 0.2s;
 }
 
 .progress-slider {
-  position: absolute;
-  top: -5px;
-  left: 0;
-  width: 100%;
-  height: 20px;
-  -webkit-appearance: none;
-  background: transparent;
-  pointer-events: none;
+    position: absolute;
+    top: -5px;
+    left: 0;
+    width: 100%;
+    height: 20px;
+    -webkit-appearance: none;
+    background: transparent;
+    pointer-events: none;
 }
 
 .progress-slider::-webkit-slider-thumb {
-  -webkit-appearance: none;
-  height: 20px;
-  width: 20px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: auto;
-  cursor: pointer;
+    -webkit-appearance: none;
+    height: 20px;
+    width: 20px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .progress-slider::-moz-range-thumb {
-  height: 20px;
-  width: 20px;
-  background: white;
-  border-radius: 50%;
-  pointer-events: auto;
-  cursor: pointer;
+    height: 20px;
+    width: 20px;
+    background: white;
+    border-radius: 50%;
+    pointer-events: auto;
+    cursor: pointer;
 }
 
 .buttons {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
 }
 
 .play-pause,
 .fullscreen {
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.5rem;
-  cursor: pointer;
+    background: none;
+    border: none;
+    color: white;
+    font-size: 1.5rem;
+    cursor: pointer;
 }
 </style>
