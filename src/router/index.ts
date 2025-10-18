@@ -67,6 +67,9 @@ const routes: Array<RouteRecordRaw> = [
   },{
     path:'/chat/:id',
     component : () => import('@/views/chat.vue')
+  },{
+    path:'/list:pathMatch(.*)*',
+    component :() => import('@/views/list/list.vue')
   }
 
 ];

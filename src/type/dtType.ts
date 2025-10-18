@@ -139,3 +139,11 @@ export type BadmintonData = {
   xunlanxiaoguo_you: number; // 训练效果（有氧）
   xunlanxiaoguo_wu: number; // 训练效果（无氧）
 };
+
+
+
+
+export type listFile = {
+    name: string,
+    type: 0 | 1 | 2 | 3
+}

@@ -1,4 +1,4 @@
-import type { A, dataImg, Dt } from '@/type/dtType';
+import type { A, dataImg, Dt, listFile } from '@/type/dtType';
 import axioss from 'axios';
 import { token as tokens } from '@/api/token';
 
@@ -338,6 +338,12 @@ export async function getShare(key: string) {
     return res;
 }
 
+export async function getListArr(pathStr: string) {
+    let url = `${Internet.url}/api/listPath?path=${pathStr}`;
+    let res = await api<{ code: number, data:listFile[]}>(url, 'GET');
+    return res;
+}
+
 export function dtFileDow(id: string) {
     const url = `${Internet.url}/api/dtFile?dtid=${id}`;
 
@@ -395,4 +401,6 @@ async function axiosGetWithTimeout(url: string, timeout = 500) {
         return null; // 返回 null 表示请求失败或超时
     }
 };
+
+
 
