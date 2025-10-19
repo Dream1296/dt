@@ -30,8 +30,8 @@ if (typeof window === 'undefined') {
 // let url = 'http://192.168.1.1:3011'
 // let url = 'http://127.0.0.1:3011'
 // let url = 'http://192.168.1.180:3010'
-// let url = 'http://192.168.0.1:3010'
-let url = '';
+let url = 'http://192.168.0.1:3010'
+// let url = '';
 
 let urlIPV6 = '';
 
@@ -340,9 +340,22 @@ export async function getShare(key: string) {
 
 export async function getListArr(pathStr: string) {
     let url = `${Internet.url}/api/listPath?path=${pathStr}`;
-    let res = await api<{ code: number, data:listFile[]}>(url, 'GET');
+    let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
     return res;
 }
+
+export function getListImgT(path: string, hash: string) {
+    let url = `${Internet.url}/api/listImgT?path=${path}&hash=${hash}`;
+    // let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
+    return url;
+}
+
+export function getListImg(path: string) {
+    let url = `${Internet.url}/api/listImg?path=${path}`;
+    // let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
+    return url;
+}
+
 
 export function dtFileDow(id: string) {
     const url = `${Internet.url}/api/dtFile?dtid=${id}`;

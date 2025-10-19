@@ -144,6 +144,7 @@ export type BadmintonData = {
 
 
 export type listFile = {
-    name: string,
-    type: 0 | 1 | 2 | 3
+  name: string,
+  type: 0 | 1 | 2 | 3,
+  hash: string,
 }

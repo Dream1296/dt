@@ -1,7 +1,7 @@
 <template>
     <div id="all">
         <div id="root">
-            <block v-for="value in showFileArr" :src="value.src" :name="value.name"></block>
+            <block v-for="value in showFileArr" :src="value.src" :name="value.name" @click="blockClick(value)"></block>
         </div>
 
     </div>
@@ -12,37 +12,68 @@
 
 
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { ref, watch } from 'vue';
 import block from './block.vue';
 
 
 import { useRoute } from 'vue-router'
-import { getListArr } from '@/api/api';
+import { getListArr, getListImg, getListImgT } from '@/api/api';
 import { svgArr } from './svgArr';
+import router from '@/router';
 
 const route = useRoute()
 
-// 获取完整路径字符串，比如 "root/a/b"
-const currentPath = route.params.pathMatch;
-let PathArr = Array.isArray(currentPath) ? currentPath.filter(Boolean) : [];
+
+let PathArr: string[] = [];
 
 // type 0为文件夹，1为图片, 2为视频， 其他为3
 type listFile = {
     name: string,
-    type: 0 | 1 | 2 | 3
+    type: 0 | 1 | 2 | 3,
+    hash: string,
 }
 type showFile = {
     name: string,
     src: string,
-    isDir: boolean,
+    type: 'dir' | 'img' | 'video' | 'file'
 }
 
 let showFileArr = ref<showFile[]>([]);
 
 let listFileArr: listFile[] = [];
 
-async function init() {
 
+
+
+
+function blockClick(e: showFile) {
+    if (e.type == 'file') {
+
+    }
+    if (e.type == 'dir') {
+        let path1 = '/list/' + PathArr.join('/') + `/${e.name}`;
+        router.push({ path: path1 });
+        return
+    }
+    if (e.type == 'img') {
+        let path2 = '/' + PathArr.join('/') + '/' + e.name;
+        let src = getListImg(path2);
+        window.open(src, "_blank");
+    }
+
+}
+
+watch(
+    () => route.params.pathMatch, // 监听 params 的 pathMatch
+    (newPath) => {
+        init();
+    }
+)
+
+async function init() {
+    PathArr = Array.isArray(route.params.pathMatch) ? route.params.pathMatch.filter(Boolean) : [];
+    showFileArr.value.length = 0;
+    listFileArr.length = 0;
     if (PathArr) {
         let pathStr = '/' + PathArr.join('/');
         listFileArr = (await getListArr(pathStr)).data;
@@ -50,14 +81,23 @@ async function init() {
             let a: showFile = {
                 name: file.name,
                 src: getUrl(1),
-                isDir: false,
+                type: 'file',
             }
             if (file.type == 0) {
                 a.src = getUrl(0)
-                a.isDir = true;
+                a.type = 'dir';
             }
             if (file.type == 3) {
                 a.src = getUrl(1)
+                a.type = 'file';
+            }
+            if (file.type == 1) {
+                a.src = getListImgT(pathStr, file.hash);
+                a.type = 'img';
+            }
+            if (file.type == 2) {
+                a.src = getListImgT(pathStr, file.hash);
+                a.type = 'video';
             }
             showFileArr.value.push(a);
         }
