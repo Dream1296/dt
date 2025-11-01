@@ -94,6 +94,7 @@ import { token } from '@/api/token';
 import { showFailToast } from 'vant';
 import { svgArr } from './svgArr';
 import { dtData } from '@/dtData/dtList';
+import router from '@/router';
 const viewData = viewDataStore();
 const userData = userStore();
 //视图数据
@@ -129,12 +130,15 @@ function tzs() {
 }
 
 function openAlist() {
-	if (!userData.isHome) {
-		showFailToast('仅在内网可用');
-		return
-	}
-	let url = 'http://dlhe.top:5244';
-	window.open(url, '_blank');
+	// if (!userData.isHome) {
+	// 	showFailToast('仅在内网可用');
+	// 	return
+	// }
+	// let url = 'http://dlhe.top:5244';
+	// window.open(url, '_blank');
+	
+	router.push({ path: '/list/' });
+	
 }
 //查询事件监听
 myEvent.on('dtFind', (e) => {

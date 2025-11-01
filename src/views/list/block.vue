@@ -2,13 +2,13 @@
     <div id="all1">
         <div class="img">
             <img :src="props.src"></img>
+
+            <img v-if="props.type == 'video'" id="videoIco" class="videoLogo" src="../../assets/img/videIon.png">
+
         </div>
         <div class="name">
             {{ props.name }}
         </div>
-
-
-
     </div>
 </template>
 
@@ -18,6 +18,7 @@ import { ref, onMounted } from 'vue'
 const props = defineProps<{
     src: string;
     name: string,
+    type: string
 }>();
 
 
@@ -42,9 +43,11 @@ onMounted(() => {
     transition: transform 0.3s ease;
     /* 添加平滑过渡效果 */
 }
+
 #all1:hover {
-  transform: scale(1.1); /* 放大 1.2 倍 */
-  background-color: #E9E9EA;
+    transform: scale(1.1);
+    /* 放大 1.2 倍 */
+    background-color: #E9E9EA;
 }
 
 
@@ -71,6 +74,17 @@ onMounted(() => {
     max-height: 100%;
     border-radius: 5px;
     color: rgb(24, 144, 255);
+}
+
+#videoIco {
+    position: absolute;
+    width: 50%;
+    // height: 30%;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0.5;
+
 }
 
 .name {

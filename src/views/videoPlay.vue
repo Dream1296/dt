@@ -1,8 +1,7 @@
 <template>
     <div class="video-player" @click="handleClick" @mousedown="startFastPlay" @mouseup="stopFastPlay">
-        <video :src="src" ref="video" @timeupdate="updateProgress" @loadedmetadata="initVideo"
-            @ended="handleEnded"
-             playsinline webkit-playsinline></video>
+        <video :src="src" ref="video" @timeupdate="updateProgress" @loadedmetadata="initVideo" @ended="handleEnded"
+            playsinline webkit-playsinline></video>
 
 
 
@@ -41,7 +40,7 @@ const src = ref('');
 const video = ref<HTMLVideoElement>();
 
 const dtid = Number(route.query.dtid);
-const index = Number(route.query.index);
+const index = route.query.index;
 
 const isPlaying = ref(false);
 const progress = ref(0);
@@ -58,8 +57,17 @@ onMounted(() => {
     if (meta) {
         meta.setAttribute('content', customViewport)
     }
+    if (dtid == -1) {
+        return
+    }
+    if (dtid >= 0) {
+        src.value = dtVideo(dtid, Number(index));
+    }
+    
+    if (dtid == -2 && typeof index == 'string') {
+        src.value = decodeURIComponent(index?.toString());    
+    }
 
-    src.value = dtVideo(dtid, index);
     setTimeout(() => {
         const videoEl = video.value;
         if (!videoEl) return;
@@ -118,7 +126,7 @@ const handleClick = (event: MouseEvent) => {
 // 更新播放进度和当前时间
 const updateProgress = () => {
     console.log(1);
-    
+
     const videoElement = video.value!;
     currentTime.value = videoElement.currentTime;
     progress.value = (videoElement.currentTime / videoElement.duration) * 100;
@@ -235,7 +243,7 @@ onBeforeUnmount(() => {
     display: flex;
     flex-direction: column;
     background-color: black;
-//    overflow: hidden;
+    //    overflow: hidden;
 }
 
 video {

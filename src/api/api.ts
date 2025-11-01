@@ -30,8 +30,8 @@ if (typeof window === 'undefined') {
 // let url = 'http://192.168.1.1:3011'
 // let url = 'http://127.0.0.1:3011'
 // let url = 'http://192.168.1.180:3010'
-let url = 'http://192.168.0.1:3010'
-// let url = '';
+// let url = 'http://192.168.0.1:3010'
+let url = '';
 
 let urlIPV6 = '';
 
@@ -204,11 +204,21 @@ export function imgSrcCom(comId: number, index: number, size?: '0' | '1') {
 }
 
 //视频
-export function dtVideo(dtid: number, index: number) {
+export function dtVideo(dtid: number, index: number | string) {
     if (tokens.tempToken) {
         return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}&token=${tokens.tempToken}`
     }
     return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}`;
+}
+
+export function listVideo(path: string) {
+    if (tokens.tempToken) {
+        return `${Internet.url}/api/listVideo?path=${path}&token=${tokens.tempToken}`;
+    }
+
+    return `${Internet.url}/api/listVideo?path=${path}`;
+
+
 }
 
 // 视频图片

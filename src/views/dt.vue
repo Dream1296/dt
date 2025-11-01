@@ -506,7 +506,7 @@ function playVideo(ids: {
     dtid: string,
     index: number,
 }) {
-    //打开图片页面
+    //打开视频页面
     router.push({ path: '/videoPlay', query: ids });
 }
 

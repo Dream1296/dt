@@ -1,9 +1,12 @@
 <template>
     <div id="all">
         <div id="root">
-            <block v-for="value in showFileArr" :src="value.src" :name="value.name" @click="blockClick(value)"></block>
-        </div>
+            <div v-for="value in showFileArr">
+                <block :src="value.src" :name="value.name" :type="value.type" @click="blockClick(value)"></block>
+            </div>
 
+
+        </div>
     </div>
 
 
@@ -17,11 +20,14 @@ import block from './block.vue';
 
 
 import { useRoute } from 'vue-router'
-import { getListArr, getListImg, getListImgT } from '@/api/api';
+import { dtVideo, getListArr, getListImg, getListImgT, Internet, listVideo } from '@/api/api';
 import { svgArr } from './svgArr';
 import router from '@/router';
+import { userStore } from '@/stores/userStore';
 
 const route = useRoute()
+
+const userStoreData = userStore();
 
 
 let PathArr: string[] = [];
@@ -59,6 +65,23 @@ function blockClick(e: showFile) {
         let path2 = '/' + PathArr.join('/') + '/' + e.name;
         let src = getListImg(path2);
         window.open(src, "_blank");
+    }
+
+    if (e.type == 'video') {
+        let path2 = '/' + PathArr.join('/') + '/' + e.name;
+        // encodeURIComponent
+
+        let src = listVideo(path2);
+        if (userStoreData.isPc) {
+            window.open(src, '_blank');
+            return
+        }
+        router.push({
+            path: '/videoPlay', query: {
+                dtid: -2,
+                index: encodeURIComponent(src)
+            }
+        });
     }
 
 }
@@ -145,6 +168,16 @@ function getUrl(index: number) {
     box-shadow: 0 10px 15px -3px rgb(0 0 0 / 0.09), 0 4px 6px -4px rgb(0 0 0 / 0.1);
 
     --hope-colors-background: #f7f8fa;
+}
 
+#videoIco {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+
+    img {
+        width: 100%;
+        height: 100%;
+    }
 }
 </style>
