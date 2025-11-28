@@ -65,6 +65,7 @@
                 <van-radio name="0">public</van-radio>
                 <van-radio name="1">Protected</van-radio>
                 <van-radio name="13">Private</van-radio>
+                <van-radio name="12">danger</van-radio>
             </van-radio-group>
             <h3>内部上传图片</h3>
             <van-switch v-model="isImgDir" />
@@ -159,7 +160,7 @@ let showSetDate = ref(false);
 //弹出层时间
 let showSetTime = ref(false);
 
-let showPopup = false;
+let showPopup: Boolean = false;
 
 //是否显示上传
 let isupIng = ref(false);

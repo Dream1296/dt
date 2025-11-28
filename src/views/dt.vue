@@ -205,8 +205,10 @@ if (route.query.login && route.query.login == 'login') {
 
 let touxianSrc = Internet.url + "/api/userImg?name=yw";
 
+// 13号loa密码
 const passwd13Text = '143323';
-
+// 12号loa密码
+const passwd12Text = '841264';
 
 //处理路径搜索
 let wd = route.query.wd;
@@ -286,7 +288,7 @@ watch(() => viewData.loa,
             get01(newVal);
         }
 
-        if (newVal == 12) {
+        if (newVal == -2) {
             showBottom.value = true;
         }
 
@@ -326,7 +328,14 @@ myEvent.on('upDtList', () => {
 watch(passwd13, (newVal) => {
     if (newVal == passwd13Text) {
         viewData.loa = 13;
-        get13();
+        get13(13);
+        showSuccessToast('密码正确');
+        showBottom.value = false;
+        return
+    }
+    if (newVal == passwd12Text) {
+        viewData.loa = 12;
+        get13(12);
         showSuccessToast('密码正确');
         showBottom.value = false;
         return
@@ -339,11 +348,11 @@ watch(passwd13, (newVal) => {
 
 
 
-function get13() {
+function get13(loa : 13 | 12) {
     //切换背景图片
     bgSrc.value = bgSrcCon + "1" + ".png";
 
-    dtDataInit(13).then((datas) => {
+    dtDataInit(loa).then((datas) => {
         obsDt.init(dtsDom, 0);
     })
 }

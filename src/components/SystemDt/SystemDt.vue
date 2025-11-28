@@ -114,7 +114,8 @@ let showSs = ref(false);
 const emit = defineEmits(['shownewdt', 'tzs', 'config']);
 
 function shownewdt(num: number) {
-	viewData.loa = 12;
+	// 将viewData.loa设置为-2，表示显示新建弹窗
+	viewData.loa = -2;
 }
 
 function config() {

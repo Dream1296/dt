@@ -350,18 +350,18 @@ export async function getShare(key: string) {
 
 export async function getListArr(pathStr: string) {
     let url = `${Internet.url}/api/listPath?path=${pathStr}`;
-    let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
+    let res = await api<{ code: number, data: listFile[] }>(url, 'GET',undefined,tokens.token);
     return res;
 }
 
 export function getListImgT(path: string, hash: string) {
-    let url = `${Internet.url}/api/listImgT?path=${path}&hash=${hash}`;
+    let url = `${Internet.url}/api/listImgT?path=${path}&hash=${hash}&token=${tokens.token}`;
     // let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
     return url;
 }
 
 export function getListImg(path: string) {
-    let url = `${Internet.url}/api/listImg?path=${path}`;
+    let url = `${Internet.url}/api/listImg?path=${path}&token=${tokens.token}`;
     // let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
     return url;
 }

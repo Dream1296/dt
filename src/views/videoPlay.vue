@@ -20,8 +20,11 @@
                 </button>
                 <button class="fullscreen" @click="toggleFullscreen">⛶</button>
             </div>
+            
+            
         </div>
     </div>
+
 </template>
 
 <script setup lang="ts">
@@ -239,7 +242,7 @@ onBeforeUnmount(() => {
 .video-player {
     position: relative;
     width: 100vw;
-    height: 100vh;
+    height: 100dvh;
     display: flex;
     flex-direction: column;
     background-color: black;
