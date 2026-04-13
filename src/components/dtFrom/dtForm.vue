@@ -78,7 +78,7 @@ watch(
 );
 
 // let src = ref("https://frp-fix.top:20047/api/dtDataImg?year=2024");
-let src = ref(Internet.url + "/api/dtDataImg?year=2025");
+let src = ref(Internet.url + "/api/dtDataImg?year=2026");
 
 
 

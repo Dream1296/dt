@@ -31,7 +31,13 @@ if (typeof window === 'undefined') {
 // let url = 'http://127.0.0.1:3011'
 // let url = 'http://192.168.1.180:3010'
 // let url = 'http://192.168.0.1:3010'
-let url = '';
+// let url = 'http://192.168.0.50:3010'
+// let url = 'http://192.168.137.50:3010'
+// let url = 'http://10.65.226.181:3010'
+export let url = 'http://192.168.1.3:3010';
+// let url = 'http://127.0.0.1:3010';
+
+//let url = '';
 
 let urlIPV6 = '';
 
@@ -87,8 +93,6 @@ export async function dtDate(loa: string | number, aes: number, signal?: AbortSi
     if (!aes) {
         aes = 0;
     }
-
-
     const urls = Internet.url + "/api/getDtList?loa=" + loa + "&aes=" + aes;
     type T = {
         code: number,
@@ -106,7 +110,8 @@ export async function dtDate(loa: string | number, aes: number, signal?: AbortSi
 //查询动态
 //qb=标签  isqb=预留，是否开启标签对比
 export async function dtfind(qb: string, loa?: string) {
-    const urls = Internet.url + "/api/dtfind?bq=" + qb + "&loa=" + loa;
+    let newQb = encodeURIComponent(qb);
+    const urls = Internet.url + "/api/dtfind?bq=" + newQb + "&loa=" + loa;
     let res = await api<{ code: number, data: A[] }>(urls, 'GET', undefined, tokens.token);
     return res;
 }
@@ -426,4 +431,60 @@ async function axiosGetWithTimeout(url: string, timeout = 500) {
 };
 
 
+// import type { B } from "../views/";
+// import pako from 'pako';
+
+
+// //获取小说文本数据
+// export function getBookData(bookId: string): Promise<A[]> {
+//     return new Promise((resolve, rejects) => {
+//         fetch(url + '/api/bookrdata?bookid=' + bookId )
+//             .then(po => po.arrayBuffer())
+//             .then((data) => {
+//                 const decompressed = pako.inflate(new Uint8Array(data), { to: 'string' });
+//                 const datas = JSON.parse(decompressed);
+//                 resolve(datas);
+//             })
+//     })
+// }
+
+
+// // 获取数据音频url
+// export function getBookAu(bookId: string, id: number | string): Promise<string> {
+//     return new Promise((resolve, reject) => {
+
+//         fetch(url + '/api/bookau?id=' + id.toString() + '&bookid=' + bookId.toString())
+//             .then(response => {
+//                 if (!response.ok) {
+//                     throw new Error('Network response was not ok ' + response.statusText);
+//                 }
+//                 return response.json();
+//             })
+//             .then(data => {
+//                 const datas =  Uint8Array.from(atob(data.data), c => c.charCodeAt(0)).buffer;
+//                 const blob = new Blob([datas], { type: 'audio/mpeg' });
+//                 const audioUrl = URL.createObjectURL(blob);
+//                 resolve(audioUrl);
+//             })
+//     });
+// }
+
+// //获取小说列表
+// export async function getBookList(): Promise<{ id: string, name: string }[]> {
+//     let po = await fetch(url + '/api/booklist');
+//     let data = await po.json();
+//     return data.data;
+// }
+
+// //获取封面图片
+// export function getImg(bookId: string) {
+//     return url + '/api/bookcover?bookid=' + bookId;
+// }
+
+// //获取进度数据
+// export async function getJd(bookid: string, jd: string) {
+//     let po = await fetch(url + '/api/bookjd?bookid=' + bookid + '&jd=' + jd);
+//     let data: { code: number, data: { jd: string } } = await po.json();
+//     return data.data.jd;
+// }
 

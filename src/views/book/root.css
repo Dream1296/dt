@@ -1,0 +1,42 @@
+#all{
+    width: 100vw;
+    height: 100vh;
+    /* background-color: aqua; */
+}
+.a{
+    width: 100vw;
+    height: 130px;
+    position: relative;
+}
+img{
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+}
+.b{
+    width: 88%;
+    height: 80%;
+    top: -10px;
+    left: 50%;
+    transform: translate(-50%);
+    position: absolute;
+    /* background-color: aqua; */
+    display: flex;
+    justify-content: space-around;
+
+}
+
+.b div{
+    width: 24%;
+    /* box-shadow: 0 8px 12px rgba(0,0,0,0.2);  */
+    /* border: 1px solid red; */
+
+}
+
+
+#di{
+    text-align: center;
+}
+.c{
+    opacity:0.0;
+}

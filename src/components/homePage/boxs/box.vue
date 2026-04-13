@@ -1,6 +1,7 @@
 <template>
     <div id="all1">
         <div id="box">
+            <!-- 大盒子 -->
             <div id="box1"  v-html="svgArr[0]"></div>
 
             <div id="box2" class="box-z" :style="{'transform':`translateY(${heArr[0]}%)`}" v-html="svgArr[1]"></div>

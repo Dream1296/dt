@@ -8,15 +8,12 @@
 			<img src="../../assets/img/mcFk.gif"></img>
 		</div>
 		
-		
-		
-		
-		
-
 		<text class="kzText" v-show="showBg" >动态</text>
 
-		<div class="dtUpntb" @click="updts" @longpress="changang" v-if="showUpDt">
-			<img src=" ../../assets/img/dtadd.png"></img>
+		<div class="dtUpntb"  @longpress="changang" >
+			<img src=" ../../assets/img/dtadd.png" v-if="showUpDt" @click="updts"></img>
+
+			<img src="../../assets/img/login.png" v-if="!showUpDt"  @click="gologin"></img>
 		</div>
 
 	</div>
@@ -49,13 +46,16 @@ import {  ref, type Ref } from 'vue';
 
 
 	//传递点击事件
-	const emit = defineEmits(['clicks','longpress1']);
+	const emit = defineEmits(['clicks','longpress1','gologin']);
 	
 	function updts(){
 		emit('clicks','');
 	}
 	function changang(){
 		emit('longpress1','');
+	}
+	function gologin(){
+		emit('gologin','');
 	}
 
 

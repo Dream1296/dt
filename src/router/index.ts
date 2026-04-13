@@ -20,6 +20,14 @@ const routes: Array<RouteRecordRaw> = [
     component: () => import('../views/login.vue'),
   },
   {
+    path:'/book/:id',
+    component : () => import('../views/book/book.vue'),
+  },
+    {
+    path:'/bookshelf',
+    component : () => import('../views/book/root.vue'),
+  },
+  {
     path: '/imgs/:dtid/:index',
     // component: imgs,
     component: () => import('../views/imgs.vue'), // 懒加载

@@ -1,0 +1,172 @@
+#all {
+    width: 100vw;
+    height: calc( 100vh - 60px );
+    background-color: rgb(233, 226, 207);
+    position: relative;
+    overflow: hidden;
+
+}
+
+.content {
+    /* width: 90vw;
+    height: 85vh; */
+    width: 100%;
+    height: 100%;
+    /* margin: 0 auto; */
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: rgb(233, 226, 207);
+
+    margin-left: 5px;
+    /* margin-bottom: 5px; */
+    /* 添加立体感阴影 */
+    box-shadow:
+        /* 阴影1 - 水平偏移5px，垂直偏移5px，模糊半径10px，暗灰色 */
+        5px 5px 10px rgba(0, 0, 0, 0.1),
+        /* 阴影2 - 增强立体感，增加深度，通过更大的模糊半径和不同的颜色 */
+        -5px -5px 15px rgba(0, 0, 0, 0.05);
+}
+
+.c {
+    background-color: blanchedalmond;
+    margin-bottom: 10px;
+    font-size: 24px;
+}
+
+.d {
+    height: 30px;
+    font-size: 23px;
+    font-family: "楷体", "楷体_GB2312", serif;
+    font-weight: 500;
+    /* text-align: center; */
+    margin-left: 30px
+}
+
+/* 播放段落的样式 */
+.e {
+    /* background-color: blueviolet; */
+    text-decoration: underline;
+}
+
+.f {
+    display: inline-block;
+    width: 42px;
+    height: 10px;
+    /* background-color: brown; */
+}
+
+#bo {
+    position: absolute;
+    top: 95%;
+    left: 25px;
+}
+
+#date {
+    position: absolute;
+    top: 96%;
+    left: 80%;
+}
+
+#ac {
+    width: 90vw;
+    height: 30vh;
+    border-radius: 15px;
+    position: absolute;
+    /* top: 66%; */
+    /* top:100%; */
+    left: 50%;
+    transform: translate(-50%);
+    transition: top 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    /* background-color: blue; */
+    /* padding: 10px 20px;   */
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.acc {
+    display: flex;
+    flex-direction: row-reverse;
+    flex-wrap: wrap;
+}
+
+.acs {
+    width: 50px;
+    height: 80px;
+    border-radius: 10px;
+    background-color: antiquewhite;
+    margin: 20px;
+}
+
+.acs div:nth-of-type(2) {
+    text-align: center;
+}
+
+.tu {
+    width: 125px;
+    margin-top: 26px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+.tu img {
+    width: 100%;
+    height: 100%;
+}
+
+#fangshu {
+    width: 80vw;
+    height: 45vh;
+    background-color: aquamarine;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+#inputs{
+    height: 50vh;
+    background-color: beige;
+    position: relative;
+}
+#fangshuQie{
+    height: 36px;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+#inputs input{
+    width: 80%;
+}
+#fangshuQie div{
+    width: 52px;
+    height: 80%;
+    background-color: rgb(206, 58, 58);
+    text-align: center;
+    border-radius: 10px;
+    
+    display: inline-block;
+    line-height: 29px;
+
+}
+
+.anjian {
+    width: 80%;
+    height: 80%;
+    /* background-color: bisque; */
+    position: absolute;
+    left: 50%;
+    top: 55%;
+    transform: translate(-50%, -50%);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.anjian div {
+    width: 30%;
+    height: 50px;
+    background-color: blue;
+    line-height: 50px;
+    text-align: center;
+}

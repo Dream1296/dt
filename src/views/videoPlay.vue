@@ -257,9 +257,11 @@ video {
 }
 
 .controls {
+    width: 85%;
     position: absolute;
+    left:50%;
+    transform: translateX(-50%);
     bottom: 0;
-    width: 100%;
     padding: 0.5rem;
     background: rgba(0, 0, 0, 0.5);
     display: flex;

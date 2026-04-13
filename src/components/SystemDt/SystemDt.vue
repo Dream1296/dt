@@ -55,7 +55,8 @@
 				<!-- <input v-model="sr" />
 				
 				<div @click="sousuo">精确搜索</div> -->
-				<van-search v-model="sr" @search="dtFind" :autocomplete="'off'" placeholder="请输入搜索关键词" />
+				<van-search v-model="sr" ref="searchRef" @search="dtFind" :autocomplete="'off'"
+					placeholder="请输入搜索关键词" />
 
 			</div>
 		</div>
@@ -80,7 +81,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue';
+import { nextTick, onMounted, ref } from 'vue';
 import Line from '../fenge/line.vue';
 import { viewDataStore } from '@/stores/viewDataStore';
 import { userStore } from '@/stores/userStore';
@@ -95,6 +96,7 @@ import { showFailToast } from 'vant';
 import { svgArr } from './svgArr';
 import { dtData } from '@/dtData/dtList';
 import router from '@/router';
+import type { SearchInstance } from 'vant'
 const viewData = viewDataStore();
 const userData = userStore();
 //视图数据
@@ -103,6 +105,7 @@ const vlist = dtData.vlist;
 // import { userImg } from '../../api';
 
 let fings = ref(false);
+const searchRef = ref<SearchInstance | null>(null)
 
 let userImg = ref(Internet.url + "/api/userImg?name=xt");
 
@@ -137,9 +140,9 @@ function openAlist() {
 	// }
 	// let url = 'http://dlhe.top:5244';
 	// window.open(url, '_blank');
-	
+
 	router.push({ path: '/list/' });
-	
+
 }
 //查询事件监听
 myEvent.on('dtFind', (e) => {
@@ -164,6 +167,41 @@ myEvent.on('dtFind', (e) => {
 function dtFind() {
 	myEvent.emit('dtFind', sr.value);
 }
+//监听键盘输入
+myEvent.on('onKey', async (a: any) => {
+	let e: KeyboardEvent = a;
+	const key = e.key;
+	console.log(key);
+	
+	// 判断是否搜索
+	if (e.ctrlKey && key === '/') {
+		e.preventDefault();
+		if (showSs.value) {
+			await nextTick();
+			searchRef.value?.blur();
+			showSs.value = false;
+		} else {
+			showSs.value = true;
+			await nextTick();
+			searchRef.value?.focus();
+		}
+	}
+	//是否确定搜索
+	if (e.altKey && key == 'q') {
+		e.preventDefault();
+		dtFind();
+	}
+	//切换分级
+	if(e.altKey){
+		if(key == '1'){
+			viewData.loa = 0;
+		}
+		if(key == '2'){
+			viewData.loa = 1;
+		}
+	}
+
+})
 
 
 </script>

@@ -60,7 +60,7 @@
         <div id="configs" v-show="configV" @click.stop="">
             <h3>图片显示数</h3>
             <van-stepper v-model="showImgNum" min="0" max="6" />
-            <h3>权限等级-{{ loa }}</h3>
+            <h3>权限等级-{{ loaText[loa] }}</h3>
             <van-radio-group v-model="loa" direction="horizontal">
                 <van-radio name="0">public</van-radio>
                 <van-radio name="1">Protected</van-radio>
@@ -69,15 +69,20 @@
             </van-radio-group>
             <h3>内部上传图片</h3>
             <van-switch v-model="isImgDir" />
+            <div v-if="!userData.isPc">
+                <h3>发布参考时间</h3>
+                <p @click="showSetDate = true; showPopup = true">
+                    {{ dateArr.join('-') }}
+                </p>
+                <p @click.stop="showSetTime = true; showPopup = true">
+                    {{ timeArr.join(':') }}
+                </p>
+            </div>
+            <div class="pcDate" v-if="userData.isPc">
+                <n-date-picker v-model:value="timestamp" type="datetime" clearable />
+                <!-- {{ dateArr.join('-') }} {{ timeArr.join(':') }} -->
+            </div>
 
-            <h3>发布参考时间</h3>
-            <p @click="showSetDate = true; showPopup = true">
-                {{ dateArr.join('-') }}
-            </p>
-
-            <p @click.stop="showSetTime = true; showPopup = true">
-                {{ timeArr.join(':') }}
-            </p>
 
             <van-button type="success" @click="huishuText">上次的文本</van-button>
 
@@ -86,8 +91,10 @@
         </div>
 
 
+
         <van-popup v-model:show="showSetDate" round position="bottom" :style="{ height: '50%' }" @click.stop="">
             <van-date-picker v-model="dateArr" title="选择日期" v-if="true" @confirm="showSetDate = false" />
+            <!-- <n-date-picker v-model:value="timestamp" type="datetime" clearable /> -->
         </van-popup>
 
         <van-popup v-model:show="showSetTime" round position="bottom" :style="{ height: '50%' }" @click.stop="">
@@ -132,12 +139,15 @@ import { closeToast, showConfirmDialog, showFailToast, showLoadingToast, showSuc
 import router from '@/router';
 import { getemojiImg, emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
 import { watch } from 'vue';
+import { userStore } from '@/stores/userStore';
 // emojiSrc
 
 let shuru = ref<HTMLDivElement>();
 let upImg = ref<HTMLInputElement>();
 let upVideo = ref<HTMLInputElement>();
 let emojiList = ref<string[]>();
+let userData = userStore();
+
 emojiList.value = emojiNames;
 const gradientColor = {
     '0%': '#3fecff',
@@ -149,9 +159,34 @@ let initialHeight: number;
 let diTop = ref('calc(100% - 40px  )');
 let showEmo = ref(false);
 
-let loa = ref('0');
+let loa = ref<0 | 1 | 13 | 12>(0);
+const loaText = {
+    0:'公开的',
+    1:"不公开的",
+    13:'私有的',
+    12:'严格的',
+};
+
 let dateArr = ref<string[]>([]);
 let timeArr = ref<string[]>([]);
+
+const timestamp = ref(Date.now());
+watch(timestamp, (newVal, oldVal) => {
+    const date = new Date(newVal); // 解析时间戳
+
+    // 提取 年、月、日（补零）
+    const year = date.getFullYear().toString(); // 年
+    const month = (date.getMonth() + 1).toString().padStart(2, '0'); // 月（0-11，+1）
+    const day = date.getDate().toString().padStart(2, '0'); // 日
+
+    // 提取 时、分（补零）
+    const hours = date.getHours().toString().padStart(2, '0'); // 时
+    const minutes = date.getMinutes().toString().padStart(2, '0'); // 分
+
+    // 更新 dateArr 和 timeArr
+    dateArr.value = [year, month, day];
+    timeArr.value = [hours, minutes];
+})
 
 let isImgDir = ref(false);
 

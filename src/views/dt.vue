@@ -5,7 +5,7 @@
 
         <!-- 顶部栏 -->
         <div id="kz" :class="{ kzs: showBg }">
-            <topDh :showBg='showBg' @clicks="updt" @longpress1='upvideo'></topDh>
+            <topDh :showBg='showBg' @clicks="updt" @longpress1='upvideo' @gologin="gologin"></topDh>
         </div>
 
         <!-- 背景图 
@@ -220,9 +220,14 @@ if (route.query.dtId && Number(route.query.dtId) && Number(route.query.dtId) >= 
 
 if (loaR == 1) {
     loaR = 1;
-} else {
-    loaR = 0;
+} 
+
+if(loaR == 3){
+    loaR = 3;
+}else{
+    loaR == 0;
 }
+
 setTimeout(() => {
     // if (wd) {
     //     myEvent.emit('dtFind', wd)
@@ -348,7 +353,7 @@ watch(passwd13, (newVal) => {
 
 
 
-function get13(loa : 13 | 12) {
+function get13(loa: 13 | 12) {
     //切换背景图片
     bgSrc.value = bgSrcCon + "1" + ".png";
 
@@ -479,8 +484,13 @@ onMounted(() => {
 // },400)
 
 
+
 // 全局监听键盘事件的回调
-const handleGlobalKeydown = (e: any) => {
+const handleGlobalKeydown = (e: KeyboardEvent) => {
+    myEvent.emit('onKey', e);
+};
+
+myEvent.on('onKey', (e: any) => {
     const key = e.key;
     if (showBottom.value) {
         if (Number(key) < 10 && Number(key) >= 0) {
@@ -490,13 +500,9 @@ const handleGlobalKeydown = (e: any) => {
         if (key == 'Backspace') {
             passwd13.value = passwd13.value.slice(0, -1);
         }
-
-
     }
+})
 
-
-
-};
 
 
 
@@ -521,6 +527,10 @@ function playVideo(ids: {
 
 function updt() {
     router.push({ path: '/updt' });
+}
+
+function gologin() {
+    router.push({ path: '/dl' });
 }
 
 //跳转到设置页
