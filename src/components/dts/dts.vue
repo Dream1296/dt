@@ -136,7 +136,7 @@
 <script setup lang="ts">
 
 import { onMounted, ref, watch } from 'vue';
-import { type A } from '../../type/dtType';
+import { type DtDataType } from '../../types/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog, Toast, Dialog, showToast } from 'vant';
@@ -150,7 +150,7 @@ import topView from '../TopView/topView.vue';
 import StyleTop from '../styleTop/styleTop.vue';
 import threeView from '@/components/threeView/threeView.vue';
 import { token } from '@/api/token';
-import { emojiNamesUrl, emojiNames, getEmojiSrc } from '@/util/dt/emoji';
+import { emojiNamesUrl, emojiNames, getEmojiSrc } from '@/utils/dt/emoji';
 import axios from 'axios';
 import { userStore } from '@/stores/userStore';
 import CommentShow from '../comment/commentShow.vue';
@@ -159,9 +159,9 @@ import CommentShow from '../comment/commentShow.vue';
 let imgTemp = tempStore();
 
 //获取父组件传入数据
-const props = defineProps<{ datas: A | undefined }>();
+const props = defineProps<{ datas: DtDataType | undefined }>();
 
-let data = ref<A>();
+let data = ref<DtDataType>();
 
 let isMo = ref(false);
 
@@ -253,7 +253,7 @@ function videoSrc(index: number) {
 }
 
 function tzXq(index: number) {
-	router.push({ path: '/dts/' + index });
+	router.push({ path: '/dtShow/' + index });
 }
 
 

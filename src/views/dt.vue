@@ -55,7 +55,6 @@
             <div id="dtArr" ref="dtArr">
                 <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
                     <div class="zhujian">
-
                         <div v-if="a.type == 'A' && !a.KeepRun && !a.KeepBadminton">
                             <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
                         </div>
@@ -153,14 +152,13 @@
 <script setup lang="ts">
 import { dtDataInit, dtFindData } from '../dtData/getList';
 import { VcDataInit, vData } from '../dtData/VcData';
-import type { A } from '../type/dtType';
+import type { DtDataType } from '../types/dtType';
 import { nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
 import topDh from '../components/topDh/topDh.vue';
 import SystemDt from '../components/SystemDt/SystemDt.vue';
 import dts from '@/components/dts/dts.vue';
-import { data1 } from '../testData';
-import { showTop } from '@/util/dt/dtTopShow';
-import { upvideo } from '@/util/dt/dtUtil';
+import { showTop } from '@/utils/dt/dtTopShow';
+import { upvideo } from '@/utils/dt/dtUtil';
 import router from '@/router';
 import { config } from 'process';
 import { obsDt } from '@/dtData/observerDt';
@@ -179,7 +177,7 @@ import elf from '@/components/elf/elf.vue';
 import threeView from '@/components/threeView/threeView.vue';
 import configV from '@/components/configV/configV.vue';
 import Line from '@/components/fenge/line.vue';
-import { layoutItemsFnAdd } from '@/util/dt/layoutItems';
+import { layoutItemsFnAdd } from '@/utils/dt/layoutItems';
 import { useRoute } from 'vue-router';
 import KeepRun from '@/components/keepRun/keepRun.vue';
 import KeepBadminton from '@/components/KeepBadminton/KeepBadminton.vue';
@@ -188,7 +186,7 @@ import footers from '@/components/footer/footer.vue';
 import homePageMo from '@/components/homePageMo/homePageMo.vue';
 import { dtData } from '@/dtData/dtList';
 import YearSign from '@/components/yearSign/yearSign.vue';
-import { routerPush } from '@/util/dt/routerUtil';
+import { routerPush } from '@/utils/dt/routerUtil';
 
 let viewData = viewDataStore();
 let userData = userStore();

@@ -1,4 +1,4 @@
-import type { A, dataImg, Dt, listFile } from '@/type/dtType';
+import type { A, dataImg, Dt, listFile } from '@/types/dtType';
 import axioss from 'axios';
 import { token as tokens } from '@/api/token';
 
@@ -488,3 +488,9 @@ async function axiosGetWithTimeout(url: string, timeout = 500) {
 //     return data.data.jd;
 // }
 
+// 注册
+export async function register(username: string, passwd: string, nickname: string, email: string) {
+    const urls = Internet.url + "/api/register";
+    let res = await api<{ code: number, message: string }>(urls, 'POST', { username, passwd, nickname, email });
+    return res;
+}

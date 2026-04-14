@@ -29,7 +29,7 @@
 
 
 <script setup lang="ts">
-import type { Com } from "@/type/dtType";
+import type { Com } from "@/types/dtType";
 import { ref } from "vue";
 import Myimage from '@/components/image/Myimage.vue'
 import { plPL } from "naive-ui";

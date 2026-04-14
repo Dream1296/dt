@@ -36,7 +36,7 @@ import topView from '../TopView/topView.vue';
 import { ref, watch } from 'vue';
 import { showConfirmDialog, showFailToast, showSuccessToast } from 'vant';
 import { } from '@/api/api';
-import type { Mood } from '@/type/dtType';
+import type { Mood } from '@/types/dtType';
 
 let data = ref<Mood>({
     type:'mood',

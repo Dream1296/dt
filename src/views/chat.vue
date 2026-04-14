@@ -7,14 +7,13 @@
                     {{ data.author }}--{{ showDate(data.date) }} -- {{ data.id }}
                 </div>
 
-
                 <ChatDiv v-if="data" :data="data.content"></ChatDiv>
 
                 <div v-if="isKunjian(data?.id)">
 
                     <n-tabs type="segment" animated @:value="getNodeIndex(data?.id, 0)"
                         @update:value="(val: string) => updataFn(data.id, val)">
-                        <n-tab-pane :name="`${value - 1}`" :tab="printxuan(data?.id, value)"
+                        <n-tab-pane :name="`${value as number - 1}`" :tab="printxuan(data?.id, value as number)"
                             v-for="value in getNodeIndex(data?.id, 1)">
                         </n-tab-pane>
                     </n-tabs>
@@ -60,7 +59,6 @@
 <script setup lang="ts">
 import { getChatNode } from '@/api/api';
 import ChatDiv from '@/components/chatDiv/chatDiv.vue';
-import { data1 } from '@/testData';
 import { computed, ref, type Ref } from 'vue';
 import { useRoute } from 'vue-router';
 import '@fortawesome/fontawesome-free/css/all.min.css'

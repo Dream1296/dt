@@ -137,7 +137,7 @@ import { ac, postDt, upfile, upfiles } from '@/api/upapi';
 import { computed, onMounted, ref } from 'vue';
 import { closeToast, showConfirmDialog, showFailToast, showLoadingToast, showSuccessToast, Toast } from 'vant';
 import router from '@/router';
-import { getemojiImg, emojiNamesUrl, emojiNames } from '@/util/dt/emoji';
+import { getemojiImg, emojiNamesUrl, emojiNames } from '@/utils/dt/emoji';
 import { watch } from 'vue';
 import { userStore } from '@/stores/userStore';
 // emojiSrc

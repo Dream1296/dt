@@ -1,7 +1,7 @@
 import { nextTick, type Ref } from "vue";
 import { dtData } from "./dtList";
 import { myEvent } from "@/myEnit";
-import { routerPush } from "@/util/dt/routerUtil";
+import { routerPush } from "@/utils/dt/routerUtil";
 
 type obsDtType = {
     index: number,

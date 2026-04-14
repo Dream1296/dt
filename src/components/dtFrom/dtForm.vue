@@ -38,7 +38,7 @@
 
 
 <script setup lang="ts">
-import type { A, dataImg } from '@/type/dtType';
+import type { A, dataImg } from '@/types/dtType';
 import { ref, watch } from 'vue';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';

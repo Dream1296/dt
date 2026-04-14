@@ -58,9 +58,9 @@ const routes: Array<RouteRecordRaw> = [
     component : () => import('../views/updt.vue')
   },
   {
-    path:'/dts/:dtid',
+    path:'/dtShow/:dtid',
     // component:dtAll,
-    component : () => import("@/views/dtAll.vue")
+    component : () => import("@/views/dtShow.vue")
   },{
     path:'/Lvi',
     // component:longVideo,
@@ -78,6 +78,9 @@ const routes: Array<RouteRecordRaw> = [
   },{
     path:'/list:pathMatch(.*)*',
     component :() => import('@/views/list/list.vue')
+  },{
+    path:'/zhuce',
+    component: () => import('@/views/zhuce.vue')
   }
 
 ];

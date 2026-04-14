@@ -87,7 +87,7 @@
 
 
 <script setup lang="ts">
-import type { A } from "@/type/dtType";
+import type { A } from "@/types/dtType";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
 

@@ -1,4 +1,4 @@
-import type { A, dataImg, Dt, Mood, Top } from "@/type/dtType";
+import type { DtDataType, dataImg, Dt, Mood, Top } from "@/types/dtType";
 import { ref, type Ref } from "vue";
 
 
@@ -11,7 +11,7 @@ export type dtList = {
 
     set: (newData: (Dt)[]) => void,
     addVlist: (i: number, direction?: 'previou' | 'next') => void
-    find: (id: number) => A | undefined,
+    find: (id: number) => DtDataType | undefined,
     del: (id: number) => boolean,
 
 }

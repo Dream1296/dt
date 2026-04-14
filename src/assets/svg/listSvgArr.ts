@@ -1,7 +1,5 @@
-export let svgArr = [
+export let listSvgArr = [
     `<svg fill="#1890ff"  stroke-width="0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" class="hope-icon hope-c-XNyZK hope-c-PJLV hope-c-PJLV-ihyxvik-css"  style="overflow: visible;"><path d="M496 152a56 56 0 00-56-56H220.11a23.89 23.89 0 01-13.31-4L179 73.41A55.77 55.77 0 00147.89 64H72a56 56 0 00-56 56v48a8 8 0 008 8h464a8 8 0 008-8zM16 392a56 56 0 0056 56h368a56 56 0 0056-56V216a8 8 0 00-8-8H24a8 8 0 00-8 8z"></path></svg>`,
-
-
     `<svg fill="#1890ff" stroke-width="0" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 16 16" class="hope-icon hope-c-XNyZK hope-c-PJLV hope-c-PJLV-ihyxvik-css"  style="overflow: visible;"><path d="M9.293 0H4a2 2 0 00-2 2v12a2 2 0 002 2h8a2 2 0 002-2V4.707A1 1 0 0013.707 4L10 .293A1 1 0 009.293 0zM9.5 3.5v-2l3 3h-2a1 1 0 01-1-1zM6 8.5h4a.5.5 0 010 1H6a.5.5 0 010-1z"></path></svg>`,
 
 ]

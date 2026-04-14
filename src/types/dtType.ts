@@ -1,10 +1,10 @@
-export type Dt = A | dataImg | Mood | Top | Year;
+export type Dt = DtDataType | dataImg | Mood | Top | Year;
 
 
 
 
 // 标准动态类型
-export interface A {
+export interface DtDataType {
   type: "A";
   date: string;
   id: number;

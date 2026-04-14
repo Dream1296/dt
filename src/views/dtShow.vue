@@ -1,0 +1,636 @@
+<template>
+<div :class="['page-container', { 'pc-layout': uStore.isPc }]">
+
+    <div id="top">
+        <button @click="back">← 返回</button>
+        <h1 @click="showBottom2 = true">动态详情</h1>
+        <button @click="showShare = true">分享</button>
+    </div>
+    <div class="show40x" v-if="show403 || show404">
+        <div v-if="show403">
+            <n-result status="403" title="403 禁止访问" description="总有些门是对你关闭的"></n-result>
+        </div>
+
+        <div v-if="show404">
+            <n-result status="404" v-if="show404" title="404 资源不存在" description="生活总归带点荒谬"></n-result>
+        </div>
+    </div>
+
+
+    <!-- 内容区 -->
+    <div class="content" v-if="data">
+        <div class="text" v-if="data">
+            <template v-for="a in data.textArr">
+                <span v-if="a.type == 'text' && a.text != '\n'">{{ a.text }}</span>
+                <br v-if="a.type == 'text' && a.text == '\n'">
+                <img v-if="a.type == 'emoji'" :src="getEmojiSrc(a.text)" />
+            </template>
+        </div>
+        <hr>
+        <!-- 时间和地点 -->
+        <div class="config" v-if="data">
+            <p>{{ data.date.slice(0, 10) + " " + data.date.slice(11, 16) }}</p>
+            <!-- <p>地点：平顶山</p> -->
+        </div>
+
+        <!-- 展示图片区 -->
+        <div class="imgShow">
+            <div v-for="(a, index) in srcShow" @click="GetImg({ dtid: data.id.toString(), index: index })">
+                <Myimage :src="a"></Myimage>
+            </div>
+
+            <div class="showVideo" v-for="(a, index) in srcVideoImg.slice(0, 1)"
+                @click="Getvideo({ dtid: data.id.toString(), index: index })">
+                <Myimage :src="a"></Myimage>
+                <img src="../assets/img/videIon.png">
+            </div>
+        </div>
+
+        <div id="keyword" @click="addKeyworld">
+            <div v-for="a in data.keyword">
+                {{ a.keyword }}
+            </div>
+        </div>
+
+        <div style="height: 10px;">
+        </div>
+
+
+        <!-- 全部图片区 -->
+        <div class="imgalllogo">
+            <img v-if="data.imgAllNum && data.imgAllNum > 4" @click="isAllsho('img')" src="../assets/img/imgall.png">
+            <img v-if="data.videoNum && data.videoNum > 1" @click="isAllsho('video')" src="../assets/img/videoA.png">
+        </div>
+        <div class="imgAll" v-if="isShowType != ''" v-show="isShowImg">
+            <!-- 图片 -->
+            <div v-if="isShowType == 'img'">
+                <Pbl :srcArr="srcAll" :dtid="dtid" :columns="uStore.isPc ? 3 : 2" @img="getImgs"></Pbl>
+            </div>
+
+            <!-- 视频 -->
+            <div v-if="isShowType == 'video'">
+                <Pbl :srcArr="srcAll" :dtid="dtid" :columns="uStore.isPc ? 3 : 2" @img="getvideos"></Pbl>
+            </div>
+        </div>
+
+        <van-button icon="plus" type="primary" @click="showPlAdd = true">添加评论</van-button>
+
+        <!-- 评论显示 -->
+        <div v-if="data.com.length > 0">
+            <CommentShow :data="data.com" :showImg="true"></CommentShow>
+        </div>
+
+    </div>
+
+    <!-- 添加标签弹窗 -->
+    <van-popup
+        v-model:show="showBottom"
+        round
+        :position="uStore.isPc ? 'center' : 'bottom'"
+        :style="uStore.isPc
+            ? { width: '480px', padding: '20px', borderRadius: '12px' }
+            : { height: '50%' }"
+    >
+        <div class="addW">
+            <h4>添加新的标签，更快速的检索</h4>
+            <van-cell-group inset>
+                <van-field v-model="newKeyWorld" label="新标签" placeholder="请输入标签名" />
+            </van-cell-group>
+            <div class="tijiao" @click="dtindextijiao">
+                <img src="../assets/img/addKeyWorldBu.png">
+            </div>
+        </div>
+
+    </van-popup>
+
+
+    <!-- 样式配置弹窗 -->
+    <van-popup
+        v-model:show="showBottom2"
+        round
+        :position="uStore.isPc ? 'center' : 'bottom'"
+        :style="uStore.isPc
+            ? { width: '560px', maxHeight: '80vh', overflowY: 'auto', padding: '20px', borderRadius: '12px' }
+            : { height: '80%' }"
+    >
+        <h1>样式{{ groupChecked }}</h1>
+        <van-radio-group v-model="groupChecked" direction="horizontal">
+            <van-radio name="0">null</van-radio>
+            <van-radio name="1">蓝色渐变-猫羽雫</van-radio>
+            <van-radio name="2">月色森林</van-radio>
+            <van-radio name="3">蓝鲸</van-radio>
+            <van-radio name="4">大黄</van-radio>
+        </van-radio-group>
+
+        <h1>Loa {{ newLoa }}</h1>
+        <van-radio-group v-model="newLoa" direction="horizontal">
+            <van-radio name="0">0</van-radio>
+            <van-radio name="1">1</van-radio>
+            <van-radio name="13">13</van-radio>
+        </van-radio-group>
+
+        <div style="height: 20px;"></div>
+        <h4>DateTime {{ nowDate }} - {{ nowTime }}</h4>
+        <input type="date" v-model="nowDate">
+        <input type="time" v-model="nowTime">
+
+        <div style="height: 50px;"></div>
+        <div style="margin: 16px;" @click="setBg">
+            <van-button round block type="primary" native-type="submit">
+                提交
+            </van-button>
+        </div>
+
+    </van-popup>
+
+    <!-- 添加评论弹窗 -->
+    <van-popup
+        v-model:show="showPlAdd"
+        round
+        :position="uStore.isPc ? 'center' : 'bottom'"
+        :style="uStore.isPc
+            ? { width: '600px', maxHeight: '80vh', overflowY: 'auto', padding: '20px', borderRadius: '12px' }
+            : { height: '80%' }"
+    >
+        <div id="plAddTitle">评论添加</div>
+        <div id="commentInput">
+            <CommentInput @up="upCom" :disabled="isUpImgNum != 0"></CommentInput>
+        </div>
+
+        <div id="imgUpDiv">
+            <div id="imgUp">
+                <van-uploader :multiple="true" :after-read="afterRead" v-model="fileList" />
+            </div>
+        </div>
+
+
+        <div v-for="a in percentCompleteArr">
+            {{ a }}
+
+        </div>
+
+    </van-popup>
+
+
+    <van-share-sheet v-model:show="showShare" title="立即分享给好友" :options="options" @select="onSelect" />
+
+</div>
+</template>
+
+
+<script setup lang="ts">
+import { addDtindex, dtVideoImg, getdt, getEmoSrc, getShare, imgSrc, postCom, setDtBgStyle, setDtData, setShare } from '@/api/api';
+import { useRoute } from 'vue-router';
+import Myimage from '../components/image/Myimage.vue';
+import Pbl from '@/components/pbl/Pbl.vue';
+import type { DtDataType } from '@/types/dtType';
+import { computed, ref, watch } from 'vue';
+import { splitContent } from '@/dtData/dtUtils';
+import router from '@/router';
+import { showFailToast, showSuccessToast, showToast, type ToastOptions, type UploaderFileListItem } from 'vant';
+import { dtData } from '@/dtData/dtList';
+import { viewDataStore } from '@/stores/viewDataStore';
+import { token } from '@/api/token';
+import CommentShow from '@/components/comment/commentShow.vue';
+import CommentInput from '@/components/comment/commentInput.vue';
+import { upfile } from '@/api/upapi';
+import { NResult } from "naive-ui";
+import { emojiNames, getEmojiSrc } from '@/utils/dt/emoji';
+import { userStore } from '@/stores/userStore';
+
+let viewData = viewDataStore();
+let uStore = userStore();
+const route = useRoute();
+let dtid = Number((computed(() => route.params.dtid as string)).value);
+
+let share = route.query.share;
+let srcShow = ref<string[]>([]);
+let srcVideoImg = ref<string[]>([]);
+
+let srcAll = ref<string[]>([]);
+
+let nowDate = ref<string>("");
+let nowTime = ref<string>("");
+
+let showShare = ref(false);
+
+let showPlAdd = ref(false);
+
+let show403 = ref(false);
+let show404 = ref(false);
+
+// watch(fileList,(oldValue, newValue)=>{
+//     console.log(newValue);
+// } );
+
+let percentCompleteArr = ref<number[]>([]);
+
+let index = 0;
+
+//当前正在上传的图片数
+let isUpImgNum = ref(0);
+
+let fileNameArrMap: Map<string, string> = new Map();
+
+function afterRead(fileItems: UploaderFileListItem | UploaderFileListItem[]) {
+    let fileItemArr = Array.isArray(fileItems) ? fileItems : [fileItems];
+    for (let fileItem of fileItemArr) {
+        let fileNameArr: string[] = [];
+        isUpImgNum.value += 1;
+        fileItem.status = 'uploading';
+        let indexa = index++;
+        let file = fileItem.file;
+        upfile(file, 'img', percentCompleteArr.value, fileNameArr, indexa)
+            .then((data) => {
+                if (fileNameArr && fileItem && fileItem.file) {
+                    fileNameArrMap.set(fileItem.file?.name, fileNameArr[indexa]);
+                }
+                fileItem.status = 'done';
+                isUpImgNum.value -= 1;
+            })
+            .catch((err) => {
+                fileItem.status = 'failed';
+            })
+    }
+};
+
+
+const fileList = ref<UploaderFileListItem[]>([])
+
+
+async function upCom(text: string) {
+    let imgNameArr: string[] = [];
+    for (let element of fileList.value) {
+        if (element.file?.name) {
+            let newName = fileNameArrMap.get(element.file?.name);
+            if (newName) {
+                imgNameArr.push(newName);
+            }
+
+        }
+    }
+
+
+    postCom(text, String(data.value?.id), imgNameArr)
+        .then(data => {
+            if (data.tf == 1) {
+                showSuccessToast('成功文案');
+            } else {
+                showFailToast('错误')
+            }
+            console.log('ok');
+            showPlAdd.value = false;
+        })
+
+
+
+}
+
+
+
+const options = [
+    { name: '复制链接', icon: 'link' },
+    // { name: '二维码', icon: 'qrcode' },
+];
+const onSelect = (option: { name: string | ToastOptions | undefined; }) => {
+    if (option.name == '复制链接') {
+        setShare(dtid.toString())
+            .then(res => {
+                let text = `http://dlhe.top/dts?dtid=${dtid}&share=${res.token}`;
+                console.log(text);
+                navigator.clipboard.writeText(text)
+                    .then(() => {
+                        showSuccessToast('文本已成功复制到剪贴板');
+                    })
+                    .catch(err => {
+                        showSuccessToast('复制失败');
+                    });
+
+            })
+    }
+
+
+    showShare.value = false;
+};
+
+// let isImgAll = ref(false);
+let isShowType = ref<'img' | 'video' | ''>('');
+
+let isShowImg = ref(true);
+
+let data = ref<DtDataType>();
+
+
+let showBottom = ref(false);
+let showBottom2 = ref(false);
+let groupChecked = ref('0');
+let newLoa = ref('0');
+let newKeyWorld = ref('');
+
+
+//初始化
+init();
+
+function init() {
+    //必须参数
+    if (!dtid) {
+        showFailToast('参数错误');
+    }
+
+    //判断是否有分享链接
+    if (share) {
+        getShare(share.toString())
+            .then(data => {
+                token.token = data.token;
+                token.istoken = 'true';
+                token.tempToken = data.token;
+                token.isTempToken = 'true';
+            })
+            .then(() => {
+                getdts().then(fn)
+            })
+    } else {
+        getdts().then(fn);
+    }
+
+    function fn() {
+        if (!data.value) {
+            return
+        }
+        imgShow(data.value);
+        newLoa.value = data.value.loa.toString();
+        groupChecked.value = data.value.bgStyle.toString();
+        parseISO8601ToDateTimeWithDelimiters(data.value.date);
+        if (!data.value.keyword) {
+            data.value.keyword = [
+                {
+                    keyword: 'null',
+                    isAi: 0
+                }
+            ]
+        }
+        return
+    }
+}
+
+
+
+
+function getdts() {
+    return new Promise<void>((resolve, reject) => {
+        //先从列表中寻找
+        let obj = dtData.list.find(res => res.id == dtid);
+        if (obj && obj.type == 'A') {
+            data.value = obj;
+            resolve()
+            return
+        }
+
+        //网络请求
+        getdt(dtid, viewData.loa).then(res => {
+            if (res.code == 403) {
+                show403.value = true;
+            }
+            if (res.code == 404) {
+                show404.value = true;
+            }
+            if (res.code == 200 && res.data) {
+                data.value = res.data;
+                data.value!.textArr = splitContent(res.data.text);
+            }
+            console.log(show403.value);
+
+            resolve()
+            return
+        })
+    })
+}
+
+
+console.log('运行');
+
+//不应该缓存
+
+// watch(() => route.query, () => {
+
+
+//     // 判断是否不刷新
+//     if (!route.path.includes('/dts') || Number(route.params.dtid) == dtid) {
+//         return
+//     }
+
+//     dtid = Number((computed(() => route.params.dtid as string)).value);
+//     share = route.query.share;
+//     isShowType.value = '';
+//     isShowImg.value = true;
+//     showBottom.value = false;
+//     newKeyWorld.value = '';
+//     srcShow.value = [];
+//     srcVideoImg.value = [];
+//     srcAll.value = [];
+//     init();
+//     // getdt(dtid).then(res => {
+//     //     data.value = res;
+//     //     res.textArr = splitContent(res.text);
+//     //     imgShow(res);
+//     // })
+// });
+
+function getImgs(index: string) {
+    GetImg({ dtid: dtid.toString(), index: Number(index) });
+}
+function getvideos(index: string) {
+    Getvideo({ dtid: dtid.toString(), index: Number(index) });
+}
+
+
+function emosrc(name: string) {
+    return getEmoSrc(name);
+}
+
+function setBg() {
+    let dtid = data.value?.id
+    let bgN = groupChecked.value;
+    let date = combineToISO8601ForMySQL(nowDate.value, nowTime.value);
+
+    if (dtid && bgN && groupChecked.value != '0') {
+        setDtData(dtid.toString(), newLoa.value, groupChecked.value, date)
+            .then((datas) => {
+                if (datas.tf == 1) {
+                    showSuccessToast('修改成功');
+                    showBottom2.value = false;
+                } else {
+                    showFailToast('错误');
+                }
+            })
+    }
+}
+
+
+let src = '../../public/bgImg/bg0.png';
+
+
+
+function imgShow(res: DtDataType) {
+    if (!res.imgShowAll) {
+        res.imgShowAll = 0;
+    }
+    for (let i = 0; i < res.imgShowAll; i++) {
+        srcShow.value.push(imgSrc(res.id, i));
+    }
+
+    if (!res.videoNum) {
+        res.videoNum = 0;
+    }
+
+
+
+
+    for (let i = 0; i < res.videoNum; i++) {
+
+        srcVideoImg.value.push(dtVideoImg(res.id, i));
+    }
+}
+
+
+function dtindextijiao() {
+    if (token.istoken == 'false') {
+        showFailToast('拒绝访问');
+        return
+    }
+    addDtindex(dtid, newKeyWorld.value)
+        .then((res: any) => {
+            if (res.tf == 1) {
+                showBottom.value = false;
+                showSuccessToast('成功');
+                data.value?.keyword.push({
+                    keyword: newKeyWorld.value,
+                    isAi: 0,
+                })
+            }
+
+        })
+}
+
+function isAllsho(types: 'video' | 'img') {
+    if (isShowType.value == types) {
+        return isShowType.value = '';
+    }
+    isShowType.value = types;
+    if (types == 'img') {
+        if (!data.value?.imgAllNum) {
+            return
+        }
+        for (let i = 0; i < data.value.imgAllNum; i++) {
+            srcAll.value.push(imgSrc(dtid, i));
+        }
+    }
+    if (types == 'video') {
+        if (!data.value?.videoNum || data.value.videoNum <= 1) {
+            return;
+        }
+        for (let i = 0; i < data.value.videoNum; i++) {
+            srcAll.value.push(dtVideoImg(dtid, i));
+        }
+    }
+
+
+
+
+    isShowType.value = types;
+}
+
+function addKeyworld() {
+    showBottom.value = true;
+}
+
+/**
+ * 返回
+ */
+function back() {
+    router.back();
+}
+
+
+function GetImg(ids: {
+    dtid: string,
+    index: number,
+}) {
+    //打开图片页面
+    router.push({ path: '/imgs/' + ids.dtid + '/' + ids.index });
+}
+
+/**
+ * 打开图视频页面
+ * @param ids
+ */
+function Getvideo(ids: {
+    dtid: string,
+    index: number,
+}) {
+    //打开视频
+    router.push({ path: '/videoPlay', query: ids });
+}
+
+
+/**
+ * 将日期和时间字符串转换为 ISO8601 格式的字符串
+ */
+function combineToISO8601ForMySQL(dateStr: string, timeStr: string): string {
+    // 检查日期和时间是否为空
+    if (!dateStr || !timeStr) {
+        return "";
+    }
+
+    // 解析日期和时间字符串
+    const dateParts = dateStr.split('-').map(Number);
+    const timeParts = timeStr.split(':').map(Number);
+    const year = dateParts[0];
+    const month = String(dateParts[1]).padStart(2, '0'); // 确保月份是两位数
+    const day = String(dateParts[2]).padStart(2, '0'); // 确保日期是两位数
+    const hours = String(timeParts[0]).padStart(2, '0'); // 确保小时是两位数
+    const minutes = String(timeParts[1]).padStart(2, '0'); // 确保分钟是两位数
+    const seconds = String(timeParts[2] || 0).padStart(2, '0'); // 如果没有秒，则默认为0，并确保是两位数
+
+    // 拼接成 MySQL DATETIME 格式的字符串
+    return `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+}
+/**
+ * 将iso8601格式的时间字符串解析为日期和时间，并返回一个包含日期和时间的数组。
+ * @param isoString ISO8601格式的时间字符串
+ */
+function parseISO8601ToDateTimeWithDelimiters(isoString: string) {
+    const date = new Date(isoString);
+
+    if (isNaN(date.getTime())) {
+        return "";
+    }
+
+    const year = date.getFullYear();
+    const month = padZero(date.getMonth() + 1); // 月份从0开始，需要加1
+    const day = padZero(date.getDate());
+    const hours = padZero(date.getHours());
+    const minutes = padZero(date.getMinutes());
+    const seconds = padZero(date.getSeconds());
+
+    nowDate.value = `${year}-${month}-${day}`;
+    nowTime.value = `${hours}:${minutes}:${seconds}`;
+}
+
+function padZero(num: number) {
+    return num < 10 ? '0' + num : num.toString();
+}
+
+
+defineOptions({
+    name: 'DtAllComponent'  // 为组件设置名称
+});
+
+
+</script>
+
+
+
+<style lang="less" scoped>
+@import url('../assets/css/dts.less');
+</style>

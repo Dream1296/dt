@@ -1,5 +1,5 @@
 // import { dtVideo, dtVideoImg, imgSrc } from "../api/api";
-import type { A } from "../type/dtType";
+import type { DtDataType } from "../types/dtType";
 
 /**
  * 分离表情包与正文
@@ -53,7 +53,7 @@ export function splitContent(content: string) {
 // }
 
 //分离表情包与正文
-export function settext(key: 'textArr', value: 'text', dtData: A[]) {
+export function settext(key: 'textArr', value: 'text', dtData: DtDataType[]) {
     
     let arr: { type: string, text: string }[][] = [];
     for (let i = 0; i < dtData.length; i++) {
@@ -87,33 +87,10 @@ export function settext(key: 'textArr', value: 'text', dtData: A[]) {
     }
 }
 
-export function Asetcl(data: A[]) {
+export function Asetcl(data: DtDataType[]) {
     //处理正文字符串
     settext('textArr', 'text', data);
-
 }
 
-//临时处理，让com不为空
-export function setCom(data: A[]) {
-    data.forEach(a => {
-        if (!a.com) {
-            a.com = [];
-        }
-    });
-
-}
-
-
-// export function setvideo(dtData:A[]){
-//     for(let i = 0; i < dtData.length; i++){
-//         if(dtData[i].video.length != 0){
-//             dtData[i].videoImg = [];
-//             for(let j = 0; j < dtData[i].video.length; j++){
-//                 dtData[i].videoImg?.push(dtVideoImg(dtData[i].video[j]));
-//                 dtData[i].video[j] = dtVideo(dtData[i].video[j]);
-//             }
-//         }
-//     }
-// }
 
 

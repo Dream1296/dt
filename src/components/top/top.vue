@@ -45,7 +45,7 @@ import Line from '../fenge/line.vue';
 import { getTouxian } from '@/api/api';
 import topView from '../TopView/topView.vue';
 import { watch } from 'vue';
-import type { Top } from '@/type/dtType';
+import type { Top } from '@/types/dtType';
 import { token } from '@/api/token';
 
 

@@ -21,7 +21,7 @@ import block from './block.vue';
 
 import { useRoute } from 'vue-router'
 import { dtVideo, getListArr, getListImg, getListImgT, Internet, listVideo } from '@/api/api';
-import { svgArr } from './svgArr';
+import { listSvgArr } from '../assets/svg/listSvgArr';
 import router from '@/router';
 import { userStore } from '@/stores/userStore';
 
@@ -138,7 +138,7 @@ init();
 
 
 function getUrl(index: number) {
-    const svgFolder = encodeURIComponent(svgArr[index])
+    const svgFolder = encodeURIComponent(listSvgArr[index])
     return `data:image/svg+xml;utf8,${svgFolder}`
 }
 
