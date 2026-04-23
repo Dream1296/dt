@@ -97,6 +97,7 @@ import { svgArr } from './svgArr';
 import { dtData } from '@/dtData/dtList';
 import router from '@/router';
 import type { SearchInstance } from 'vant'
+// import process from 'process';
 const viewData = viewDataStore();
 const userData = userStore();
 //视图数据
@@ -118,10 +119,15 @@ const emit = defineEmits(['shownewdt', 'tzs', 'config']);
 
 function shownewdt(num: number) {
 	// 将viewData.loa设置为-2，表示显示新建弹窗
+
 	viewData.loa = -2;
 }
 
 function config() {
+	if (token.istoken == 'false') {
+		showFailToast('仅用于内部维护使用');
+		return
+	}
 	emit('config');
 }
 
@@ -172,7 +178,7 @@ myEvent.on('onKey', async (a: any) => {
 	let e: KeyboardEvent = a;
 	const key = e.key;
 	console.log(key);
-	
+
 	// 判断是否搜索
 	if (e.ctrlKey && key === '/') {
 		e.preventDefault();
@@ -192,11 +198,11 @@ myEvent.on('onKey', async (a: any) => {
 		dtFind();
 	}
 	//切换分级
-	if(e.altKey){
-		if(key == '1'){
+	if (e.altKey) {
+		if (key == '1') {
 			viewData.loa = 0;
 		}
-		if(key == '2'){
+		if (key == '2') {
 			viewData.loa = 1;
 		}
 	}

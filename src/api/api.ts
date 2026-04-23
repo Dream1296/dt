@@ -1,4 +1,4 @@
-import type { A, dataImg, Dt, listFile } from '@/types/dtType';
+import type { DtDataType,dataImg, Dt, listFile } from '@/types/dtType';
 import axioss from 'axios';
 import { token as tokens } from '@/api/token';
 
@@ -34,8 +34,11 @@ if (typeof window === 'undefined') {
 // let url = 'http://192.168.0.50:3010'
 // let url = 'http://192.168.137.50:3010'
 // let url = 'http://10.65.226.181:3010'
-export let url = 'http://192.168.1.3:3010';
-// let url = 'http://127.0.0.1:3010';
+// export let url = 'http://192.168.1.3:3010';
+// export let url = 'http://192.168.1.105:3010'; 
+// let url = 'http://127.0.0.1:3011';
+export let url = import.meta.env.VITE_URL;
+
 
 //let url = '';
 
@@ -101,9 +104,6 @@ export async function dtDate(loa: string | number, aes: number, signal?: AbortSi
         data: (Dt)[],
     }
     let res = await api<T>(urls, 'GET', undefined, tokens.token, signal);
-    if (!tokens.token) {
-        res.data = res.data.slice(0, 30);
-    }
     return res;
 }
 
@@ -112,7 +112,7 @@ export async function dtDate(loa: string | number, aes: number, signal?: AbortSi
 export async function dtfind(qb: string, loa?: string) {
     let newQb = encodeURIComponent(qb);
     const urls = Internet.url + "/api/dtfind?bq=" + newQb + "&loa=" + loa;
-    let res = await api<{ code: number, data: A[] }>(urls, 'GET', undefined, tokens.token);
+    let res = await api<{ code: number, data: DtDataType[] }>(urls, 'GET', undefined, tokens.token);
     return res;
 }
 
@@ -124,10 +124,10 @@ export async function addDtindex(dtid: number, text: string) {
 }
 
 //单个动态
-export async function getdt(id: string | number, loa?: number): Promise<{ code: number, data: A }> {
+export async function getdt(id: string | number, loa?: number): Promise<{ code: number, data: DtDataType }> {
     loa = loa == undefined ? 0 : loa
     let urls = Internet.url + "/api/getdt?id=" + String(id) + "&loa=" + loa;
-    let res = (await api(urls, 'GET', undefined, tokens.token)) as { code: number, data: A };
+    let res = (await api(urls, 'GET', undefined, tokens.token)) as { code: number, data: DtDataType };
     return res;
 }
 
@@ -372,8 +372,8 @@ export function getListImg(path: string) {
 }
 
 
-export function dtFileDow(id: string) {
-    const url = `${Internet.url}/api/dtFile?dtid=${id}`;
+export function dtFileDow(fileId: string) {
+    const url = `${Internet.url}/api/dtFile?fileId=${encodeURIComponent(fileId)}&token=${tokens.token}`;
 
     const a = document.createElement('a');
     a.href = url;

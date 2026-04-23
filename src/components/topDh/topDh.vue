@@ -1,79 +1,82 @@
 <template>
 	<div id="all">
-		<div class="kz_img" :style="{'transform':`translate(${ydsLeft}px)`}" v-show="shows1 && showBg">
+		<div class="kz_img" :style="{ 'transform': `translate(${ydsLeft}px)` }" v-show="shows1 && showBg">
 			<img src="../../assets/img/ysrYd.gif"></img>
 		</div>
 
 		<div class="kz_img2" v-show="shows1 && showBg">
 			<img src="../../assets/img/mcFk.gif"></img>
 		</div>
-		
-		<text class="kzText" v-show="showBg" >动态</text>
 
-		<div class="dtUpntb"  @longpress="changang" >
+		<text class="kzText" v-show="showBg">动态</text>
+
+		<div class="dtUpntb" @longpress="changang">
 			<img src=" ../../assets/img/dtadd.png" v-if="showUpDt" @click="updts"></img>
-
-			<img src="../../assets/img/login.png" v-if="!showUpDt"  @click="gologin"></img>
+			<img src="../../assets/img/login.png" v-if="!showUpDt && SHOWLOGIN"  @click="gologin"></img>
 		</div>
 
 	</div>
 </template>
 
 <script setup lang="ts">
-	import { addToken } from '@/api/apiIng';
-import {  ref, type Ref } from 'vue';
-
-	let ydsLeft = ref(0);
-	let shows1 = ref(false);
-
-	let showUpDt = ref(false);
-
-	let fnTrue = (showUpDt:Ref) =>{
-		showUpDt.value = true;
-	}
-	let fnFalse = (showUpDt:Ref) =>{
-		showUpDt.value = false;
-	}
+import { addToken } from '@/api/apiIng';
+import { ref, type Ref } from 'vue';
 
 
-	addToken(fnTrue,fnFalse,showUpDt);
+// 环境变量 是否显示登陆按钮
+const SHOWLOGIN = import.meta.env.VITE_SHOWLOGIN == 'true' ? true : false;
+
+let ydsLeft = ref(0);
+let shows1 = ref(false);
+
+let showUpDt = ref(false);
+
+let fnTrue = (showUpDt: Ref) => {
+	showUpDt.value = true;
+}
+let fnFalse = (showUpDt: Ref) => {
+	showUpDt.value = false;
+}
 
 
-    //接受父组件传类的参数
-    const props = defineProps({
-        showBg: Boolean
-    })
+addToken(fnTrue, fnFalse, showUpDt);
 
 
-	//传递点击事件
-	const emit = defineEmits(['clicks','longpress1','gologin']);
-	
-	function updts(){
-		emit('clicks','');
-	}
-	function changang(){
-		emit('longpress1','');
-	}
-	function gologin(){
-		emit('gologin','');
-	}
+//接受父组件传类的参数
+const props = defineProps({
+	showBg: Boolean
+})
 
 
-	//顶部栏移动效果
+//传递点击事件
+const emit = defineEmits(['clicks', 'longpress1', 'gologin']);
 
-	// setInterval(() => {
-	// 	if (props.showBg) {
-	// 		ydsLeft.value += 10;
-	// 		if (ydsLeft.value >= 360) {
-	// 			shows1.value = false;
-	// 			setTimeout(() => {
-	// 				shows1.value = true;
-	// 			}, 1000);
-	// 			ydsLeft.value = -30;
+function updts() {
+	emit('clicks', '');
+}
+function changang() {
+	emit('longpress1', '');
+}
+function gologin() {
+	emit('gologin', '');
+}
 
-	// 		}
-	// 	}
-	// }, 1000);
+
+//顶部栏移动效果
+
+// setInterval(() => {
+// 	if (props.showBg) {
+// 		ydsLeft.value += 10;
+// 		if (ydsLeft.value >= 360) {
+// 			shows1.value = false;
+// 			setTimeout(() => {
+// 				shows1.value = true;
+// 			}, 1000);
+// 			ydsLeft.value = -30;
+
+// 		}
+// 	}
+// }, 1000);
 </script>
 
 <style scoped>

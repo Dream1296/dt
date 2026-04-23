@@ -17,10 +17,8 @@
                             v-for="value in getNodeIndex(data?.id, 1)">
                         </n-tab-pane>
                     </n-tabs>
-
                 </div>
             </div>
-
         </div>
         <hr class="myHr">
         <div>

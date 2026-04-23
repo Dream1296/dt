@@ -16,7 +16,7 @@
 
 <script lang="ts" setup>
 import { ref, watch } from 'vue';
-import block from './block.vue';
+import block from '../components/listBlock/listBlock.vue';
 
 
 import { useRoute } from 'vue-router'

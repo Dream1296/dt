@@ -8,22 +8,6 @@
             <topDh :showBg='showBg' @clicks="updt" @longpress1='upvideo' @gologin="gologin"></topDh>
         </div>
 
-        <!-- 背景图 
-        <div id="head" ref="head" :style="{ 'background-image': 'url(' + bgSrc + ')' }">
-        </div> -->
-
-
-        <!-- 背景图山的头像部分 -->
-        <!-- <div id="touxian">
-            <div class="tou">
-                <text class="texts"> {{ userName }} </text>
-                <img :src=touxianSrc></img>
-            </div>
-            <div id="guajian">
-                <img src="../assets/img/guajianc.png">
-            </div>
-        </div> -->
-
         <div id="head" ref="head">
             <div v-if="userData.isPc">
                 <homePage></homePage>
@@ -111,7 +95,7 @@
 
         <!-- end -->
         <div>
-            <elf @touchmove="a2" @mousemove="a2" @mousedown="startDrag" @mouseup="endDrag" @mouseleave="endDrag"></elf>
+            <elf></elf>
         </div>
         <div>
             <configV></configV>
@@ -226,27 +210,10 @@ if(loaR == 3){
     loaR == 0;
 }
 
-setTimeout(() => {
-    // if (wd) {
-    //     myEvent.emit('dtFind', wd)
-    // }
-    let topNum = 0;
-    // setInterval(() => {
-    //     window.scrollTo({
-    //         top: topNum, // 滚动到最底部
-    //         behavior: 'smooth', // 平滑滚动（可选）
-    //     });
-    //     topNum += 500;
-    // }, 100)
-
-
-}, 1000)
-
 
 
 myEvent.on('dtFind', (e) => {
     // routerPush('wd', e as string);
-
 })
 
 
@@ -254,11 +221,6 @@ myEvent.on('dtFind', (e) => {
 //视图数据
 const vlist = dtData.vlist;
 
-
-
-
-// 底部信息是否显示
-// const footer_show = ref(true);
 
 // 底部信息是否显示
 const footer_show_num = ref(0);
@@ -284,8 +246,6 @@ watch(() => viewData.loa,
             showFailToast('仅在登录后可查看所有内容');
             return
         }
-
-        // routerPush('wd', null);
 
         if (newVal == 0 || newVal == 1) {
             get01(newVal);
@@ -360,44 +320,6 @@ function get13(loa: 13 | 12) {
     })
 }
 
-let isMouseDown = false;
-
-function a2(e: any) {
-    console.log(1);
-
-    e.preventDefault(); // 防止页面滚动
-
-    let x, y;
-
-    if (e.touches) {
-        // 触摸事件
-        const touch = e.touches[0];
-        x = touch.clientX;
-        y = touch.clientY;
-    } else {
-
-        if (!isMouseDown) {
-            return
-        }
-        // 鼠标事件
-        x = e.clientX;
-        y = e.clientY;
-    }
-
-    viewData.elfX = x;
-    viewData.elfY = y;
-}
-
-function startDrag() {
-    isMouseDown = true;
-}
-function endDrag() {
-    isMouseDown = false;
-}
-
-
-
-
 //token有效的修改函数
 let fnTure = (key: { isLogin: boolean }) => {
     key.isLogin = true;
@@ -468,19 +390,6 @@ onMounted(() => {
 });
 
 
-// watch(vlist.value, () => {
-//     if (dtArr.value && dtsDom.value) {
-//         layoutItemsFnAdd(dtArr.value, dtsDom.value);
-//     }
-
-// })
-
-// setInterval(()=>{
-//     if (dtArr.value && dtsDom.value) {
-//         layoutItemsFnAdd(dtArr.value, dtsDom.value);
-//     }
-// },400)
-
 
 
 // 全局监听键盘事件的回调
@@ -528,7 +437,7 @@ function updt() {
 }
 
 function gologin() {
-    router.push({ path: '/dl' });
+    router.push({ path: '/login' });
 }
 
 //跳转到设置页
@@ -563,13 +472,6 @@ dtDataInit(loaR)
     .then(datas => {
         VcDataInit(datas);
         obsDt.init(dtsDom, startId);
-        // setTimeout(() => {
-        //       window.scrollTo({
-        //     top: 1500, // 滚动到最底部
-        //     behavior: 'smooth', // 平滑滚动（可选）
-        // });
-        // }, 0);
-
 
     })
 

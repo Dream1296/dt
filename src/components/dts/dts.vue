@@ -86,10 +86,10 @@
 
 
 
-		<div class="lvLogos" v-if="data.File">
+		<div class="lvLogos" v-if="visibleFiles.length > 0">
 
-			<div class="lvLogo" @click="dowFile(data.File.fileId)">
-				{{ data.File.name }}
+			<div class="lvLogo" v-for="file in visibleFiles" :key="file.fileId" @click="dowFile(file.fileId)">
+				{{ file.name }}
 			</div>
 
 		</div>
@@ -135,7 +135,7 @@
 
 <script setup lang="ts">
 
-import { onMounted, ref, watch } from 'vue';
+import { computed, onMounted, ref, watch } from 'vue';
 import { type DtDataType } from '../../types/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData } from '@/dtData/VcData';
@@ -168,6 +168,27 @@ let isMo = ref(false);
 const textarea = ref<HTMLTextAreaElement>();
 
 const userStoreData = userStore();
+
+const isLogin = ref(token.istoken == 'true');
+
+const visibleFiles = computed(() => {
+	const files = data.value?.File || [];
+	if (isLogin.value) {
+		return files;
+	}
+	return files.filter(file => file.loa == 0);
+});
+
+function syncLoginState() {
+	isLogin.value = token.istoken == 'true';
+	if (token.istoken == 'unknown') {
+		token.tokenPro?.then(() => {
+			isLogin.value = token.istoken == 'true';
+		});
+	}
+}
+
+onMounted(syncLoginState);
 
 
 
@@ -226,6 +247,7 @@ watch(
 	(newVal) => {
 		if (newVal !== undefined) {
 			data.value = newVal;
+			syncLoginState();
 		}
 	},
 	{ immediate: true } // 当props.datas初始值为undefined时，immediate确保一开始就会执行

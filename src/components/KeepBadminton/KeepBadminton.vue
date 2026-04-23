@@ -55,12 +55,12 @@
 
 
 <script setup lang="ts">
-import type { A } from "@/types/dtType";
+import type { DtDataType } from "@/types/dtType";
 import type { Ref } from "vue";
 import { computed, ref } from "vue";
 
 //获取父组件传入数据
-const props = defineProps<{ datas: A | undefined }>();
+const props = defineProps<{ datas: DtDataType | undefined }>();
 
 let data = props.datas?.KeepBadminton;
 

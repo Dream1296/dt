@@ -17,7 +17,7 @@
 
 
 <script setup lang="ts">
-import type { A } from '@/types/dtType';
+import type { DtDataType } from '@/types/dtType';
 
 
 //获取父组件传入数据

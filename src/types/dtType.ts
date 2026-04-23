@@ -32,8 +32,9 @@ export interface DtDataType {
   }[];
   File?: {
     name: string,
-    fileId: string
-  };
+    fileId: string,
+    loa: number,
+  }[];
   KeepRun?: KeepRunRecord;
   KeepBadminton?: BadmintonData;
   chatRoot?: chatRoot[];
