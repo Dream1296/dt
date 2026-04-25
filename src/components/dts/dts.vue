@@ -34,21 +34,8 @@
 
 			</div>
 
-			<!-- <div class="imgsAdd" v-if="data.imgShowAll && data.imgShowAll > 6">
-				<span>+{{ data.imgAllNum ? data.imgAllNum - 6 : '0' }}</span>
-			</div> -->
-			<!-- <div class="video" v-for="(a, index) in (data.videoNum ? 1 : 0)" @click="playVideo(index)">
-				<img class="videoCover" src="../../assets/img/videIon.png">
-				<Myimage :src='videoSrc(index)'></Myimage>
-			</div> -->
 		</div>
-		<!-- 视频 -->
-		<!-- <div class="video">
-			<div v-for="(a, index) in (data.videoNum ? 1 : 0)" @click="playVideo(index)">
-				<img src="../../assets/img/videIon.png">
-				<Myimage :src='videoSrc(index)'></Myimage>
-			</div>
-		</div> -->
+		
 		<van-switch v-if="data.id == 562" v-model="isMo" />
 
 		<div id="thressV" v-if="data.id == 562 && isMo">
@@ -64,16 +51,43 @@
 
 		</div>
 
-		<!-- 长文本显示 -->
-		<div class="lvLogos" v-if="data.text.length > textLen">
-			<div class="lvLogo" @click="tzlt(data.id)">
-				在长文本中查看动态
-			</div>
-		</div>
+		<!-- 右上角悬挂链接 -->
+		<div class="hangingLinks" v-if="hasHangingLinks">
+			<span class="hangingRopePin"></span>
+			<span class="hangingRopeLine"></span>
+			<div class="hangingLinksBody">
+				<div class="hangingLinkItem" v-if="data.text.length > textLen">
+					<span class="hangingRopeKnot"></span>
+					<span class="hangingRopeTie"></span>
+					<div class="lvLogos lvLogos--dynamic">
+						<div class="lvLogo lvLogo--dynamic" @click="tzlt(data.id)">
+							<img class="lvLogoIcon" :src="bookIcon" alt="书本图标">
+							<span class="lvLogoText">在长文本中查看动态</span>
+						</div>
+					</div>
+				</div>
 
-		<div class="lvLogos" v-for="(longText, temp) in data.longText" :id="longText.id.toString()">
-			<div class="lvLogo" @click="tzlongtext(data.id, temp)">
-				{{ longText.tetile }}
+				<div class="hangingLinkItem" v-for="(longText, temp) in data.longText" :id="longText.id.toString()">
+					<span class="hangingRopeKnot"></span>
+					<span class="hangingRopeTie"></span>
+					<div class="lvLogos lvLogos--longText">
+						<div class="lvLogo lvLogo--longText" @click="tzlongtext(data.id, temp)">
+							<img class="lvLogoIcon" :src="bookIcon" alt="书本图标">
+							<span class="lvLogoText">{{ longText.tetile }}</span>
+						</div>
+					</div>
+				</div>
+
+				<div class="hangingLinkItem" v-for="file in visibleFiles" :key="file.fileId">
+					<span class="hangingRopeKnot"></span>
+					<span class="hangingRopeTie"></span>
+					<div class="lvLogos lvLogos--file">
+						<div class="lvLogo lvLogo--file" @click="dowFile(file.fileId)">
+							<img class="lvLogoIcon" :src="rarIcon" alt="压缩包图标">
+							<span class="lvLogoText">{{ file.name }}</span>
+						</div>
+					</div>
+				</div>
 			</div>
 		</div>
 
@@ -81,17 +95,6 @@
 			<div class="lvLogo" @click="tzChat(chat.rootId)">
 				{{ chat.name }}
 			</div>
-		</div>
-
-
-
-
-		<div class="lvLogos" v-if="visibleFiles.length > 0">
-
-			<div class="lvLogo" v-for="file in visibleFiles" :key="file.fileId" @click="dowFile(file.fileId)">
-				{{ file.name }}
-			</div>
-
 		</div>
 
 		<div class="di">
@@ -122,9 +125,6 @@
 		</div>
 
 
-		<!-- <hr> -->
-		<!-- <div id="line"></div> -->
-		<!-- <div style="height: 20px;"></div> -->
 
 		<div class="ding" v-show="data.po != 0">
 			<img src="../../assets/img/ding.png">
@@ -135,10 +135,10 @@
 
 <script setup lang="ts">
 
-import { computed, onMounted, ref, watch } from 'vue';
+import { computed, nextTick, onMounted, ref, watch } from 'vue';
 import { type DtDataType } from '../../types/dtType';
 import Myimage from '../image/Myimage.vue';
-import { findvData } from '@/dtData/VcData';
+import { findvData, vDataSave } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog, Toast, Dialog, showToast } from 'vant';
 import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, dtFileDow, Internet } from '@/api/api';
 import { dtData } from '@/dtData/dtList';
@@ -155,6 +155,8 @@ import axios from 'axios';
 import { userStore } from '@/stores/userStore';
 import CommentShow from '../comment/commentShow.vue';
 
+import bookIcon from '@/assets/img/img_load.png';
+import rarIcon from '@/assets/img/rar_ico.png';
 
 let imgTemp = tempStore();
 
@@ -177,6 +179,16 @@ const visibleFiles = computed(() => {
 		return files;
 	}
 	return files.filter(file => file.loa == 0);
+});
+
+const hasHangingLinks = computed(() => {
+	const current = data.value;
+	if (!current) {
+		return false;
+	}
+	return current.text.length > textLen.value
+		|| current.longText.length > 0
+		|| visibleFiles.value.length > 0;
 });
 
 function syncLoginState() {
@@ -323,15 +335,24 @@ function playVideo(temp: number) {
 }
 
 // 自动调整 textarea 高度
-const textInputHeightAuto = () => {
+const textInputHeightAuto = (event: Event) => {
+	const currentVData = getV();
+	const target = event.target as HTMLTextAreaElement | null;
+	if (currentVData && target) {
+		currentVData.plText = target.value;
+	}
+
 	const textareas = textarea.value;
+	console.log(textareas);
 	if (textareas == null) {
+		vDataSave();
 		return
 	}
 	// 重置高度以便重新计算
 	textareas.style.height = 'auto';
 	// 设置新的高度，确保文本框不小于最小高度
 	textareas.style.height = Math.max((textareas.scrollHeight + 40), 150) + 'px';
+	vDataSave();
 
 };
 
@@ -413,6 +434,16 @@ function setPls() {
 				imgAllNum: 0,
 				id: -1,
 			})
+			getV()!.plText = '';
+			vDataSave();
+			nextTick(() => {
+				const textareas = textarea.value;
+				if (!textareas) {
+					return;
+				}
+				textareas.style.height = 'auto';
+				textareas.style.height = '150px';
+			});
 		} else {
 			showFailToast('失败');
 		}

@@ -135,7 +135,7 @@
 
 <script setup lang="ts">
 import { dtDataInit, dtFindData } from '../dtData/getList';
-import { VcDataInit, vData } from '../dtData/VcData';
+import { VcDataPush, vData } from '../dtData/VcData';
 import type { DtDataType } from '../types/dtType';
 import { nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
 import topDh from '../components/topDh/topDh.vue';
@@ -470,7 +470,7 @@ obsDt.guanbi_footer_show = guanbi_footer_show;
 //初始化数据,初始化评论列表
 dtDataInit(loaR)
     .then(datas => {
-        VcDataInit(datas);
+        VcDataPush(datas);
         obsDt.init(dtsDom, startId);
 
     })

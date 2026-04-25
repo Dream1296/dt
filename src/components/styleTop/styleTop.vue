@@ -28,6 +28,11 @@
             <!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
             <img class="bgIco6" src="../../assets/img/22_macbook_1.png">
         </div>
+        <div id="bg" v-if="props.bgStyle == 7">
+            <!-- <img class="bgDi" src="../../assets/img/22_macbook_2.png"> -->
+            <!-- <img class="bgDi" src="../../assets/img/dtbg.png"> -->
+            <img class="bgIco7" src="../../assets/img/dyStyle7.png">
+        </div>
     </div>
 
 

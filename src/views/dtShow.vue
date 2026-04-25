@@ -557,7 +557,12 @@ function GetImg(ids: {
     index: number,
 }) {
     //打开图片页面
-    router.push({ path: '/imgs/' + ids.dtid + '/' + ids.index });
+    // 改为在新标签中打开图片
+    // 在新标签页中打开图片
+    // const url = '/imgs/' + ids.dtid + '/' + ids.index;
+    const url1 = `${import.meta.env.VITE_URL}/api/dtimg?dtid=${ids.dtid}&index=${ids.index}&size=1&token=${token.istoken == 'true' ? token.token : ''}`;
+    window.open(url1, '_blank');
+    // router.push({ path: '/imgs/' + ids.dtid + '/' + ids.index });
 }
 
 /**

@@ -82,6 +82,8 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: num
         // 设置请求类型和上传目标地址
         xhr.open('POST', url, true);
 
+        xhr.setRequestHeader('Authorization',`Bearer ${token.tempToken}`);
+
         // 监听上传进度
         xhr.upload.addEventListener('progress', function (e) {
             if (e.lengthComputable) {
@@ -115,7 +117,7 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json', // 请求头  
-                'Authorization': 'B ' + token,
+                'Authorization': 'B ' + token.tempToken
             },
             body: JSON.stringify({
                 text,

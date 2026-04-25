@@ -1,36 +1,55 @@
-#bg{
+#bg {
+  width: 100%;
+  position: absolute;
+  top: 0px;
+
+  .bgDi {
     width: 100%;
+    height: 100px;
+    // height: 100%;
+  }
+
+  .bgIco1 {
+    width: 36px;
     position: absolute;
-    top: 0px;
-    .bgDi{
-      width: 100%;
-      height: 100px;
-      // height: 100%;
-    }
-    .bgIco1{
-      width: 36px;
-      position: absolute;
-      left: 82%;
-      top: 3px;
-      // height: 100px;
-  
-    }
-    .bgIco2{
-      width: 101px;
-      position: absolute;
-      left: 70%;
-      top: 1px;
-    }
-    .bgIco3{
-      width: 40px;
-      position: absolute;
-      left: 80%;
-      top: 10px;
-    }
-    .bgIco6{
- width: 120px;
+    left: 82%;
+    top: 3px;
+    // height: 100px;
+
+  }
+
+  .bgIco2 {
+    width: 101px;
+    position: absolute;
+    left: 70%;
+    top: 1px;
+  }
+
+  .bgIco3 {
+    width: 40px;
+    position: absolute;
+    left: 80%;
+    top: 10px;
+  }
+
+  .bgIco6 {
+    width: 120px;
     position: absolute;
     right: 0;
     top: -1px;
+  }
+  .bgIco7 {
+    width: 120px;
+    position: absolute;
+    right: 0;
+    top: -1px;
+  }
+  // bgIco7设备为移动端时
+  @media (max-width: 768px) {
+    .bgIco7 {
+      width: 80px;
+      top: 0px;
     }
   }
+
+}

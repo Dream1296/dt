@@ -1,7 +1,7 @@
 import { dtDate, dtfind } from "../api/api";
 import type { DtDataType, dataImg, Dt, Mood, Top } from "../types/dtType";
 import { Asetcl, settext, splitContent } from "./dtUtils";
-import { VcDataInit } from "./VcData";
+import { VcDataPush } from "./VcData";
 import { ref } from 'vue';
 import type { Ref } from 'vue';
 import { token } from "@/api/token";
@@ -38,7 +38,7 @@ export async function dtDataInit(loa: string | number,): Promise<(Dt)[]> {
 
     //将主数据改为带修改数据
     dtData.set(data);
-    VcDataInit(data);
+    VcDataPush(data);
     return data;
 }
 
@@ -63,7 +63,7 @@ export async function dtFindData(qb: string, loa: number) {
 
     dtData.set(dataA);
 
-    VcDataInit(dataA);
+    VcDataPush(dataA);
 
     return dataA;
 
