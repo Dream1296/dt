@@ -2,10 +2,8 @@
     <div class="panel" :class="{ mobile: !isPc }" :style="panelStyle" v-show="viewData.showV">
         <div v-if="isPc" class="panel-head">
             <div>
-                <p class="panel-tag">Quick Actions</p>
                 <h3>快捷操作</h3>
             </div>
-            <span class="panel-state">{{ viewData.isShowDy ? '动态已展开' : '动态已折叠' }}</span>
         </div>
 
         <div class="action-list">
@@ -14,19 +12,11 @@
                     <img src="../../assets/img/dy.png" v-show="viewData.isShowDy">
                     <img src="../../assets/img/dy0.png" v-show="!viewData.isShowDy">
                 </span>
-                <span class="action-text">
-                    <strong>{{ viewData.isShowDy ? '隐藏动态' : '显示动态' }}</strong>
-                    <small>切换首页动态内容展示</small>
-                </span>
             </button>
 
             <button class="action-card" type="button" @click="toTop">
                 <span class="icon-wrap">
                     <img src="../../assets/img/ic_回到顶部.png">
-                </span>
-                <span class="action-text">
-                    <strong>回到顶部</strong>
-                    <small>平滑返回页面顶部位置</small>
                 </span>
             </button>
         </div>
@@ -44,8 +34,8 @@ const viewData = viewDataStore();
 const isPc = computed(() => window.innerWidth >= 768);
 const panelLeft = ref(0);
 const panelTop = ref(0);
-const panelWidth = computed(() => (isPc.value ? 320 : 176));
-const panelHeight = computed(() => (isPc.value ? 184 : 72));
+const panelWidth = computed(() => (isPc.value ? 168 : 132));
+const panelHeight = computed(() => (isPc.value ? 108 : 92));
 const gap = computed(() => (isPc.value ? 18 : 12));
 
 const panelStyle = computed(() => ({
@@ -63,15 +53,26 @@ function upData() {
 
 function updatePanelPosition() {
     const margin = 14;
-    const preferredLeft = viewData.elfX - panelWidth.value - gap.value;
+    const elfSize = 58;
+    const elfHalf = elfSize / 2;
+    const preferredLeft = viewData.elfX - panelWidth.value - gap.value - elfHalf;
+    const preferredRight = viewData.elfX + elfHalf + gap.value;
     const preferredTop = viewData.elfY - panelHeight.value / 2;
-    const fallbackRight = viewData.elfX + 40;
-    const maxLeft = window.innerWidth - panelWidth.value - margin;
-    const maxTop = window.innerHeight - panelHeight.value - margin;
+    const maxLeft = Math.max(margin, window.innerWidth - panelWidth.value - margin);
+    const maxTop = Math.max(margin, window.innerHeight - panelHeight.value - margin);
 
     let nextLeft = preferredLeft;
-    if (preferredLeft < margin) {
-        nextLeft = fallbackRight;
+    const canPlaceLeft = preferredLeft >= margin;
+    const canPlaceRight = preferredRight <= maxLeft;
+
+    if (!canPlaceLeft) {
+        nextLeft = canPlaceRight ? preferredRight : maxLeft;
+    }
+
+    if (canPlaceLeft && canPlaceRight) {
+        const leftSpace = viewData.elfX - elfHalf - margin;
+        const rightSpace = window.innerWidth - viewData.elfX - elfHalf - margin;
+        nextLeft = rightSpace > leftSpace ? preferredRight : preferredLeft;
     }
 
     panelLeft.value = Math.min(Math.max(nextLeft, margin), maxLeft);

@@ -142,6 +142,18 @@ import { watch } from 'vue';
 import { userStore } from '@/stores/userStore';
 // emojiSrc
 
+const UPDT_DRAFT_STORAGE_KEY = 'updtDraftSnapshot';
+
+type UpdtDraftSnapshot = {
+    text: string;
+    showImgNum: number;
+    loa: 0 | 1 | 13 | 12;
+    isImgDir: boolean;
+    dateArr: string[];
+    timeArr: string[];
+    timestamp: number;
+};
+
 let shuru = ref<HTMLDivElement>();
 let upImg = ref<HTMLInputElement>();
 let upVideo = ref<HTMLInputElement>();
@@ -209,6 +221,54 @@ let configV = ref(false);
 
 let a = ref<number[]>([0]);
 
+function buildDraftSnapshot(): UpdtDraftSnapshot {
+    return {
+        text: shuru.value?.innerHTML || '',
+        showImgNum: showImgNum.value,
+        loa: loa.value,
+        isImgDir: isImgDir.value,
+        dateArr: [...dateArr.value],
+        timeArr: [...timeArr.value],
+        timestamp: timestamp.value,
+    };
+}
+
+function saveDraftSnapshot() {
+    localStorage.setItem(UPDT_DRAFT_STORAGE_KEY, JSON.stringify(buildDraftSnapshot()));
+}
+
+function loadDraftSnapshot() {
+    const raw = localStorage.getItem(UPDT_DRAFT_STORAGE_KEY);
+    if (!raw) {
+        return null;
+    }
+
+    try {
+        return JSON.parse(raw) as UpdtDraftSnapshot;
+    } catch {
+        return null;
+    }
+}
+
+function applyDraftSnapshot(snapshot: UpdtDraftSnapshot) {
+    if (shuru.value) {
+        shuru.value.innerHTML = snapshot.text || '';
+        textInputHeightAuto();
+    }
+
+    showImgNum.value = snapshot.showImgNum ?? 0;
+    loa.value = snapshot.loa ?? 0;
+    isImgDir.value = !!snapshot.isImgDir;
+    dateArr.value = Array.isArray(snapshot.dateArr) && snapshot.dateArr.length === 3 ? [...snapshot.dateArr] : dateArr.value;
+    timeArr.value = Array.isArray(snapshot.timeArr) && snapshot.timeArr.length === 2 ? [...snapshot.timeArr] : timeArr.value;
+
+    if (typeof snapshot.timestamp === 'number' && !Number.isNaN(snapshot.timestamp)) {
+        timestamp.value = snapshot.timestamp;
+    } else if (dateArr.value.length === 3 && timeArr.value.length === 2) {
+        timestamp.value = new Date(`${dateArr.value[0]}-${String(dateArr.value[1]).padStart(2, '0')}-${String(dateArr.value[2]).padStart(2, '0')} ${String(timeArr.value[0]).padStart(2, '0')}:${String(timeArr.value[1]).padStart(2, '0')}:00`).getTime();
+    }
+}
+
 
 // 从本地存储中获取上一次内容
 function huishuText() {
@@ -219,10 +279,9 @@ function huishuText() {
             '如果解决方法是丑陋的，那就肯定还有更好的解决方法，只是还没有发现而已。',
     })
         .then(() => {
-            let updTtText = localStorage.getItem('updTtText');
-
-            if (updTtText && shuru.value) {
-                shuru.value.innerHTML = updTtText;
+            const snapshot = loadDraftSnapshot();
+            if (snapshot) {
+                applyDraftSnapshot(snapshot);
             }
             showSuccessToast("完成");
         })
@@ -235,14 +294,16 @@ function huishuText() {
 
 onMounted(() => {
 
-
-
     shuru.value?.addEventListener('input', (e) => {
         let shuruText = shuru.value?.innerHTML;
         if (!shuruText) {
+            localStorage.setItem('updTtText', '');
+            saveDraftSnapshot();
+            textInputHeightAuto();
             return
         }
         localStorage.setItem('updTtText', shuruText);
+        saveDraftSnapshot();
         textInputHeightAuto();
     })
 
@@ -323,6 +384,8 @@ async function updts() {
         return
     }
 
+    saveDraftSnapshot();
+
     isUp = true;
 
     //上传媒体资源
@@ -360,6 +423,7 @@ async function updts() {
         .then((a: any) => {
             if (a.tf == 1) {
                 isupIng.value = false;
+                saveDraftSnapshot();
                 showSuccessToast('上传成功！');
                 setTimeout(() => {
                     router.push({ path: '/' });
@@ -551,6 +615,22 @@ function getDataTime(dateArr: string[], timeArr: string[]) {
 
     return `${year}-${month}-${day} ${hours}:${minutes}:00`;
 }
+
+watch([showImgNum, loa, isImgDir], () => {
+    saveDraftSnapshot();
+});
+
+watch(dateArr, () => {
+    saveDraftSnapshot();
+}, { deep: true });
+
+watch(timeArr, () => {
+    saveDraftSnapshot();
+}, { deep: true });
+
+watch(timestamp, () => {
+    saveDraftSnapshot();
+});
 
 
 

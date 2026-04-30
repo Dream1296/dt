@@ -40,7 +40,6 @@
 
 		<div id="thressV" v-if="data.id == 562 && isMo">
 			<!-- <threeView modelPath="./小凳子.glb"></threeView> -->
-
 		</div>
 
 		<div class="lvLogos" v-if="data.longVideo">
@@ -119,7 +118,7 @@
 				@click.stop='nulls'></textarea>
 			<van-button @click.stop="setPls()" type="primary">发送</van-button>
 		</div>
-
+				<!-- 评论显示 -->
 		<div v-if="data.com && data.com.length > 0">
 			<CommentShow :data="data.com"></CommentShow>
 		</div>

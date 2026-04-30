@@ -63,30 +63,31 @@
 
 #emojiC {
     width: 90%;
-    height: @topEmoji;
-    // margin: 0 auto;
+    height: 520px;
     border-radius: 25px;
     background-color: antiquewhite;
     position: fixed;
-    top:~"calc(100% - @{topEmoji})";
+    top: ~"calc(100% - 600px)";
     left: 50%;
     transform: translate(-50%, 0%);
     padding: 10px;
 
     display: flex;
     flex-wrap: wrap;
-    align-content: space-around;
+    align-content: flex-start;
+    justify-content: center;
     overflow: auto;
 
     div {
-        margin-left: 3px;
-        margin-right: 3px;
-        margin-top: 5px;
-        margin-bottom: 5px;
-        width: 8%;
+        display: inline-block;
+        margin: 10px;
+        border-radius: 10px;
+        width: 80px;
+        height: 80px;
+        overflow: hidden;
 
-        // height: 20px;
         img {
+            object-fit: cover;
             width: 100%;
             height: 100%;
         }
