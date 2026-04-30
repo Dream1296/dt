@@ -1,4 +1,4 @@
-import type { DtDataType,dataImg, Dt, listFile } from '@/types/dtType';
+import type { DtDataType,dataImg, Dt, listFile, setDtDataT } from '@/types/dtType';
 import axioss from 'axios';
 import { token as tokens } from '@/api/token';
 
@@ -129,6 +129,16 @@ export async function getdt(id: string | number, loa?: number): Promise<{ code: 
     let urls = Internet.url + "/api/getdt?id=" + String(id) + "&loa=" + loa;
     let res = (await api(urls, 'GET', undefined, tokens.token)) as { code: number, data: DtDataType };
     return res;
+}
+
+// 单个动态数据更新
+export async function setDt(id:number,upData:setDtDataT){
+    
+    let res = {
+        code:200
+    }
+    return res;
+    
 }
 
 //提交动态评论内容

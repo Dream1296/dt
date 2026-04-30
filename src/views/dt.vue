@@ -123,6 +123,10 @@
     <div>
         <footers :show_num="footer_show_num"></footers>
     </div>
+    
+    <!-- <div id="dtop">
+        <dtOp :dtId="1524" :loa="1"></dtOp>
+    </div> -->
 
 
 
@@ -170,6 +174,7 @@ import homePageMo from '@/components/homePageMo/homePageMo.vue';
 import { dtData } from '@/dtData/dtList';
 import YearSign from '@/components/yearSign/yearSign.vue';
 import { routerPush } from '@/utils/dt/routerUtil';
+import dtOp from '@/components/dtOp/dtOp.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();

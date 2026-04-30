@@ -1,472 +1,472 @@
 #head {
-  width: 100%;
-  height: 100%;
-  // height: 100vh;
-  /* background-color: aqua; */
-  // background-image: url('../img/bg2.png');
-  background-position: center;
-  background-size: cover;
+    width: 100%;
+    height: 100%;
+    // height: 100vh;
+    /* background-color: aqua; */
+    // background-image: url('../img/bg2.png');
+    background-position: center;
+    background-size: cover;
 }
 
 * {
-  scrollbar-color: #ff0000 #dddddd;
+    scrollbar-color: #ff0000 #dddddd;
 }
 
 .zhujian {
-  // width: 360px;
-  width: 100%;
-  margin: 0 auto;
-  margin-bottom: 10px;
-  // background-color: antiquewhite;
-  border-radius: 10px;
-  // position: absolute;
-  // left: 0;
-  // top: 0;
+    // width: 360px;
+    width: 100%;
+    margin: 0 auto;
+    margin-bottom: 10px;
+    // background-color: antiquewhite;
+    border-radius: 10px;
+    // position: absolute;
+    // left: 0;
+    // top: 0;
 }
 
 #dtArr {
-  // width: 90vw;
-  // background-color: #039be5;
+    // width: 90vw;
+    // background-color: #039be5;
 
-  position: relative;
+    position: relative;
 }
 
 .line {
-  width: 360px;
-  margin: 0 auto;
+    width: 360px;
+    margin: 0 auto;
 }
 
 @media (min-width: 768px) {
-  .zhujian {
-    width: 580px;
+    .zhujian {
+        width: 580px;
 
-  }
+    }
 
-  #dtArr {}
+    #dtArr {}
 
-  .line {
-    width: 580px;
-    margin-top: 5px;
-    margin-bottom: 5px;
-  }
+    .line {
+        width: 580px;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
 
-  .zhujian {
-    width: 580px;
-    padding: 20px 30px;
-    /* 内边距，保证文章内容不贴边 */
-    // background: linear-gradient(135deg, #f8e1f4, #ece7e7); /* 默认渐变背景：淡粉色到白色 */
-    border-radius: 16px;
-    /* 圆角，使用更大的圆角 */
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-    /* 更深的阴影效果，增强立体感 */
-    border: 1px solid #e0e0e0;
-    /* 边框添加一个浅灰色边框 */
-    overflow: visible;
-    /* 防止内容溢出 */
-    // animation: backgroundAnimation 10s ease-in-out infinite; /* 背景渐变动画 */
-  }
+    .zhujian {
+        width: 580px;
+        padding: 20px 30px;
+        /* 内边距，保证文章内容不贴边 */
+        // background: linear-gradient(135deg, #f8e1f4, #ece7e7); /* 默认渐变背景：淡粉色到白色 */
+        border-radius: 16px;
+        /* 圆角，使用更大的圆角 */
+        box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+        /* 更深的阴影效果，增强立体感 */
+        border: 1px solid #e0e0e0;
+        /* 边框添加一个浅灰色边框 */
+        overflow: visible;
+        /* 防止内容溢出 */
+        // animation: backgroundAnimation 10s ease-in-out infinite; /* 背景渐变动画 */
+    }
 
 }
 
 /* 动画：渐变背景从淡粉色到白色循环变化 */
 @keyframes backgroundAnimation {
-  0% {
-    background: linear-gradient(135deg, #f8e1f4, #ffffff);
-    /* 初始渐变：淡粉色到白色 */
-  }
+    0% {
+        background: linear-gradient(135deg, #f8e1f4, #ffffff);
+        /* 初始渐变：淡粉色到白色 */
+    }
 
-  50% {
-    background: linear-gradient(135deg, #ffffff, #f8e1f4);
-    /* 中间渐变：白色到淡粉色 */
-  }
+    50% {
+        background: linear-gradient(135deg, #ffffff, #f8e1f4);
+        /* 中间渐变：白色到淡粉色 */
+    }
 
-  100% {
-    background: linear-gradient(135deg, #f8e1f4, #ffffff);
-    /* 结束时恢复初始渐变 */
-  }
+    100% {
+        background: linear-gradient(135deg, #f8e1f4, #ffffff);
+        /* 结束时恢复初始渐变 */
+    }
 }
 
 
 #kz {
-  width: 100vw;
-  height: 70px;
-  /* background-color: aqua; */
-  position: fixed;
-  z-index: 800;
+    width: 100vw;
+    height: 70px;
+    /* background-color: aqua; */
+    position: fixed;
+    z-index: 800;
 }
 
 .kzs {
-  background-color: rgb(237, 237, 237);
+    background-color: rgb(237, 237, 237);
 }
 
 #touxian {
-  width: 100%;
-  position: absolute;
-  top: 208px;
-  display: flex;
-  flex-direction: row-reverse;
-
-  .tou {
-    margin-right: 30px;
-    position: relative;
-
-    text {
-      position: relative;
-      color: white;
-      top: -25px;
-      left: -36px;
-      font-size: 20px;
-    }
-
-    img {
-      width: 60px;
-      height: 60px;
-      border-radius: 10px;
-    }
-  }
-
-  #guajian {
-    width: 120px;
+    width: 100%;
     position: absolute;
-    left: calc(100vw - 126px);
-    top: -23px;
+    top: 208px;
+    display: flex;
+    flex-direction: row-reverse;
 
-    // height: 100px;
-    img {
-      width: 100%;
-      height: 100%;
+    .tou {
+        margin-right: 30px;
+        position: relative;
+
+        text {
+            position: relative;
+            color: white;
+            top: -25px;
+            left: -36px;
+            font-size: 20px;
+        }
+
+        img {
+            width: 60px;
+            height: 60px;
+            border-radius: 10px;
+        }
     }
-  }
+
+    #guajian {
+        width: 120px;
+        position: absolute;
+        left: calc(100vw - 126px);
+        top: -23px;
+
+        // height: 100px;
+        img {
+            width: 100%;
+            height: 100%;
+        }
+    }
 
 }
 
 #nulls {
-  width: 90vw;
-  height: 18px;
+    width: 90vw;
+    height: 18px;
 }
 
 
 .touxian {
-  position: relative;
-  left: 35px;
+    position: relative;
+    left: 35px;
 }
 
 .touxian image {
-  width: 40px;
-  height: 40px;
-  border-radius: 8px;
+    width: 40px;
+    height: 40px;
+    border-radius: 8px;
 }
 
 .name {
-  color: rgb(87, 107, 149);
-  font-size: 16px;
-  position: absolute;
-  left: 85px;
-  top: 2px;
+    color: rgb(87, 107, 149);
+    font-size: 16px;
+    position: absolute;
+    left: 85px;
+    top: 2px;
 }
 
 .text {
-  font-size: 15px;
-  width: 70%;
-  position: relative;
-  left: 85px;
-  top: -20px;
-  display: flex;
-  flex-wrap: wrap;
+    font-size: 15px;
+    width: 70%;
+    position: relative;
+    left: 85px;
+    top: -20px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .text image {
-  width: 26px;
-  height: 26px;
-  display: inline-block;
-  transform: translateY(-13%);
+    width: 26px;
+    height: 26px;
+    display: inline-block;
+    transform: translateY(-13%);
 }
 
 .imgs {
-  width: 80vw;
-  position: relative;
-  top: -10px;
-  left: 85px;
-  display: flex;
-  flex-wrap: wrap;
+    width: 80vw;
+    position: relative;
+    top: -10px;
+    left: 85px;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .imgs image {
-  width: 100px;
-  height: 100px;
+    width: 100px;
+    height: 100px;
 
-  margin-bottom: 10px;
-  margin-right: 10px;
+    margin-bottom: 10px;
+    margin-right: 10px;
 }
 
 .imgs div {
-  width: 100px;
-  height: 100px;
-  position: absolute;
-  top: 220px;
-  left: 110px;
-  background-color: rgba(0, 0, 0, 0.2);
-  display: flex;
-  justify-content: center;
-  align-content: center;
-  flex-wrap: wrap;
+    width: 100px;
+    height: 100px;
+    position: absolute;
+    top: 220px;
+    left: 110px;
+    background-color: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: center;
+    align-content: center;
+    flex-wrap: wrap;
 }
 
 .imgs text {
-  font-size: 24px;
-  color: white;
-  font-weight: 700;
+    font-size: 24px;
+    color: white;
+    font-weight: 700;
 }
 
 .video {
-  width: 60vw;
-  position: relative;
-  top: -10px;
-  left: 85px;
+    width: 60vw;
+    position: relative;
+    top: -10px;
+    left: 85px;
 }
 
 .videos1 {
-  width: 40px;
-  height: 40px;
-  position: absolute;
-  left: 40%;
-  top: 0;
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    left: 40%;
+    top: 0;
 }
 
 .videos2 {
-  width: 20px;
-  height: 20px;
-  position: absolute;
-  left: 105%;
-  top: 30px;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    left: 105%;
+    top: 30px;
 }
 
 .videosc {
-  height: 50px;
+    height: 50px;
 }
 
 .video image {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 .video video {
-  width: 100%;
+    width: 100%;
 }
 
 .date {
-  width: 70px;
-  font-size: 10px;
-  height: 25px;
-  left: 280px;
-  top: 8px;
-  position: absolute;
+    width: 70px;
+    font-size: 10px;
+    height: 25px;
+    left: 280px;
+    top: 8px;
+    position: absolute;
 }
 
 .di {
-  width: 100vw;
-  height: 50px;
-  /* background-color: blue; */
-  position: relative;
+    width: 100vw;
+    height: 50px;
+    /* background-color: blue; */
+    position: relative;
 }
 
 .xuan {
-  width: 90px;
-  position: absolute;
-  left: 50%;
-  top: -5px;
-  border-radius: 10px;
-  background-color: rgb(247, 247, 247);
+    width: 90px;
+    position: absolute;
+    left: 50%;
+    top: -5px;
+    border-radius: 10px;
+    background-color: rgb(247, 247, 247);
 }
 
 .btn {
-  width: 36px;
-  height: 25px;
-  border-radius: 10px;
-  position: absolute;
-  left: 80%;
-  top: 0px;
+    width: 36px;
+    height: 25px;
+    border-radius: 10px;
+    position: absolute;
+    left: 80%;
+    top: 0px;
 
-  /* background-color: rgb(247, 247, 247); */
-  /* background-color: aqua; */
-  color: rgb(87, 107, 147);
-  /* display: flex; */
-  /* justify-content: center; */
+    /* background-color: rgb(247, 247, 247); */
+    /* background-color: aqua; */
+    color: rgb(87, 107, 147);
+    /* display: flex; */
+    /* justify-content: center; */
 }
 
 .shhuru {
-  top: -15px;
-  left: 26%;
-  position: relative;
-  width: 65vw;
-  height: 80px;
-  /* background-color: aqua; */
-  border: 1px solid blue;
-  border-radius: 10px;
+    top: -15px;
+    left: 26%;
+    position: relative;
+    width: 65vw;
+    height: 80px;
+    /* background-color: aqua; */
+    border: 1px solid blue;
+    border-radius: 10px;
 }
 
 .shhuru textarea {
-  /* background-color: black; */
-  width: 100%;
-  height: 80%;
-  margin: 5px;
+    /* background-color: black; */
+    width: 100%;
+    height: 80%;
+    margin: 5px;
 }
 
 .shhuru button {
-  position: relative;
-  left: 72%;
-  top: -25px;
+    position: relative;
+    left: 72%;
+    top: -25px;
 }
 
 .pl {
-  width: 66vw;
-  position: relative;
-  left: 85px;
-  top: -15px;
-  background-color: rgb(247, 247, 247);
+    width: 66vw;
+    position: relative;
+    left: 85px;
+    top: -15px;
+    background-color: rgb(247, 247, 247);
 }
 
 .pls {
-  margin-top: 10px;
-  margin-left: 10px;
+    margin-top: 10px;
+    margin-left: 10px;
 }
 
 .pls> :first-child {
-  color: rgb(87, 107, 147);
+    color: rgb(87, 107, 147);
 }
 
 .pls> :nth-child(3) {
-  color: black;
+    color: black;
 }
 
 .plss {
-  width: 80px;
-  height: 30px;
-  background-color: aqua;
-  border-radius: 8px;
-  top: -39px;
-  left: 60%;
-  position: relative;
+    width: 80px;
+    height: 30px;
+    background-color: aqua;
+    border-radius: 8px;
+    top: -39px;
+    left: 60%;
+    position: relative;
 }
 
 #text {
-  width: 100vw;
-  height: 100px;
-  background-color: beige;
+    width: 100vw;
+    height: 100px;
+    background-color: beige;
 }
 
 #logs {
-  width: 100vw;
-  height: 100px;
+    width: 100vw;
+    height: 100px;
 }
 
 #isDel {
-  width: 80%;
-  height: 130px;
-  border-radius: 20px;
-  position: fixed;
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%);
-  background-color: aqua;
+    width: 80%;
+    height: 130px;
+    border-radius: 20px;
+    position: fixed;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    background-color: aqua;
 }
 
 #isDel div:nth-child(1) {
-  text-align: center;
-  font-size: 18px;
+    text-align: center;
+    font-size: 18px;
 }
 
 .delxuan {
-  transform: translate(-50%, -0%);
-  left: 50%;
-  position: relative;
-  width: 90%;
-  height: 65%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  /* background-color: antiquewhite; */
+    transform: translate(-50%, -0%);
+    left: 50%;
+    position: relative;
+    width: 90%;
+    height: 65%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    /* background-color: antiquewhite; */
 }
 
 .delxuan div {
-  width: 90px;
-  height: 50px;
-  display: inline-block;
-  line-height: 50px;
-  text-align: center;
-  background-color: green;
-  border-radius: 10px;
-  /* margin-top: 15px;1 */
+    width: 90px;
+    height: 50px;
+    display: inline-block;
+    line-height: 50px;
+    text-align: center;
+    background-color: green;
+    border-radius: 10px;
+    /* margin-top: 15px;1 */
 }
 
 .delxuan div:nth-child(1) {
-  background-color: red;
+    background-color: red;
 }
 
 #bntx {
-  width: 100vw;
-  height: 40px;
-  /* background-color: aqua; */
-  position: relative;
+    width: 100vw;
+    height: 40px;
+    /* background-color: aqua; */
+    position: relative;
 }
 
 #bntxs {
-  width: 70vw;
-  height: 40px;
-  position: absolute;
-  top: 30%;
-  display: flex;
-  align-content: center;
-  flex-wrap: wrap;
-  justify-content: space-around;
-  /* background-color: blue; */
+    width: 70vw;
+    height: 40px;
+    position: absolute;
+    top: 30%;
+    display: flex;
+    align-content: center;
+    flex-wrap: wrap;
+    justify-content: space-around;
+    /* background-color: blue; */
 }
 
 #xuanx1 {
-  width: 20px;
-  height: 20px;
-  transform: scale(1.8);
+    width: 20px;
+    height: 20px;
+    transform: scale(1.8);
 }
 
 #xuanx2 {
-  width: 20px;
-  height: 20px;
-  transform: scale(2);
+    width: 20px;
+    height: 20px;
+    transform: scale(2);
 }
 
 #xuanx3 {
-  width: 20px;
-  height: 20px;
-  transform: scale(1.5);
+    width: 20px;
+    height: 20px;
+    transform: scale(1.5);
 }
 
 #xuanx4 {
-  width: 20px;
-  height: 20px;
-  transform: scale(1.5);
+    width: 20px;
+    height: 20px;
+    transform: scale(1.5);
 }
 
 #bntxs image {
-  width: 100%;
-  height: 100%;
+    width: 100%;
+    height: 100%;
 }
 
 #passwd13 {
-  // width: 300px;
-  height: 200px;
-  position: relative;
-  // top: 50px;
+    // width: 300px;
+    height: 200px;
+    position: relative;
+    // top: 50px;
 }
 
 #passwd13Inp {}
 
 #passwd13H3 {
-  text-align: center;
+    text-align: center;
 }
 
 #thressV {
-  width: 100vw;
-  height: 280px;
+    width: 100vw;
+    height: 280px;
 }
 
 // 底部标识
@@ -500,55 +500,65 @@
 // }
 
 .footer-info p {
-  margin: 6px 0;
+    margin: 6px 0;
 }
 
 .footer-info a {
-  color: #039be5;
-  text-decoration: none;
-  font-weight: bold;
-  transition: color 0.3s ease;
+    color: #039be5;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease;
 }
 
 .footer-info a:hover {
-  color: #0288d1;
-  text-decoration: underline;
+    color: #0288d1;
+    text-decoration: underline;
 }
 
 .footer-info span {
-  font-size: 12px;
-  color: #607d8b;
+    font-size: 12px;
+    color: #607d8b;
 }
 
 /* 内容反馈按钮 */
 .feedback-link {
-  color: #039be5;
-  border: none;
-  background-color: transparent;
-  font-size: 14px;
-  font-weight: normal;
-  text-decoration: none;
-  transition: color 0.3s ease;
+    color: #039be5;
+    border: none;
+    background-color: transparent;
+    font-size: 14px;
+    font-weight: normal;
+    text-decoration: none;
+    transition: color 0.3s ease;
 }
 
 .feedback-link:hover {
-  color: #0288d1;
-  text-decoration: underline;
+    color: #0288d1;
+    text-decoration: underline;
 }
 
 /* 响应式设计 */
 @media (max-width: 768px) {
-  .footer-info {
-    font-size: 12px;
-    padding: 6px 0;
-    line-height: 1.4;
-  }
+    .footer-info {
+        font-size: 12px;
+        padding: 6px 0;
+        line-height: 1.4;
+    }
 
-  .footer-info p {
-    margin: 2px 0;
-  }
+    .footer-info p {
+        margin: 2px 0;
+    }
 
-  .feedback-link {
-    font-size: 12px;
-  }
+    .feedback-link {
+        font-size: 12px;
+    }
+}
+
+
+#dtop {
+    width: 450px;
+    height: 600px;
+    z-index: 900;
+    position: fixed;
+    top: 5%;
+    left: 20px;
 }

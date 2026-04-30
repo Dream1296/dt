@@ -42,6 +42,18 @@ export interface DtDataType {
 }
 
 
+export type setDtDataT = {
+    date?:string, 
+    imgShowAll?:number,
+    imgAllNum?:number,
+    videoShowAll?:number,
+    videoNum?:number,
+    text?:string,
+    loa?:number,
+    bgStyle?:number,
+}
+
+
 export type chatRoot = {
   rootId: string,
   name: string,

@@ -1,0 +1,201 @@
+.dt-op {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 14px;
+    background: rgba(255, 255, 255, 0.96);
+    border: 1px solid rgba(148, 163, 184, 0.18);
+    box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
+}
+
+.dt-op__toast {
+    position: absolute;
+    top: 14px;
+    left: 50%;
+    z-index: 20;
+    transform: translateX(-50%);
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(17, 24, 39, 0.88);
+    color: #fff;
+    font-size: 12px;
+    line-height: 1;
+    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2);
+    pointer-events: none;
+}
+
+.dt-op-toast-enter-active,
+.dt-op-toast-leave-active {
+    transition: opacity 0.18s ease, transform 0.18s ease;
+}
+
+.dt-op-toast-enter-from,
+.dt-op-toast-leave-to {
+    opacity: 0;
+    transform: translateX(-50%) translateY(-6px);
+}
+
+.dt-op__spin {
+    width: 100%;
+    height: 100%;
+}
+
+.dt-op__container {
+    box-sizing: border-box;
+    height: 100%;
+    padding: 8px;
+    overflow: auto;
+}
+
+.dt-op__container :deep(.n-card) {
+    background: #fff;
+}
+
+.dt-op__container :deep(.n-card-header) {
+    padding: 8px 10px 4px;
+}
+
+.dt-op__container :deep(.n-card-header__main) {
+    font-size: 13px;
+    font-weight: 700;
+}
+
+.dt-op__container :deep(.n-card__content) {
+    padding: 8px 10px 10px;
+}
+
+.dt-op__container :deep(.n-input-number),
+.dt-op__container :deep(.n-base-selection),
+.dt-op__container :deep(.n-input) {
+    font-size: 12px;
+}
+
+.dt-op__container :deep(.n-input-number) {
+    width: 100%;
+}
+
+.dt-op__header,
+.dt-op__card {
+    border-radius: 10px;
+    border: 1px solid rgba(226, 232, 240, 0.9);
+    box-shadow: none;
+}
+
+.dt-op__header-row {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 8px;
+}
+
+.dt-op__window-actions {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.dt-op__action {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 12px;
+    height: 12px;
+    padding: 0;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    transition: transform 0.15s ease, opacity 0.15s ease;
+}
+
+.dt-op__action:hover {
+    transform: scale(1.08);
+}
+
+.dt-op__action span {
+    opacity: 0;
+    font-size: 9px;
+    line-height: 1;
+    color: rgba(0, 0, 0, 0.58);
+}
+
+.dt-op__action:hover span {
+    opacity: 1;
+}
+
+.dt-op__action--close {
+    background: #ff5f57;
+}
+
+.dt-op__action--min {
+    background: #febc2e;
+}
+
+.dt-op__action--full {
+    background: #28c840;
+}
+
+.dt-op__header-main {
+    min-width: 0;
+}
+
+.dt-op__title {
+    font-size: 15px;
+    font-weight: 700;
+    color: #1f2937;
+    line-height: 1.2;
+}
+
+.dt-op__subtitle {
+    margin-top: 2px;
+    font-size: 11px;
+    color: #6b7280;
+    line-height: 1.2;
+}
+
+.dt-op__result {
+    margin-top: 8px;
+}
+
+.dt-op__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+.dt-op__card--full {
+    grid-column: 1 / -1;
+}
+
+.dt-op__counts-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px 10px;
+}
+
+.dt-op__field {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+}
+
+.dt-op__field-label {
+    font-size: 11px;
+    line-height: 1.2;
+    color: #4b5563;
+}
+
+.dt-op__container :deep(.n-radio-group) {
+    width: 100%;
+}
+
+.dt-op__container :deep(.n-radio-button),
+.dt-op__container :deep(.n-radio) {
+    font-size: 12px;
+}
+
+.dt-op__container :deep(.n-space) {
+    flex-wrap: wrap;
+}
