@@ -131,7 +131,7 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
         })
             .then(po => po.json())
             .then(res => {
-                console.log(res);
+    
                 resolve(res);
             })
     })

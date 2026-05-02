@@ -19,9 +19,7 @@ export async function dtDataInit(loa: string | number,): Promise<(Dt)[]> {
 
     //过滤掉不显示元素
     filterVisibleData(data)
-    console.log(data.length);
-    
-    console.log(data.length);
+ 
     
     // DtDataType类型数组，用于分离出主动态数据
     let dataA: DtDataType[] = [];
@@ -78,10 +76,6 @@ function filterVisibleData(data: Dt[]) {
     // 如果未登陆，显示的动态数量由环境变量控制
     if (!token.token && SHOWDTNUM != -1) {
         data.splice(SHOWDTNUM);
-    }
-
-    if (viewData.isShowDy) {
-        return
     }
 
 

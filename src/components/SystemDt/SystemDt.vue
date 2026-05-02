@@ -120,7 +120,7 @@ const emit = defineEmits(['shownewdt', 'tzs', 'config']);
 function shownewdt(num: number) {
 	// 将viewData.loa设置为-2，表示显示新建弹窗
 
-	viewData.loa = -2;
+	// viewData.loa = -2;
 }
 
 function config() {
@@ -177,7 +177,7 @@ function dtFind() {
 myEvent.on('onKey', async (a: any) => {
 	let e: KeyboardEvent = a;
 	const key = e.key;
-	console.log(key);
+	
 
 	// 判断是否搜索
 	if (e.ctrlKey && key === '/') {

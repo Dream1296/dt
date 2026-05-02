@@ -37,7 +37,6 @@ let isPc = ref(true);
 let butt = ref(0);
 let a = ref(true);
 
-console.log(userStoreData.isPc);
 
 if (userStoreData.isPc === false) {
     isPc.value = false;

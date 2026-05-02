@@ -37,6 +37,8 @@ import { showFailToast, showSuccessToast } from 'vant';
 import topView from '../TopView/topView.vue';
 import { ref } from 'vue';
 import Line from "@/components/fenge/line.vue";
+import { token } from '@/api/token';
+import { getTempTokenApi } from '@/api/api';
 
 
 // let onSubmit = ref('');
@@ -52,14 +54,18 @@ const emit = defineEmits(['success']);
 function onSubmit(e: any) {
   login(username.value, password.value)
 
-    .then((res) => {
+    .then(async (res) => {
       if (res.message != 'OK') {
         showFailToast('账号或密码错误');
         return
       }
-      showFailToast('账号或密码错误');
 
       localStorage.setItem('token', res.token);
+      token.token = res.token;
+      token.istoken = 'true';
+      token.tempToken = await getTempTokenApi(res.token);
+      token.isTempToken = 'true';
+      sessionStorage.setItem('tempToken', token.tempToken);
       emit('success');
       showSuccessToast('登录成功');
 

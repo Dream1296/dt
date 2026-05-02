@@ -13,8 +13,7 @@ class Token {
     TempTokenPro: Promise<any> | null;
 
     constructor() {
-        //从存储中去token
-
+        //从存储中取token
         let tokens = localStorage.getItem('token');
         this._token = "";
         this._tempToken = "";

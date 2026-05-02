@@ -5,7 +5,6 @@ import { ref, computed } from 'vue'
 export const viewDataStore = defineStore('viewData', {
   state: () => ({
     loa: 0,
-    isShowDy: false,
     elfX: 0,
     elfY: 0,
     showV: false,
@@ -16,14 +15,14 @@ export const viewDataStore = defineStore('viewData', {
   getters: {
 
   },
-  persist: {
-    enabled: true,
-    strategies: [
-      {
-        key: 'user-store',
-        storage: localStorage, // 也可以是 sessionStorage
-        paths: ['isShowDy'], // 指定要持久化的字段
-      },
-    ],
-  }
+  // persist: {
+  //   enabled: true,
+  //   strategies: [
+  //     {
+  //       key: 'user-store',
+  //       storage: localStorage, // 也可以是 sessionStorage
+  //       paths: ['isShowDy'], // 指定要持久化的字段
+  //     },
+  //   ],
+  // }
 });

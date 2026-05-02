@@ -38,8 +38,6 @@ function add() {
     vlist.value.push(data[i]);
   }
   index += 6;
-  console.log('listLen: ' + (index - 6) + ' -- ' + index);
-  console.log(listDom.value);
 
   nextTick(() => {
     // 如果 observer 已经存在，断开之前的观察
@@ -51,7 +49,6 @@ function add() {
     observer = new IntersectionObserver((entries) => {
       if (entries[0].isIntersecting) {
         add()
-        console.log('加载新数据');
       }
     });
     observer.observe(listDom.value[index - 3]);

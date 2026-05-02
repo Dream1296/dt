@@ -20,7 +20,14 @@ import { Stepper } from 'vant';
 import { Switch } from 'vant';
 import NaiveUI from 'naive-ui'
 
+//  const rawSetItem = Storage.prototype.setItem;
 
+//   Storage.prototype.setItem = function (key, value) {
+//     if (key === 'tokenArr') {
+//       console.trace('write tokenArr:', value);
+//     }
+//     return rawSetItem.call(this, key, value);
+//   };
 
 
 

@@ -56,8 +56,23 @@
                                 <n-space size="small">
                                     <n-radio :value="0">0</n-radio>
                                     <n-radio :value="1">1</n-radio>
-                                    <n-radio :value="13">13</n-radio>
-                                    <n-radio :value="12">12</n-radio>
+                                    <n-radio :value="10">10</n-radio>
+                                </n-space>
+                            </n-radio-group>
+                        </n-card>
+
+                        <n-card title="user" size="small" class="dt-op__card">
+                            <n-radio-group
+                                v-model:value="editUser"
+                                name="user"
+                                size="small"
+                                :disabled="loading || saving"
+                                @update:value="handleUserChange"
+                            >
+                                <n-space size="small">
+                                    <n-radio value="xt">xt</n-radio>
+                                    <n-radio value="yw">yw</n-radio>
+                                    <n-radio value="dy">dy</n-radio>
                                 </n-space>
                             </n-radio-group>
                         </n-card>
@@ -103,7 +118,7 @@
                                         size="small"
                                         :min="0"
                                         :disabled="loading || saving"
-                                        @update:value="(value) => handleNumberChange('imgShowAll', value)"
+                                        @update:value="handleImgShowAllChange"
                                     />
                                 </div>
                                 <div class="dt-op__field">
@@ -113,7 +128,7 @@
                                         size="small"
                                         :min="0"
                                         :disabled="loading || saving"
-                                        @update:value="(value) => handleNumberChange('imgAllNum', value)"
+                                        @update:value="handleImgAllNumChange"
                                     />
                                 </div>
                                 <div class="dt-op__field">
@@ -123,7 +138,7 @@
                                         size="small"
                                         :min="0"
                                         :disabled="loading || saving"
-                                        @update:value="(value) => handleNumberChange('videoShowAll', value)"
+                                        @update:value="handleVideoShowAllChange"
                                     />
                                 </div>
                                 <div class="dt-op__field">
@@ -133,7 +148,7 @@
                                         size="small"
                                         :min="0"
                                         :disabled="loading || saving"
-                                        @update:value="(value) => handleNumberChange('videoNum', value)"
+                                        @update:value="handleVideoNumChange"
                                     />
                                 </div>
                             </div>
@@ -150,6 +165,8 @@ import { getdt, setDt } from '@/api/api';
 import type { DtDataType, setDtDataT } from '@/types/dtType';
 import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
+type DtPatchData = Omit<setDtDataT, 'id'>;
+
 const props = defineProps<{ dtId: number, loa: number }>();
 const emit = defineEmits<{
     close: [];
@@ -162,6 +179,7 @@ const data = ref<DtDataType>();
 const errorText = ref('');
 const toastText = ref('');
 const editLoa = ref<number>(0);
+const editUser = ref('');
 const editBgStyle = ref<number>(0);
 const editText = ref('');
 const editDate = ref('');
@@ -195,6 +213,7 @@ function handleFullscreenClick() {
 
 function syncEditors(dt: DtDataType) {
     editLoa.value = dt.loa;
+    editUser.value = dt.user;
     editBgStyle.value = dt.bgStyle;
     editText.value = dt.text;
     editDate.value = formatDateForInput(dt.date);
@@ -218,10 +237,10 @@ async function loadData() {
     }
 }
 
-async function submitPatch(patch: setDtDataT, rollback: () => void, applyLocal: () => void) {
+async function submitPatch(patch: DtPatchData, rollback: () => void, applyLocal: () => void) {
     saving.value = true;
     try {
-        const res = await setDt(props.dtId, patch);
+        const res = await setDt({ id: props.dtId, ...patch });
         if (res.code === 200) {
             applyLocal();
             return;
@@ -244,12 +263,22 @@ async function handleLoaChange(value: number) {
     });
 }
 
+async function handleUserChange(value: string) {
+    if (!data.value) return;
+    const previous = data.value.user;
+    if (value === previous) return;
+    editUser.value = value;
+    await submitPatch({ user: value }, () => { editUser.value = previous; }, () => {
+        if (data.value) data.value = { ...data.value, user: value };
+    });
+}
+
 async function handleBgStyleChange(value: number) {
     if (!data.value) return;
     const previous = data.value.bgStyle;
     if (value === previous) return;
     editBgStyle.value = value;
-    await submitPatch({ bgStyle: value } as setDtDataT, () => { editBgStyle.value = previous; }, () => {
+    await submitPatch({ bgStyle: value }, () => { editBgStyle.value = previous; }, () => {
         if (data.value) data.value = { ...data.value, bgStyle: value } as DtDataType;
     });
 }
@@ -264,6 +293,22 @@ async function handleNumberChange(key: 'imgShowAll' | 'imgAllNum' | 'videoShowAl
     }, () => {
         if (data.value) data.value = { ...data.value, [key]: nextValue };
     });
+}
+
+function handleImgShowAllChange(value: number | null) {
+    handleNumberChange('imgShowAll', value);
+}
+
+function handleImgAllNumChange(value: number | null) {
+    handleNumberChange('imgAllNum', value);
+}
+
+function handleVideoShowAllChange(value: number | null) {
+    handleNumberChange('videoShowAll', value);
+}
+
+function handleVideoNumChange(value: number | null) {
+    handleNumberChange('videoNum', value);
 }
 
 function handleDateInput(value: string) {

@@ -43,14 +43,16 @@ export interface DtDataType {
 
 
 export type setDtDataT = {
-    date?:string, 
-    imgShowAll?:number,
-    imgAllNum?:number,
-    videoShowAll?:number,
-    videoNum?:number,
-    text?:string,
-    loa?:number,
-    bgStyle?:number,
+  id:number,
+  user?: string,
+  date?: string,
+  imgShowAll?: number,
+  imgAllNum?: number,
+  videoShowAll?: number,
+  videoNum?: number,
+  text?: string,
+  loa?: number,
+  bgStyle?: number,
 }
 
 
@@ -160,4 +162,12 @@ export type listFile = {
   name: string,
   type: 0 | 1 | 2 | 3,
   hash: string,
+}
+
+
+
+export type TokenArr = {
+  token: string,
+  user: string,
+  name: string,
 }

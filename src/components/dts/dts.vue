@@ -3,8 +3,7 @@
 		<!-- 顶部小样式 -->
 		<StyleTop :bgStyle="data.bgStyle"></StyleTop>
 		<!-- 头像与名字 -->
-		<topView :touxianSrc="getTouxian('yw')" :name="data.name" :dtid="data.id.toString()"></topView>
-
+		<topView :touxianSrc="getTouxian(data.user)" :name="data.name" :dtid="data.id.toString()"></topView>
 		<!-- 正文 -->
 		<div class="text">
 			<template v-for="(a, temp) in (data.textArr.slice(0, textLen))">
@@ -266,7 +265,7 @@ watch(
 
 
 
-const emit = defineEmits(['clicks', 'showImg', 'showVideo']);
+const emit = defineEmits(['clicks', 'showImg', 'showVideo', 'showOptions']);
 
 
 
@@ -342,7 +341,6 @@ const textInputHeightAuto = (event: Event) => {
 	}
 
 	const textareas = textarea.value;
-	console.log(textareas);
 	if (textareas == null) {
 		vDataSave();
 		return
@@ -401,9 +399,16 @@ function isDels() {
 
 //显示与隐藏选项
 function showX() {
-	getV()!.isPlss = !getV()!.isPlss;
-	if (getV()!.isInput && !getV()!.isPlss) {
-		getV()!.isInput = false
+	const currentVData = getV();
+	if (!currentVData || !data.value) {
+		return
+	}
+	currentVData.isPlss = !currentVData.isPlss;
+	if (currentVData.isPlss) {
+		emit('showOptions', data.value.id);
+	}
+	if (currentVData.isInput && !currentVData.isPlss) {
+		currentVData.isInput = false
 	}
 }
 

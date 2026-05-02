@@ -48,9 +48,7 @@ export let obsDt: obsDtType = {
                     return
                 }
                 let a = dtsDom.value[0].offsetTop + 200;
-                console.log(dtsDom.value[0]);
-
-                console.log(a);
+              
                 window.scrollTo({
                     top: a,
                     behavior: 'auto'
@@ -65,7 +63,7 @@ export let obsDt: obsDtType = {
     dtAddNext(dtsDom: Ref<HTMLElement[]>) {
 
         this.guanbi_footer_show();
-        console.log('开始添加元素');
+   
 
         //添加addNum个元素
         for (let i = this.index; i < this.index + this.addNumNext; i++) {
@@ -75,8 +73,6 @@ export let obsDt: obsDtType = {
             }
             dtData.addVlist(i);
             
-
-            console.log(`添加了第${i}个元素`);
 
         }
         myEvent.emit('upLookDtId',this.index);
@@ -97,9 +93,7 @@ export let obsDt: obsDtType = {
                     this.dtAddNext(dtsDom);
                 }
             });
-            // console.log(`设置的观察元素为：${dtsDom.value.length - 3}`);
-            // console.log(dtsDom.value[dtsDom.value.length - 3]);
-
+      
 
             // 设置observer的观察元素，倒数第2个元素
             this.observerNext.observe(dtsDom.value[dtsDom.value.length - 3]);
@@ -110,8 +104,6 @@ export let obsDt: obsDtType = {
     dtAddPreviou(dtsDom: Ref<HTMLElement[]>) {
         let start = this.index - dtsDom.value.length;
 
-        console.log('start ' + start);
-
         if (start == 0 || start < 0) {
             return
         }
@@ -120,7 +112,7 @@ export let obsDt: obsDtType = {
             if (i == 0) {
                 return
             }
-            console.log(i);
+      
             dtData.addVlist(i, 'previou');
             myEvent.emit('upLookDtId',i);
         }

@@ -57,12 +57,6 @@ export function settext(key: 'textArr', value: 'text', dtData: DtDataType[]) {
     
     let arr: { type: string, text: string }[][] = [];
     for (let i = 0; i < dtData.length; i++) {
-        // debugger;
-        // if(dtData[i].id == 902){
-            // console.log(dtData[i].id);
-            
-            // debugger;
-        // }
         arr[i] = splitContent(dtData[i][value]);
     }
     for (let i = 0; i < arr.length; i++) {

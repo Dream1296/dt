@@ -9,33 +9,6 @@
     box-shadow: 0 10px 28px rgba(15, 23, 42, 0.12);
 }
 
-.dt-op__toast {
-    position: absolute;
-    top: 14px;
-    left: 50%;
-    z-index: 20;
-    transform: translateX(-50%);
-    padding: 6px 12px;
-    border-radius: 999px;
-    background: rgba(17, 24, 39, 0.88);
-    color: #fff;
-    font-size: 12px;
-    line-height: 1;
-    box-shadow: 0 8px 18px rgba(15, 23, 42, 0.2);
-    pointer-events: none;
-}
-
-.dt-op-toast-enter-active,
-.dt-op-toast-leave-active {
-    transition: opacity 0.18s ease, transform 0.18s ease;
-}
-
-.dt-op-toast-enter-from,
-.dt-op-toast-leave-to {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-6px);
-}
-
 .dt-op__spin {
     width: 100%;
     height: 100%;
@@ -53,7 +26,7 @@
 }
 
 .dt-op__container :deep(.n-card-header) {
-    padding: 8px 10px 4px;
+    padding: 6px 8px 2px;
 }
 
 .dt-op__container :deep(.n-card-header__main) {
@@ -62,7 +35,7 @@
 }
 
 .dt-op__container :deep(.n-card__content) {
-    padding: 8px 10px 10px;
+    padding: 6px 8px 8px;
 }
 
 .dt-op__container :deep(.n-input-number),
@@ -131,10 +104,6 @@
     background: #febc2e;
 }
 
-.dt-op__action--full {
-    background: #28c840;
-}
-
 .dt-op__header-main {
     min-width: 0;
 }
@@ -160,7 +129,7 @@
 .dt-op__grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 6px;
     margin-top: 8px;
 }
 
@@ -168,17 +137,28 @@
     grid-column: 1 / -1;
 }
 
+.dt-op__base-grid {
+    display: grid;
+    grid-template-columns: minmax(160px, auto) minmax(78px, auto) minmax(180px, 1fr);
+    align-items: end;
+    gap: 4px 8px;
+}
+
 .dt-op__counts-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px 10px;
+    gap: 6px 8px;
 }
 
 .dt-op__field {
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: 2px;
     min-width: 0;
+}
+
+.dt-op__field--date {
+    grid-column: 1 / -1;
 }
 
 .dt-op__field-label {
@@ -187,15 +167,25 @@
     color: #4b5563;
 }
 
-.dt-op__container :deep(.n-radio-group) {
-    width: 100%;
+.dt-op__radio-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    min-height: 28px;
+    gap: 0 8px;
 }
 
-.dt-op__container :deep(.n-radio-button),
 .dt-op__container :deep(.n-radio) {
+    margin-right: 0;
     font-size: 12px;
 }
 
-.dt-op__container :deep(.n-space) {
-    flex-wrap: wrap;
+:global(.dt-op__style-menu) {
+    max-height: 320px;
+}
+
+@media (max-width: 560px) {
+    .dt-op__base-grid {
+        grid-template-columns: 1fr;
+    }
 }

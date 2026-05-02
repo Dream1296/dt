@@ -21,6 +21,11 @@ let userNmae = ref<string>('');
 let passwd = ref<string>('');
 
 import { useRouter } from 'vue-router';
+
+
+import { token } from '@/api/token';
+import { getTempTokenApi } from '@/api/api';
+import { tokenArrObj } from '@/api/tokenArr';
 const router = useRouter();
 
 
@@ -28,15 +33,20 @@ async function tz() {
 
     login(userNmae.value, passwd.value)
 
-        .then((res) => {
+        .then(async (res) => {
             if (res.message != 'OK') {
                 showFailToast('账号或密码错误');
                 return
             }
-            showFailToast('账号或密码错误');
 
             localStorage.setItem('token', res.token);
+            token.token = res.token;
+            token.istoken = 'true';
+            token.tempToken = await getTempTokenApi(res.token);
+            token.isTempToken = 'true';
+            sessionStorage.setItem('tempToken', token.tempToken);
             showSuccessToast('登录成功');
+            tokenArrObj.unshiftUp(res.token);
             router.push('/');
         })
 

@@ -1,6 +1,6 @@
 import type { DtDataType,dataImg, Dt, listFile, setDtDataT } from '@/types/dtType';
 import axioss from 'axios';
-import { token as tokens } from '@/api/token';
+import { token, token as tokens } from '@/api/token';
 
 let axios: any;
 
@@ -57,7 +57,6 @@ export async function api<T>(url: string, method: 'GET' | 'POST' = 'GET', data?:
         await tokens.tokenPro;
     }
     if (token != undefined && tokens.istoken == 'false') {
-        console.log('跳转到登录');
     }
     const headers = token ? { Authorization: `Bearer ${token}` } : {};
     const response = await axios({
@@ -88,6 +87,7 @@ export async function getTempTokenApi(token: string = tokens.token) {
 export async function yz(token: string) {
     const urls = Internet.url + '/api/userClass';
     let userId = (await api<{ coed: number, data: { username: string } }>(urls, 'GET', undefined, token)).data.username;
+    
     return userId;
 }
 
@@ -132,11 +132,12 @@ export async function getdt(id: string | number, loa?: number): Promise<{ code: 
 }
 
 // 单个动态数据更新
-export async function setDt(id:number,upData:setDtDataT){
-    
-    let res = {
-        code:200
-    }
+export async function setDt(upData:setDtDataT){
+    let urls = `${Internet.url}/api/setdt`;
+    let res = (await api(urls, 'POST', upData, tokens.token)) as {code:number}
+    // let res = {
+    //     code:200
+    // }
     return res;
     
 }
@@ -178,6 +179,15 @@ export async function getName() {
     let res = await api<{ user: string, name: string }>(urls, 'GET', undefined, tokens.token);
     return res;
 }
+
+//传入token获取用户名
+export async function getTokenName(token:string) {    
+    let urls = Internet.url + '/api/userc?token=' + token;
+    let res = await api<{ user: string, name: string }>(urls, 'GET', undefined, undefined);
+    return res;
+}
+
+
 
 export async function getlvObj(id: number) {
     let url = Internet.url + '/api/lviobj?id=' + id;
@@ -250,15 +260,11 @@ export function getEmoSrc(name: string) {
 
 
 //获取头像
-export function getTouxian(name: string) {
-    return `${Internet.url}/api/userImg?name=${name}`
-
+export function getTouxian(userId:string) {
+    const tokenStr = tokens.tempToken ? `&token=${tokens.tempToken}` : '';
+    return `${Internet.url}/api/userImg?userId=${userId}${tokenStr}`
 }
 
-// //获取表情包地址
-// export function emojiSrc(name: string) {
-//     return `${Internet.url}/api/emoji?lei=weixin&name=${name}`;
-// }
 
 //获取表情包地址
 export function emojiSrc(name: string) {

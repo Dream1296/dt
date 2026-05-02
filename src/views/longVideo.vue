@@ -39,9 +39,6 @@ getlvObj(lvid).then(data =>{
 
 
 
-console.log(route.query.name);
-
-
 
 
 

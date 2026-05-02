@@ -3,8 +3,12 @@
 
 
         <!-- 顶部栏 -->
-        <div id="kz" :class="{ kzs: showBg }">
-            <topDh :showBg='showBg' @clicks="updt" @longpress1='upvideo' @gologin="gologin"></topDh>
+        <div id="kz" :class="{ kzs: showBg }" v-if="!userData.isPc">
+            <topDh :showBg='showBg' @clicks="updt" @gologin="gologin"></topDh>
+        </div>
+
+        <div v-if="userData.isPc" class="userOptions">
+            <userOptions></userOptions>
         </div>
 
         <div id="head" ref="head">
@@ -39,7 +43,7 @@
                 <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
                     <div class="zhujian">
                         <div v-if="a.type == 'A' && !a.KeepRun && !a.KeepBadminton">
-                            <dts @showImg="dtsClicks" @showVideo='playVideo' :datas="a"></dts>
+                            <dts @showImg="dtsClicks" @showVideo='playVideo' @showOptions="showDtOptions" :datas="a"></dts>
                         </div>
 
                         <div v-if="a.type == 'A' && a.KeepRun">
@@ -123,9 +127,9 @@
     <div>
         <footers :show_num="footer_show_num"></footers>
     </div>
-    
-    <!-- <div id="dtop">
-        <dtOp :dtId="1524" :loa="1"></dtOp>
+
+    <!-- <div id="dtop" v-if="dtOpDtId !== undefined">
+        <dtOp :dtId="dtOpDtId" :loa="viewData.loa" @close="closeDtOp"></dtOp>
     </div> -->
 
 
@@ -145,7 +149,6 @@ import topDh from '../components/topDh/topDh.vue';
 import SystemDt from '../components/SystemDt/SystemDt.vue';
 import dts from '@/components/dts/dts.vue';
 import { showTop } from '@/utils/dt/dtTopShow';
-import { upvideo } from '@/utils/dt/dtUtil';
 import router from '@/router';
 import { config } from 'process';
 import { obsDt } from '@/dtData/observerDt';
@@ -175,45 +178,45 @@ import { dtData } from '@/dtData/dtList';
 import YearSign from '@/components/yearSign/yearSign.vue';
 import { routerPush } from '@/utils/dt/routerUtil';
 import dtOp from '@/components/dtOp/dtOp.vue';
+import userOptions from '@/components/userOptions/userOptions.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();
 
 const route = useRoute();
 let showLogin = ref(false);
+//处理路径搜索
+let wd = route.query.wd;
 
+// 动态位置
+let startId = 0;
+
+// 刷新还是重新打开
+let Restart = sessionStorage.getItem('restart');
 
 
 if (route.query.login && route.query.login == 'login') {
     showLogin.value = true;
 }
-
-
-let touxianSrc = Internet.url + "/api/userImg?name=yw";
-
-// 13号loa密码
-const passwd13Text = '143323';
-// 12号loa密码
-const passwd12Text = '841264';
-
-//处理路径搜索
-let wd = route.query.wd;
-let loaR = Number(route.query.loa);
-let startId = 0;
-if (route.query.dtId && Number(route.query.dtId) && Number(route.query.dtId) >= 0) {
+if (route.query.dtId && !isNaN(Number(route.query.dtId)) && Number(route.query.dtId) >= 0) {
     startId = Number(route.query.dtId);
 }
+console.log(Number(route.query.loa));
+console.log(isNaN(Number(route.query.loa)));
 
-if (loaR == 1) {
-    loaR = 1;
-} 
-
-if(loaR == 3){
-    loaR = 3;
-}else{
-    loaR == 0;
+if (route.query.loa && !isNaN(Number(route.query.loa)) && Number(route.query.loa) >= 0) {
+    console.log(Number(route.query.loa));
+    
+    viewData.loa = Number(route.query.loa);
 }
 
+
+if(!Restart){
+    viewData.loa = 0;
+    startId = 0;
+    routerPush('loa', '0');
+    sessionStorage.setItem('restart','1')
+}
 
 
 myEvent.on('dtFind', (e) => {
@@ -231,6 +234,8 @@ const footer_show_num = ref(0);
 
 //用户名
 let userName = ref('正在加载');
+
+const dtOpDtId = ref<number>();
 
 
 let showBottom = ref(false)
@@ -292,37 +297,8 @@ myEvent.on('upDtList', () => {
     // })
 })
 
-watch(passwd13, (newVal) => {
-    if (newVal == passwd13Text) {
-        viewData.loa = 13;
-        get13(13);
-        showSuccessToast('密码正确');
-        showBottom.value = false;
-        return
-    }
-    if (newVal == passwd12Text) {
-        viewData.loa = 12;
-        get13(12);
-        showSuccessToast('密码正确');
-        showBottom.value = false;
-        return
-    }
-    if (newVal.length == 6) {
-        showFailToast('密码错误');
-        passwd13.value = '';
-    }
-});
 
 
-
-function get13(loa: 13 | 12) {
-    //切换背景图片
-    bgSrc.value = bgSrcCon + "1" + ".png";
-
-    dtDataInit(loa).then((datas) => {
-        obsDt.init(dtsDom, 0);
-    })
-}
 
 //token有效的修改函数
 let fnTure = (key: { isLogin: boolean }) => {
@@ -383,7 +359,6 @@ onMounted(() => {
     //     layoutItemsFnAdd(dtArr.value, dtsDom.value);
     // }
     window.scrollTo(0, 0);
-    console.log('onMounted');
 
     if (window.innerWidth < 768) {
         showTop(showBg, head as Ref<HTMLElement>);
@@ -436,6 +411,14 @@ function playVideo(ids: {
     router.push({ path: '/videoPlay', query: ids });
 }
 
+function showDtOptions(dtId: number) {
+    dtOpDtId.value = dtId;
+}
+
+function closeDtOp() {
+    dtOpDtId.value = undefined;
+}
+
 function updt() {
     router.push({ path: '/updt' });
 }
@@ -472,11 +455,10 @@ obsDt.guanbi_footer_show = guanbi_footer_show;
 
 
 //初始化数据,初始化评论列表
-dtDataInit(loaR)
+dtDataInit(viewData.loa)
     .then(datas => {
         VcDataPush(datas);
         obsDt.init(dtsDom, startId);
-
     })
 
 

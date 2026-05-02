@@ -51,7 +51,7 @@ onMounted(() => {
 
     img.onload = () => {
         stop(100).then(() => {
-            console.log("原图加载完成");
+           
             Shows.value = true;
         })
 

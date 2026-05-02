@@ -297,7 +297,7 @@ const onSelect = (option: { name: string | ToastOptions | undefined; }) => {
         setShare(dtid.toString())
             .then(res => {
                 let text = `http://dlhe.top/dts?dtid=${dtid}&share=${res.token}`;
-                console.log(text);
+               
                 navigator.clipboard.writeText(text)
                     .then(() => {
                         showSuccessToast('文本已成功复制到剪贴板');

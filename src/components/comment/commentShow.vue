@@ -45,7 +45,7 @@ const props = withDefaults(defineProps<{
 });
 
 function getImgSrc(comId:number,index: number) {	
-	console.log(props.data);
+	
 	
 	return imgSrcCom( comId , index, '0');
 }

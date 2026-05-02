@@ -9,8 +9,8 @@
         <div class="action-list">
             <button class="action-card" type="button" @click="upData">
                 <span class="icon-wrap">
-                    <img src="../../assets/img/dy.png" v-show="viewData.isShowDy">
-                    <img src="../../assets/img/dy0.png" v-show="!viewData.isShowDy">
+                    <!-- <img src="../../assets/img/dy.png" v-show="viewData.isShowDy"> -->
+                    <!-- <img src="../../assets/img/dy0.png" v-show="!viewData.isShowDy"> -->
                 </span>
             </button>
 
@@ -45,7 +45,7 @@ const panelStyle = computed(() => ({
 }));
 
 function upData() {
-    viewData.isShowDy = !viewData.isShowDy;
+    // viewData.isShowDy = !viewData.isShowDy;
     dtDataInit(viewData.loa).then(() => {
         myEvent.emit('upDtList');
     });
@@ -104,7 +104,7 @@ function handleResize() {
 }
 
 watch(
-    () => [viewData.elfX, viewData.elfY, viewData.showV, viewData.isShowDy, panelWidth.value, panelHeight.value],
+    () => [viewData.elfX, viewData.elfY, viewData.showV, panelWidth.value, panelHeight.value],
     () => {
         updatePanelPosition();
     },
