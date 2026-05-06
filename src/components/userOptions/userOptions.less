@@ -5,8 +5,17 @@
     z-index: 1200;
     width: auto;
     max-width: calc(100vw - 28px);
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
     color: #4d3325;
     font-family: inherit;
+}
+
+.user-options__account {
+    position: relative;
+    min-width: 0;
+    flex: 0 1 auto;
 }
 
 .user-options__trigger {
@@ -70,9 +79,51 @@
 }
 
 .user-options__trigger:focus-visible,
-.user-options__item:focus-visible {
+.user-options__item:focus-visible,
+.user-options__upload:focus-visible {
     outline: 2px solid rgba(206, 143, 60, 0.34);
     outline-offset: 3px;
+}
+
+.user-options__upload {
+    width: 46px;
+    height: 46px;
+    flex: 0 0 46px;
+    display: grid;
+    place-items: center;
+    padding: 8px;
+    margin-top: 1px;
+    border: 1px solid rgba(146, 94, 55, 0.3);
+    border-radius: 15px 13px 16px 14px;
+    background:
+        linear-gradient(135deg, rgba(255, 253, 245, 0.96), rgba(255, 244, 220, 0.94));
+    box-shadow:
+        0 8px 18px rgba(125, 82, 42, 0.14),
+        inset 0 1px 0 rgba(255, 255, 255, 0.78);
+    box-sizing: border-box;
+    cursor: pointer;
+    transform: rotate(0.35deg);
+    transition: border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease, background 0.18s ease;
+}
+
+.user-options__upload:hover {
+    background:
+        linear-gradient(135deg, rgba(255, 255, 248, 0.98), rgba(255, 240, 207, 0.96));
+    border-color: rgba(146, 94, 55, 0.42);
+    box-shadow:
+        0 12px 22px rgba(125, 82, 42, 0.18),
+        inset 0 1px 0 rgba(255, 255, 255, 0.82);
+    transform: translateY(-2px) rotate(-0.15deg);
+}
+
+.user-options__upload:active {
+    transform: translateY(0) scale(0.98);
+}
+
+.user-options__upload img {
+    width: 26px;
+    height: 26px;
+    object-fit: contain;
 }
 
 .user-options__avatar {
@@ -290,6 +341,7 @@
     .user-options {
         top: 12px;
         right: 12px;
+        gap: 8px;
         max-width: calc(100vw - 24px);
     }
 
@@ -299,5 +351,17 @@
 
     .user-options__panel {
         width: min(260px, calc(100vw - 24px));
+    }
+
+    .user-options__upload {
+        width: 42px;
+        height: 42px;
+        flex-basis: 42px;
+        padding: 7px;
+    }
+
+    .user-options__upload img {
+        width: 24px;
+        height: 24px;
     }
 }

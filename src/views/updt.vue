@@ -63,9 +63,11 @@
             <h3>权限等级-{{ loaText[loa] }}</h3>
             <van-radio-group v-model="loa" direction="horizontal">
                 <van-radio name="0">public</van-radio>
-                <van-radio name="1">Protected</van-radio>
-                <van-radio name="13">Private</van-radio>
-                <van-radio name="12">danger</van-radio>
+                <!-- <van-radio name="1">Protected</van-radio> -->
+                 <van-radio name="1">Private</van-radio>
+                <van-radio name="10">Protected</van-radio>
+                <!-- <van-radio name="13">Private</van-radio> -->
+                <!-- <van-radio name="12">danger</van-radio> -->
             </van-radio-group>
             <h3>内部上传图片</h3>
             <van-switch v-model="isImgDir" />
@@ -174,7 +176,8 @@ let showEmo = ref(false);
 let loa = ref<0 | 1 | 13 | 12>(0);
 const loaText = {
     0:'公开的',
-    1:"不公开的",
+    1:"私有的",
+    10:'仅登录',
     13:'私有的',
     12:'严格的',
 };

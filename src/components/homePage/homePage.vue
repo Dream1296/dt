@@ -1,5 +1,10 @@
 <template>
-    <div id="all">
+
+    <div v-if="bgState === 'image'" id="img_bg">
+        <img class="home-page-mo13__image" :src="bgImgSrc" alt="" />
+    </div>
+    
+    <div v-else-if="bgState === 'default'" id="all">
         <div id="bg"></div>
 
         <div id="text1">
@@ -34,12 +39,36 @@
 
 
 <script setup lang="ts">
+import { onBeforeUnmount, onMounted, ref } from 'vue';
+import { getUserBgIMg } from '@/api/api';
 import box from './boxs/box.vue';
 import { svgArr } from './svgArr';
 import userIn from './userIn/userIn.vue';
 
+type BgState = 'loading' | 'default' | 'image';
 
+const bgState = ref<BgState>('loading');
+const bgImgSrc = ref('');
+let bgObjectUrl = '';
 
+onMounted(async () => {
+    const bgImg = await getUserBgIMg();
+
+    if (!bgImg) {
+        bgState.value = 'default';
+        return;
+    }
+
+    bgObjectUrl = URL.createObjectURL(bgImg);
+    bgImgSrc.value = bgObjectUrl;
+    bgState.value = 'image';
+});
+
+onBeforeUnmount(() => {
+    if (bgObjectUrl) {
+        URL.revokeObjectURL(bgObjectUrl);
+    }
+});
 
 </script>
 

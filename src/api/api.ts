@@ -187,6 +187,42 @@ export async function getTokenName(token:string) {
     return res;
 }
 
+export type UserBgImgResponse = Blob | null;
+
+/**
+ * 获取用户首页背景图。
+ * 后端默认背景返回字符串 'null'；存在自定义背景时通过 sendFile 返回图片文件。
+ * 返回 null 表示使用默认首页内容，返回 Blob 表示需要显示该背景图。
+ */
+export async function getUserBgIMg(): Promise<UserBgImgResponse> {
+    let urls = Internet.url + '/api/userBgImg';
+    const headers = token.tempToken ? { Authorization: `Bearer ${token.tempToken}` } : 
+    { Authorization: `Bearer ${token.token}` };
+    const response = await axios({
+        url: urls,
+        method: 'GET',
+        headers: headers,
+        responseType: 'blob',
+        validateStatus: () => true
+    });
+
+    if (response.status < 200 || response.status >= 300) {
+        return null;
+    }
+
+    const data = response.data as Blob;
+    const contentType = data.type || response.headers?.['content-type'] || '';
+
+    if (contentType.includes('text') || contentType.includes('json')) {
+        const text = (await data.text()).trim();
+        if (text === 'null') {
+            return null;
+        }
+    }
+
+    return data;
+}
+
 
 
 export async function getlvObj(id: number) {
@@ -371,20 +407,24 @@ export async function getShare(key: string) {
 
 export async function getListArr(pathStr: string) {
     let url = `${Internet.url}/api/listPath?path=${pathStr}`;
-    let res = await api<{ code: number, data: listFile[] }>(url, 'GET',undefined,tokens.token);
+    let res = await api<{ code: number, data: listFile[] }>(url, 'GET',undefined,tokens.tempToken);
     return res;
 }
 
 export function getListImgT(path: string, hash: string) {
-    let url = `${Internet.url}/api/listImgT?path=${path}&hash=${hash}&token=${tokens.token}`;
+    let url = `${Internet.url}/api/listImgT?path=${path}&hash=${hash}&token=${tokens.tempToken}`;
     // let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
     return url;
 }
 
 export function getListImg(path: string) {
-    let url = `${Internet.url}/api/listImg?path=${path}&token=${tokens.token}`;
+    let url = `${Internet.url}/api/listImg?path=${path}&token=${tokens.tempToken}`;
     // let res = await api<{ code: number, data: listFile[] }>(url, 'GET');
     return url;
+}
+
+export function getListFile(path:string){
+    return `${Internet.url}/api/listFile?path=${encodeURIComponent(path)}&token=${tokens.token}`;
 }
 
 

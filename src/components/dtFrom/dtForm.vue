@@ -1,6 +1,6 @@
 <template>
 <div class="zhu" v-if="data" >
-		<topView :dtid="dtid" :touxian-src="getTouxian('yw')" :name="data.name"></topView>
+		<topView :dtid="dtid" :touxian-src="getTouxian('xt')" :name="data.name"></topView>
 		<!-- 正文 -->
 		<div class="text">
 		</div>

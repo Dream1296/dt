@@ -1,59 +1,71 @@
 <template>
   <div class="user-options">
-    <button
-      class="user-options__trigger"
-      type="button"
-      :aria-expanded="isOpen"
-      @click="toggleOpen"
-    >
-      <span
-        class="user-options__avatar"
-        :class="{ 'user-options__avatar--empty': !currentAccount }"
+    <div class="user-options__account">
+      <button
+        class="user-options__trigger"
+        type="button"
+        :aria-expanded="isOpen"
+        @click="toggleOpen"
       >
-        <img v-if="currentAccount" :src="getTouxian(currentAccount.user)" alt="">
-        <span v-else>未</span>
-      </span>
-      <span class="user-options__info">
-        <span class="user-options__name">{{ accountText(currentAccount) }}</span>
-      </span>
-    </button>
-
-    <Transition name="user-options-panel">
-      <div v-if="isOpen" class="user-options__panel">
-        <div class="user-options__panel-head">
-          <span>账号切换</span>
-          <span>{{ accountList.length }} 个账号</span>
-        </div>
-
-        <button
-          v-for="item in accountList"
-          :key="item.token"
-          class="user-options__item"
-          :class="{
-            'user-options__item--active': item.token === currentAccount?.token,
-            'user-options__item--loading': item.token === switchingToken
-          }"
-          type="button"
-          :disabled="Boolean(switchingToken)"
-          @click="switchAccount(item)"
+        <span
+          class="user-options__avatar"
+          :class="{ 'user-options__avatar--empty': !currentAccount }"
         >
-          <span class="user-options__avatar user-options__avatar--small">
-            <img :src="getTouxian(item.user)" alt="">
-          </span>
-          <span class="user-options__item-text">
-            <span class="user-options__item-name">{{ accountText(item) }}</span>
-            <span class="user-options__item-meta">
-              {{ item.token === currentAccount?.token ? '当前使用' : '点击切换' }}
-            </span>
-          </span>
-          <span class="user-options__check"></span>
-        </button>
+          <img v-if="currentAccount" :src="getTouxian(currentAccount.user)" alt="">
+          <span v-else>未</span>
+        </span>
+        <span class="user-options__info">
+          <span class="user-options__name">{{ accountText(currentAccount) }}</span>
+        </span>
+      </button>
 
-        <div v-if="!accountList.length" class="user-options__empty">
-          暂无账号
+      <Transition name="user-options-panel">
+        <div v-if="isOpen" class="user-options__panel">
+          <div class="user-options__panel-head">
+            <span>账号切换</span>
+            <span>{{ accountList.length }} 个账号</span>
+          </div>
+
+          <button
+            v-for="item in accountList"
+            :key="item.token"
+            class="user-options__item"
+            :class="{
+              'user-options__item--active': item.token === currentAccount?.token,
+              'user-options__item--loading': item.token === switchingToken
+            }"
+            type="button"
+            :disabled="Boolean(switchingToken)"
+            @click="switchAccount(item)"
+          >
+            <span class="user-options__avatar user-options__avatar--small">
+              <img :src="getTouxian(item.user)" alt="">
+            </span>
+            <span class="user-options__item-text">
+              <span class="user-options__item-name">{{ accountText(item) }}</span>
+              <span class="user-options__item-meta">
+                {{ item.token === currentAccount?.token ? '当前使用' : '点击切换' }}
+              </span>
+            </span>
+            <span class="user-options__check"></span>
+          </button>
+
+          <div v-if="!accountList.length" class="user-options__empty">
+            暂无账号
+          </div>
         </div>
-      </div>
-    </Transition>
+      </Transition>
+    </div>
+
+    <button
+      class="user-options__upload"
+      type="button"
+      aria-label="上传"
+      title="上传"
+      @click="goUpload"
+    >
+      <img :src="uploadIcon" alt="">
+    </button>
   </div>
 </template>
 
@@ -64,6 +76,8 @@ import { getTempTokenApi, getTouxian } from '@/api/api';
 import { token } from '@/api/token';
 import { tokenArrObj } from '@/api/tokenArr';
 import type { TokenArr } from '@/types/dtType';
+import uploadIcon from '@/assets/img/dtadd.png';
+
 
 const router = useRouter();
 const isOpen = ref(false);
@@ -107,6 +121,11 @@ function clearSyncTimer() {
 function toggleOpen() {
   syncAccountList();
   isOpen.value = !isOpen.value;
+}
+
+function goUpload() {
+  isOpen.value = false;
+  router.push({ path: '/updt' });
 }
 
 function accountText(account?: TokenArr) {

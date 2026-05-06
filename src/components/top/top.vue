@@ -1,6 +1,6 @@
 <template>
     <div class="zhu">
-        <topView :dtid="data.id" :touxian-src="getTouxian(data.touxian)" :name="data.name"></topView>
+        <topView :dtid="data.id" :touxian-src="getTouxian('xt')" :name="data.name"></topView>
         <div id="biaodan">
             <div class="circle">
                 <div>

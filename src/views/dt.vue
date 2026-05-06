@@ -7,13 +7,15 @@
             <topDh :showBg='showBg' @clicks="updt" @gologin="gologin"></topDh>
         </div>
 
-        <div v-if="userData.isPc" class="userOptions">
+        <div v-if="userData.isPc && userData.isLogin" class="userOptions">
             <userOptions></userOptions>
         </div>
 
         <div id="head" ref="head">
             <div v-if="userData.isPc">
-                <homePage></homePage>
+                <homePage ></homePage>
+                <!-- <homePageMo13 ></homePageMo13> -->
+               
             </div>
             <div v-if="!userData.isPc">
                 <homePageMo></homePageMo>
@@ -179,6 +181,7 @@ import YearSign from '@/components/yearSign/yearSign.vue';
 import { routerPush } from '@/utils/dt/routerUtil';
 import dtOp from '@/components/dtOp/dtOp.vue';
 import userOptions from '@/components/userOptions/userOptions.vue';
+import homePageMo13 from '@/components/homepageMo13/homePageMo13.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();
@@ -193,6 +196,8 @@ let startId = 0;
 
 // 刷新还是重新打开
 let Restart = sessionStorage.getItem('restart');
+
+console.log(token.istoken);
 
 
 if (route.query.login && route.query.login == 'login') {
