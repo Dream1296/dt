@@ -35,7 +35,7 @@
 
 .action-card {
     width: 100%;
-    height: 64px;
+    height: 104px;
     border: 0;
     padding: 0;
     border-radius: 18px;
@@ -54,6 +54,11 @@
             0 14px 24px rgba(136, 96, 35, 0.12),
             inset 0 1px 0 rgba(255, 255, 255, 0.82);
     }
+}
+
+.action-card--account {
+    padding: 0;
+    overflow: hidden;
 }
 
 .icon-wrap {
@@ -85,11 +90,16 @@
 
 .panel.mobile .action-list {
     gap: 8px;
+    grid-template-columns: minmax(0, 1fr) 56px;
 }
 
 .panel.mobile .action-card {
-    height: 56px;
+    height: 92px;
     border-radius: 16px;
+}
+
+.panel.mobile .action-card--account {
+    min-width: 0;
 }
 
 .panel.mobile .icon-wrap {

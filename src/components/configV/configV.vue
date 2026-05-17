@@ -7,12 +7,9 @@
         </div>
 
         <div class="action-list">
-            <button class="action-card" type="button" @click="upData">
-                <span class="icon-wrap">
-                    <!-- <img src="../../assets/img/dy.png" v-show="viewData.isShowDy"> -->
-                    <!-- <img src="../../assets/img/dy0.png" v-show="!viewData.isShowDy"> -->
-                </span>
-            </button>
+            <div class="action-card action-card--account">
+                <MobileUserOptions></MobileUserOptions>
+            </div>
 
             <button class="action-card" type="button" @click="toTop">
                 <span class="icon-wrap">
@@ -26,16 +23,16 @@
 <script setup lang="ts">
 import { computed, onBeforeUnmount, onMounted, ref, watch } from 'vue';
 import { viewDataStore } from '@/stores/viewDataStore';
-import { dtDataInit } from '@/dtData/getList';
 import { myEvent } from '@/myEnit';
+import MobileUserOptions from '@/components/mobileUserOptions/mobileUserOptions.vue';
 
 const viewData = viewDataStore();
 
 const isPc = computed(() => window.innerWidth >= 768);
 const panelLeft = ref(0);
 const panelTop = ref(0);
-const panelWidth = computed(() => (isPc.value ? 168 : 132));
-const panelHeight = computed(() => (isPc.value ? 108 : 92));
+const panelWidth = computed(() => (isPc.value ? 230 : 230));
+const panelHeight = computed(() => (isPc.value ? 162 : 112));
 const gap = computed(() => (isPc.value ? 18 : 12));
 
 const panelStyle = computed(() => ({
@@ -43,13 +40,6 @@ const panelStyle = computed(() => ({
     top: `${panelTop.value}px`,
     width: `${panelWidth.value}px`,
 }));
-
-function upData() {
-    // viewData.isShowDy = !viewData.isShowDy;
-    dtDataInit(viewData.loa).then(() => {
-        myEvent.emit('upDtList');
-    });
-}
 
 function updatePanelPosition() {
     const margin = 14;
