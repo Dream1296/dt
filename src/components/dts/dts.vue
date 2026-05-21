@@ -34,7 +34,7 @@
 			</div>
 
 		</div>
-		
+
 		<van-switch v-if="data.id == 562" v-model="isMo" />
 
 		<div id="thressV" v-if="data.id == 562 && isMo">
@@ -117,7 +117,7 @@
 				@click.stop='nulls'></textarea>
 			<van-button @click.stop="setPls()" type="primary">发送</van-button>
 		</div>
-				<!-- 评论显示 -->
+		<!-- 评论显示 -->
 		<div v-if="data.com && data.com.length > 0">
 			<CommentShow :data="data.com"></CommentShow>
 		</div>
@@ -228,7 +228,12 @@ function tzlongtext(id: number, index: number) {
 }
 
 function tzChat(id: string) {
+	if (userStoreData.isPc) {
+		window.open('/chat/' + id, '_blank');
+		return
+	}
 	router.push({ path: '/chat/' + id });
+
 }
 
 

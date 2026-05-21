@@ -11,14 +11,14 @@ import { dtData } from "./dtList";
 
 
 //获取动态主数据并对其进行初始化操作后返回
-export async function dtDataInit(loa: string | number,): Promise<(Dt)[]> {
+export async function dtDataInit(loa: string | number,tabList?:{name:string,show:boolean}[]): Promise<(Dt)[]> {
     //从网络请求获取数据
     let data = (await dtDate(loa, 0, dtData.signal)).data;
 
 
 
     //过滤掉不显示元素
-    filterVisibleData(data)
+    filterVisibleData(data,tabList);
  
     
     // DtDataType类型数组，用于分离出主动态数据
@@ -70,16 +70,13 @@ export async function dtFindData(qb: string, loa: number) {
 let SHOWDTNUM = import.meta.env.VITE_SHOWDTNUM != -1 ? import.meta.env.VITE_SHOWDTNUM : -1;
 
 //数据过滤，隐藏抖音视频
-function filterVisibleData(data: Dt[]) {
+function filterVisibleData(data: Dt[],tabList?:{name:string,show:boolean}[]) {
     let viewData = viewDataStore();
 
     // 如果未登陆，显示的动态数量由环境变量控制
     if (!token.token && SHOWDTNUM != -1) {
         data.splice(SHOWDTNUM);
     }
-
-
-
 
     // !!这里要倒着遍历，因为正向遍历时删除操作会影响后续遍历索引
     for (let i = data.length - 1; i >= 0; i--) {
@@ -89,6 +86,32 @@ function filterVisibleData(data: Dt[]) {
             data.splice(i, 1); // 删除当前项
         }
     }
+
+    if(tabList && tabList.length > 0){
+        for (let i = data.length - 1; i >= 0; i--) {
+            const a = data[i];
+            if(a.type != 'A'){
+                continue;
+            }
+            let keyWorldArr = a.keyword.map(e => e.keyword);
+            if(keyWorldArr.length ==0 ){
+                if(tabList[tabList.length-1].show){
+                    continue;
+                }else{
+                    data.splice(i, 1); // 删除当前项
+                }
+            }
+            if(keyWorldArr.some(e => tabList.some(e2 => e2.name == e && e2.show))){
+                continue;
+            }else{
+                data.splice(i, 1); // 删除当前项
+            }
+        }
+    }
+
+
+
+
 }
 
 

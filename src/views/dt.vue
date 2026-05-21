@@ -13,9 +13,9 @@
 
         <div id="head" ref="head">
             <div v-if="userData.isPc">
-                <homePage ></homePage>
+                <homePage></homePage>
                 <!-- <homePageMo13 ></homePageMo13> -->
-               
+
             </div>
             <div v-if="!userData.isPc">
                 <homePageMo></homePageMo>
@@ -30,8 +30,13 @@
             <div class="zhujian">
                 <SystemDt @config="configs"></SystemDt>
             </div>
+            <line></line>
 
+            <div class="zhujian" >
+               <TabOption></TabOption>
+            </div>
 
+            
 
             <div class="zhujian" v-show="showLogin">
                 <login @success="logins"></login>
@@ -45,7 +50,8 @@
                 <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
                     <div class="zhujian">
                         <div v-if="a.type == 'A' && !a.KeepRun && !a.KeepBadminton">
-                            <dts @showImg="dtsClicks" @showVideo='playVideo' @showOptions="showDtOptions" :datas="a"></dts>
+                            <dts @showImg="dtsClicks" @showVideo='playVideo' @showOptions="showDtOptions" :datas="a">
+                            </dts>
                         </div>
 
                         <div v-if="a.type == 'A' && a.KeepRun">
@@ -182,6 +188,7 @@ import { routerPush } from '@/utils/dt/routerUtil';
 import dtOp from '@/components/dtOp/dtOp.vue';
 import userOptions from '@/components/userOptions/userOptions.vue';
 import homePageMo13 from '@/components/homepageMo13/homePageMo13.vue';
+import TabOption from '@/components/tabOption/tabOption.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();
@@ -211,16 +218,15 @@ console.log(isNaN(Number(route.query.loa)));
 
 if (route.query.loa && !isNaN(Number(route.query.loa)) && Number(route.query.loa) >= 0) {
     console.log(Number(route.query.loa));
-    
     viewData.loa = Number(route.query.loa);
 }
 
 
-if(!Restart){
+if (!Restart) {
     viewData.loa = 0;
     startId = 0;
     routerPush('loa', '0');
-    sessionStorage.setItem('restart','1')
+    sessionStorage.setItem('restart', '1')
 }
 
 
