@@ -41,12 +41,14 @@
 			<!-- <threeView modelPath="./小凳子.glb"></threeView> -->
 		</div>
 
-		<div class="lvLogos" v-if="data.longVideo">
+		<div id="map" v-if="data.map.length > 0">
+			📍{{ data.map[0].name }}
+		</div>
 
+		<div class="lvLogos" v-if="data.longVideo">
 			<div class="lvLogo" v-for="a in data.longVideo" @click="tzlv(a.id)">
 				{{ a.name }}
 			</div>
-
 		</div>
 
 		<!-- 右上角悬挂链接 -->
@@ -83,6 +85,16 @@
 						<div class="lvLogo lvLogo--file" @click="dowFile(file.fileId)">
 							<img class="lvLogoIcon" :src="rarIcon" alt="压缩包图标">
 							<span class="lvLogoText">{{ file.name }}</span>
+						</div>
+					</div>
+				</div>
+				<div class="hangingLinkItem" v-for="index in indexArr()" :key="index">
+					<span class="hangingRopeKnot"></span>
+					<span class="hangingRopeTie"></span>
+					<div class="lvLogos lvLogos--file">
+						<div class="lvLogo lvLogo--file">
+							<img class="lvLogoIcon" src="../../assets/img/index_img.png" alt="书签图标">
+							<span class="lvLogoText">{{ index }}</span>
 						</div>
 					</div>
 				</div>
@@ -186,7 +198,8 @@ const hasHangingLinks = computed(() => {
 	}
 	return current.text.length > textLen.value
 		|| current.longText.length > 0
-		|| visibleFiles.value.length > 0;
+		|| visibleFiles.value.length > 0 
+		|| indexArr().length > 0;
 });
 
 function syncLoginState() {
@@ -271,6 +284,20 @@ watch(
 
 
 const emit = defineEmits(['clicks', 'showImg', 'showVideo', 'showOptions']);
+
+
+function indexArr() {
+	let res: string[] = [];
+	if (data.value?.keyword == null || data.value?.keyword.length == 0) {
+		return res;
+	}
+	for (let a of data.value.keyword) {
+		if (a.keyword.startsWith('#!')) {
+			res.push(a.keyword.slice(2));
+		}
+	}
+	return res;
+}
 
 
 

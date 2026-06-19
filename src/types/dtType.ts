@@ -35,6 +35,7 @@ export interface DtDataType {
     fileId: string,
     loa: number,
   }[];
+  map: { id: number, name: string, E: number, N: number }[];
   KeepRun?: KeepRunRecord;
   KeepBadminton?: BadmintonData;
   chatRoot?: chatRoot[];
@@ -43,7 +44,7 @@ export interface DtDataType {
 
 
 export type setDtDataT = {
-  id:number,
+  id: number,
   user?: string,
   date?: string,
   imgShowAll?: number,

@@ -150,27 +150,9 @@ function openAlist() {
 	router.push({ path: '/list/' });
 
 }
-//查询事件监听
-myEvent.on('dtFind', (e) => {
-	showSs.value = true;
-	sr.value = e as string;
 
-	if (token.istoken == 'false') {
-		showFailToast('仅用于内部维护使用');
-		return
-	}
-	if (sr.value == '' || sr.value == ' ') {
-		dtDataInit(0).then(() => {
-			myEvent.emit('upDtList');
-		});
-	} else {
-		dtFindData(sr.value, viewData.loa).then(() => {
-			myEvent.emit('upDtList');
-		});
-	}
-
-})
 function dtFind() {
+		showSs.value = true;
 	myEvent.emit('dtFind', sr.value);
 }
 //监听键盘输入

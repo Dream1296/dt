@@ -2,6 +2,7 @@
     <div class="all">
 
 
+
         <!-- 顶部栏 -->
         <div id="kz" :class="{ kzs: showBg }" v-if="!userData.isPc">
             <topDh :showBg='showBg' @clicks="updt" @gologin="gologin"></topDh>
@@ -15,7 +16,6 @@
             <div v-if="userData.isPc">
                 <homePage></homePage>
                 <!-- <homePageMo13 ></homePageMo13> -->
-
             </div>
             <div v-if="!userData.isPc">
                 <homePageMo></homePageMo>
@@ -23,20 +23,30 @@
         </div>
 
         <!-- 空白间隔 -->
-        <div id="nulls"></div>
+        <!-- <div id="nulls"></div> -->
 
-        <div v-if="vlist">
+        <!-- <div id="dtBg">
+            <video autoplay muted loop src="../assets/xiz.mp4"></video>
+        </div> -->
+
+
+
+        <div v-if="vlist" id="dtcompo">
+
+            <!-- 空白间隔 -->
+            <div id="nulls"></div>
+
             <!-- 系统选项 -->
             <div class="zhujian">
                 <SystemDt @config="configs"></SystemDt>
             </div>
             <line></line>
 
-            <div class="zhujian" >
-               <TabOption></TabOption>
+            <div class="zhujian">
+                <TabOption></TabOption>
             </div>
 
-            
+
 
             <div class="zhujian" v-show="showLogin">
                 <login @success="logins"></login>
@@ -204,7 +214,6 @@ let startId = 0;
 // 刷新还是重新打开
 let Restart = sessionStorage.getItem('restart');
 
-console.log(token.istoken);
 
 
 if (route.query.login && route.query.login == 'login') {
@@ -268,7 +277,7 @@ watch(() => viewData.loa,
         }
 
         if (newVal == 0 || newVal == 1) {
-            get01(newVal);
+            myEvent.emit('upDtList', newVal);
         }
 
         if (newVal == -2) {
@@ -286,26 +295,37 @@ watch(() => viewData.loa,
     }
 )
 
-function get01(newVal: number) {
-    dtDataInit(newVal ? 1 : 0).then((data) => {
-        // viewData.loa = data.loa;
-        // 切换背景图
-        if (newVal == 0) {
-            // 页面视图改变
-            bgSrc.value = bgSrcCon + newVal + ".webp";
-        } else {
-            bgSrc.value = bgSrcCon + "1" + ".png";
-        }
 
-        myEvent.emit('upDtList');
-    })
-}
+myEvent.on('upDtList', (loa: any) => {
+    console.log('触发更新');
 
-myEvent.on('upDtList', () => {
+    if (loa == -1) {
+        loa = viewData.loa;
+    }
     // nextTick(() => {
+    dtDataInit(loa)
+        .then((data) => {
+            obsDt.init(dtsDom, 0);
+        })
+})
 
-    obsDt.init(dtsDom, 0);
-    // })
+//查询事件监听
+myEvent.on('dtFind', (e) => {
+
+    if (token.istoken == 'false') {
+        showFailToast('仅用于内部维护使用');
+        return
+    }
+    if (e == '' || e == ' ') {
+        dtDataInit(0).then(() => {
+            obsDt.init(dtsDom, 0);
+        });
+    } else {
+        dtFindData(e as string, viewData.loa).then(() => {
+            obsDt.init(dtsDom, 0);
+        });
+    }
+
 })
 
 

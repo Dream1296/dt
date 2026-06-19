@@ -2,6 +2,7 @@
 
     <div v-if="bgState === 'image'" id="img_bg">
         <img class="home-page-mo13__image" :src="bgImgSrc" alt="" />
+        <!-- <video autoplay muted loop src="../../assets/xiz.mp4"></video> -->
     </div>
 
     <div v-else-if="bgState === 'default'" id="all">

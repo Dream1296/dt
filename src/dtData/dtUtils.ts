@@ -84,6 +84,17 @@ export function settext(key: 'textArr', value: 'text', dtData: DtDataType[]) {
 export function Asetcl(data: DtDataType[]) {
     //处理正文字符串
     settext('textArr', 'text', data);
+
+
+    for (let a of data) {
+        if (a.type == 'A') {
+           if(!a.keyword){
+            a.keyword = [];
+           }
+        }
+    }
+
+
 }
 
 

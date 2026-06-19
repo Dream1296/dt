@@ -1,4 +1,4 @@
-import type { DtDataType,dataImg, Dt, listFile, setDtDataT } from '@/types/dtType';
+import type { DtDataType, dataImg, Dt, listFile, setDtDataT } from '@/types/dtType';
 import axioss from 'axios';
 import { token, token as tokens } from '@/api/token';
 
@@ -87,7 +87,7 @@ export async function getTempTokenApi(token: string = tokens.token) {
 export async function yz(token: string) {
     const urls = Internet.url + '/api/userClass';
     let userId = (await api<{ coed: number, data: { username: string } }>(urls, 'GET', undefined, token)).data.username;
-    
+
     return userId;
 }
 
@@ -132,14 +132,14 @@ export async function getdt(id: string | number, loa?: number): Promise<{ code: 
 }
 
 // 单个动态数据更新
-export async function setDt(upData:setDtDataT){
+export async function setDt(upData: setDtDataT) {
     let urls = `${Internet.url}/api/setdt`;
-    let res = (await api(urls, 'POST', upData, tokens.token)) as {code:number}
+    let res = (await api(urls, 'POST', upData, tokens.token)) as { code: number }
     // let res = {
     //     code:200
     // }
     return res;
-    
+
 }
 
 //提交动态评论内容
@@ -181,7 +181,7 @@ export async function getName() {
 }
 
 //传入token获取用户名
-export async function getTokenName(token:string) {    
+export async function getTokenName(token: string) {
     let urls = Internet.url + '/api/userc?token=' + token;
     let res = await api<{ user: string, name: string }>(urls, 'GET', undefined, undefined);
     return res;
@@ -196,8 +196,8 @@ export type UserBgImgResponse = Blob | null;
  */
 export async function getUserBgIMg(): Promise<UserBgImgResponse> {
     let urls = Internet.url + '/api/userBgImg';
-    const headers = token.tempToken ? { Authorization: `Bearer ${token.tempToken}` } : 
-    { Authorization: `Bearer ${token.token}` };
+    const headers = token.tempToken ? { Authorization: `Bearer ${token.tempToken}` } :
+        { Authorization: `Bearer ${token.token}` };
     const response = await axios({
         url: urls,
         method: 'GET',
@@ -236,6 +236,11 @@ export function getYearImg(year: number) {
     return url;
 }
 
+export async function userIndex() {
+    let url = Internet.url + '/api/userIndex';
+    let res = await api<{ code:number,index_arr:string[] }>(url, 'GET', undefined, token.token);
+    return res.index_arr;
+}
 
 /**
  * 
@@ -296,7 +301,7 @@ export function getEmoSrc(name: string) {
 
 
 //获取头像
-export function getTouxian(userId:string) {
+export function getTouxian(userId: string) {
     const tokenStr = tokens.tempToken ? `&token=${tokens.tempToken}` : '';
     return `${Internet.url}/api/userImg?userId=${userId}${tokenStr}`
 }
@@ -407,7 +412,7 @@ export async function getShare(key: string) {
 
 export async function getListArr(pathStr: string) {
     let url = `${Internet.url}/api/listPath?path=${pathStr}`;
-    let res = await api<{ code: number, data: listFile[] }>(url, 'GET',undefined,tokens.tempToken);
+    let res = await api<{ code: number, data: listFile[] }>(url, 'GET', undefined, tokens.tempToken);
     return res;
 }
 
@@ -423,7 +428,7 @@ export function getListImg(path: string) {
     return url;
 }
 
-export function getListFile(path:string){
+export function getListFile(path: string) {
     return `${Internet.url}/api/listFile?path=${encodeURIComponent(path)}&token=${tokens.token}`;
 }
 
