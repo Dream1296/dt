@@ -3,6 +3,7 @@ import axioss from 'axios';
 import { api, Internet } from './api';
 import { token } from './token';
 import { ref, type Ref } from 'vue';
+import { getFileMd5 } from '@/utils/md5';
 
 
 
@@ -34,7 +35,7 @@ export function ac() {
 
 
 
-export function upfiles(imgArr: any[], videoArr: any[]) {
+export function upfiles(imgArr: any[], videoArr: any[],dtId:number) {
     let len = imgArr.length + videoArr.length;
     let imgNameArr: string[] = [];
     let videoNumArr: string[] = [];
@@ -44,11 +45,11 @@ export function upfiles(imgArr: any[], videoArr: any[]) {
 
     for (let i = 0; i < imgArr.length; i++) {
         upPromise[i] =
-            () => upfile(imgArr[i], 'img', percentCompleteArr.value[0], imgNameArr, i);
+            () => upfile(imgArr[i], 'img', percentCompleteArr.value[0], imgNameArr, i,dtId);
     }
     for (let i = 0; i < videoArr.length; i++) {
         upPromise[imgArr.length + i] =
-            () => upfile(videoArr[i], 'video', percentCompleteArr.value[1], videoNumArr, i);
+            () => upfile(videoArr[i], 'video', percentCompleteArr.value[1], videoNumArr, i,dtId);
     }
     return {
         upPromise,
@@ -59,17 +60,16 @@ export function upfiles(imgArr: any[], videoArr: any[]) {
 }
 
 
-export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: number[], fileNameArr: string[], index: number): Promise<boolean> {
-    return new Promise((resolve, reject) => {
+export function upfile(file: File, type: 'img' | 'video', percentCompleteArr: number[], fileNameArr: string[], index: number, dtId: number): Promise<boolean> {
+    return new Promise(async (resolve, reject) => {
         const date = new Date();
-        let filename = file.name;
-        var formData = new FormData(); // 创建一个FormData对象
-        formData.append('filename', filename);
-        formData.append('file', file);
-
+        let filename = encodeURIComponent(file.name);
+        let fileBuffer = await file.arrayBuffer();
+        let md5 =  getFileMd5(fileBuffer);
         let url = '';
+
         if (type == 'img') {
-            url = Internet.url + '/api/updt';
+            url = Internet.url + '/api/upImg';
         }
         if (type == 'video') {
             url = Internet.url + '/api/upvideo';
@@ -83,6 +83,14 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: num
         xhr.open('POST', url, true);
 
         xhr.setRequestHeader('Authorization', `Bearer ${token.tempToken}`);
+        xhr.setRequestHeader('Content-Type', `application/octet-stream`);
+
+        xhr.setRequestHeader('x-dt-id', dtId.toString());
+        xhr.setRequestHeader('x-dt-index', index.toString());
+        xhr.setRequestHeader('x-file-name', filename);
+        xhr.setRequestHeader('x-file-md5', md5);
+        
+        
 
         // 监听上传进度
         xhr.upload.addEventListener('progress', function (e) {
@@ -106,12 +114,12 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: num
         };
 
         // 发送请求
-        xhr.send(formData);
+        xhr.send(fileBuffer);
     })
 
 }
 
-export function postDt(text: string, img: string[], imgShowNum: string, date: string, loa: number, video: string[], imgDir: boolean) {
+export function postDt(dtId:number,text: string, imgNum:number, imgShowNum: number,videoNum:number, date: string, loa: number, imgDir: boolean) {
     return new Promise((resolve, rejects) => {
         fetch(Internet.url + '/api/postdt', {
             method: 'POST',
@@ -120,12 +128,13 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
                 'Authorization': 'B ' + token.tempToken
             },
             body: JSON.stringify({
+                dtId,
                 text,
-                img,
+                imgNum,
                 imgShowNum,
+                videoNum,
                 date,
-                loa,
-                video,
+                loa,                
                 imgDir: imgDir,
             })
         })
@@ -140,6 +149,6 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
 
 // 预上传，获取id
 export async function preUp() {
-   let res = await api<{ dtId: number }>(Internet.url + '/api/preUpDt', 'GET', undefined, token.tempToken)
+    let res = await api<{ dtId: number }>(Internet.url + '/api/preUpDt', 'GET', undefined, token.tempToken)
     return res.dtId;
 }

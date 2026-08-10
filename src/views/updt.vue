@@ -135,7 +135,7 @@
 <script setup lang="ts">
 
 import { emojiSrc, emoList } from '@/api/api';
-import { ac, postDt, upfile, upfiles } from '@/api/upapi';
+import { ac, postDt, preUp, upfile, upfiles } from '@/api/upapi';
 import { computed, onMounted, ref } from 'vue';
 import { closeToast, showConfirmDialog, showFailToast, showLoadingToast, showSuccessToast, Toast } from 'vant';
 import router from '@/router';
@@ -392,8 +392,12 @@ async function updts() {
 
     isUp = true;
 
+    let dtId = -1;
+    // 预上传 获取dtid
+    dtId = await preUp();
+
     //上传媒体资源
-    let pro = upfiles(imgArr, videoArr);
+    let pro = upfiles(imgArr, videoArr, dtId);
     let allNum = imgArr.length + videoArr.length;
 
     watch(
@@ -414,6 +418,12 @@ async function updts() {
 
     let bool = await Promise.all(pro.upPromise.map(task => task()));
 
+    console.log('上传测试');
+    
+    // 延迟函数
+    function delay(ms: number) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
 
     // num = pro.percentCompleteArr;
     if (!bool) {
@@ -423,7 +433,7 @@ async function updts() {
         showImgNum.value = imgArr.length > 6 ? 6 : imgArr.length;
     }
     let time = getDataTime(dateArr.value, timeArr.value);
-    postDt(txt, pro.imgNameArr, showImgNum.value.toString(), time, loa.value, pro.videoNumArr, isImgDir.value)
+    postDt(dtId, txt, imgArr.length, showImgNum.value, videoArr.length, time, loa.value, isImgDir.value)
         .then((a: any) => {
             if (a.tf == 1) {
                 isupIng.value = false;
