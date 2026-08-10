@@ -1,9 +1,10 @@
-#img_bg{
+#img_bg {
     width: 98vw;
     height: 100vh;
     overflow: hidden;
     position: relative;
     background: #f9d7e4;
+
     video {
         width: 100%;
         height: 100%;
@@ -12,7 +13,7 @@
         //自动静音循环播放
         autoplay: true;
         muted: true;
-        loop: true; 
+        loop: true;
         //自动播放
         play: true;
     }
@@ -93,4 +94,22 @@ a {
     position: absolute;
     top: 95%;
     left: 42%;
+}
+
+
+#interaction {
+    z-index: 200;
+    position: absolute;
+    left: 0;
+    top: 0;
+
+    #wsj {
+      width: 143px;
+    height: 243px;
+    border: 1px solid #000;
+    position: absolute;
+    transform: rotate(25deg);
+    left: 130px;
+    top: 116px;
+    }
 }

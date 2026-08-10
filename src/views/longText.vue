@@ -1,10 +1,10 @@
 <template>
     <div v-if="text != '' &&  textType == 'text'" id="all">
-        <longTextShow :data="text" :title='title'></longTextShow>
+        <longTextShow :data="text" :dtid="dtid" :title='title'></longTextShow>
     </div>
 
     <div v-if="text != '' && textType == 'html'">
-        <LongHtmlShow :data="text" ></LongHtmlShow>
+        <LongHtmlShow :data="text"  ></LongHtmlShow>
     </div>
 
     <div v-if="text != '' && textType == 'chatgpt'">
@@ -33,6 +33,7 @@ const viewData = viewDataStore();
 let text = ref('');
 let textType = ref('');
 let title = ref('');
+let dtid = ref(-1);
 
 
 console.log(type,id);
@@ -55,6 +56,9 @@ function getLongTextFn(){
                 // document.title = `📖${res.title}`;
                 setDoTitle(res.title,res.type)
                 text.value = res.data;
+                dtid.value = Number(res.dtid);
+                console.log(res.dtid);
+                
                 title.value = res.title;
                 textType.value = res.type;
                 if(textType.value == 'chatgpt' && all.value){
@@ -71,7 +75,6 @@ function lookTextLong(){
             title.value = '#' + res.data.id;
             text.value = textAddBr( res.data.text);
             textType.value = 'text';
-
         })
 }
 

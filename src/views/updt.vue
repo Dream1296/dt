@@ -369,11 +369,12 @@ function upimgs() {
     upImg.value?.click();
 }
 
+// 上传进行时
 let isUp = false;
 
 let upfilejd = ref(0);
 
-
+// 上传
 async function updts() {
 
     if (isUp) {
@@ -434,11 +435,6 @@ async function updts() {
             }
 
         })
-
-
-
-
-
 
 }
 

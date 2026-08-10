@@ -1,19 +1,22 @@
 <template>
-    <div class="article-container_long_text" v-html="showText">
+    <div class="article-container_long_text" v-html="showText" @click="setImg">
 
     </div>
+    <!-- {{ props.dtid }} -->
 
 </template>
 
 
 <script setup lang="ts">
+import { imgSrc } from '@/api/api';
 import { computed } from 'vue';
 
 
 
 const props = defineProps<{
-    title:string,
+    title: string,
     data: string,
+    dtid: number
 }>();
 
 
@@ -23,13 +26,71 @@ let redHtml = `
     <span>--END--</span>
   </div>`;
 
-  let title = `
+let title = `
   <h3>${props.title}</h3>
   `
 
 let showText = computed(() => {
-    return title + props.data + redHtml;
+    let html = title + props.data + redHtml;
+    console.log(props.dtid);
+
+    return parseArticleHtml(html, props.dtid);
 })
+
+function parseArticleHtml(html: string, dtid: number): string {
+    const parser = new DOMParser();
+    const doc = parser.parseFromString(html, "text/html");
+
+    const imgs = doc.querySelectorAll("img");
+    console.log(imgs);
+
+    imgs.forEach((img) => {
+
+        const index = img.getAttribute("index");
+        const size = Number(img.getAttribute("size")) || '0';
+
+        dtid = Number(img.getAttribute("dtid")) != 0 ? Number(img.getAttribute("dtid")) : dtid;
+        console.log(dtid);
+
+        // 如果没有 index，跳过
+        if (index === null) return;
+
+        const src = imgSrc(dtid, Number(index), '0');
+
+        img.setAttribute("src", src);
+
+        // 可选：清理自定义属性
+        // img.removeAttribute("index");
+    });
+
+    return doc.body.innerHTML;
+}
+
+
+function setImg(e: MouseEvent) {
+    console.log(e);
+    
+    const target = e.target as HTMLElement;
+    
+    if (target.tagName.toLowerCase() !== "img") return;
+    
+    
+    const index = target.getAttribute("index");
+    console.log(index);
+    let dtid = Number(target.getAttribute("dtid")) != 0 ? Number(target.getAttribute("dtid")) : props.dtid;
+
+
+    if (index === null) return;
+
+     const src = imgSrc(dtid, Number(index), '1');
+    //  跳转到src
+    window.open(src, '_blank');
+      
+}
+
+
+
+
 
 
 
@@ -113,7 +174,7 @@ let showText = computed(() => {
 
 /* 在图片添加样式时确保它们自适应 */
 .article-container_long_text img {
-    max-width: 100%;
+    max-width: 30%;
     /* 确保图片不会超出容器 */
     border-radius: 10px;
     /* 图片边缘圆角 */

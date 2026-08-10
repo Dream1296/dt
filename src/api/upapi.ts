@@ -1,6 +1,6 @@
 import type { DtDataType } from '@/types/dtType';
 import axioss from 'axios';
-import { Internet } from './api';
+import { api, Internet } from './api';
 import { token } from './token';
 import { ref, type Ref } from 'vue';
 
@@ -82,7 +82,7 @@ export function upfile(file: any, type: 'img' | 'video', percentCompleteArr: num
         // 设置请求类型和上传目标地址
         xhr.open('POST', url, true);
 
-        xhr.setRequestHeader('Authorization',`Bearer ${token.tempToken}`);
+        xhr.setRequestHeader('Authorization', `Bearer ${token.tempToken}`);
 
         // 监听上传进度
         xhr.upload.addEventListener('progress', function (e) {
@@ -131,9 +131,15 @@ export function postDt(text: string, img: string[], imgShowNum: string, date: st
         })
             .then(po => po.json())
             .then(res => {
-    
+
                 resolve(res);
             })
     })
 
+}
+
+// 预上传，获取id
+export async function preUp() {
+   let res = await api<{ dtId: number }>(Internet.url + '/api/preUpDt', 'GET', undefined, token.tempToken)
+    return res.dtId;
 }

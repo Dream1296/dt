@@ -113,11 +113,11 @@ let showText = computed(() => {
 
 /* 在图片添加样式时确保它们自适应 */
 .article-container_long_text img {
-    max-width: 100%;
+    /* max-width: 100%; */
     /* 确保图片不会超出容器 */
-    border-radius: 10px;
+    /* border-radius: 10px; */
     /* 图片边缘圆角 */
-    margin-bottom: 20px;
+    /* margin-bottom: 20px; */
     /* 图片与文本之间增加间隔 */
 }
 

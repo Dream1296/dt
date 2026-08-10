@@ -49,6 +49,7 @@ import router from '@/router';
 import { styleText } from 'util';
 import Line from '../fenge/line.vue';
 import topView from '../TopView/topView.vue';
+import { token } from '@/api/token.js';
 
 
 
@@ -78,7 +79,7 @@ watch(
 );
 
 // let src = ref("https://frp-fix.top:20047/api/dtDataImg?year=2024");
-let src = ref(Internet.url + "/api/dtDataImg?year=2026&id=" + data.value?.id);
+let src = ref(Internet.url + "/api/dtDataImg?year=2026&id=" + data.value?.id + '&token=' + token.tempToken);
 
 
 

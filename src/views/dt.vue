@@ -32,7 +32,6 @@
 
 
         <div v-if="vlist" id="dtcompo">
-
             <!-- 空白间隔 -->
             <div id="nulls"></div>
 
@@ -44,6 +43,10 @@
 
             <div class="zhujian">
                 <TabOption></TabOption>
+            </div>
+
+            <div class="zhujian" v-if="userList.length > 1">
+                <UserBlackList></UserBlackList>
             </div>
 
 
@@ -159,7 +162,7 @@
 </template>
 
 <script setup lang="ts">
-import { dtDataInit, dtFindData } from '../dtData/getList';
+import { dtDataInit, dtFindData, userList } from '../dtData/getList';
 import { VcDataPush, vData } from '../dtData/VcData';
 import type { DtDataType } from '../types/dtType';
 import { nextTick, onBeforeUnmount, onMounted, ref, watch, type Ref } from 'vue';
@@ -199,6 +202,7 @@ import dtOp from '@/components/dtOp/dtOp.vue';
 import userOptions from '@/components/userOptions/userOptions.vue';
 import homePageMo13 from '@/components/homepageMo13/homePageMo13.vue';
 import TabOption from '@/components/tabOption/tabOption.vue';
+import UserBlackList from '@/components/userBlackList/userBlackList.vue';
 
 let viewData = viewDataStore();
 let userData = userStore();

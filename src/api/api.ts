@@ -242,13 +242,6 @@ export async function userIndex() {
     return res.index_arr;
 }
 
-/**
- * 
- * @param comId 评论id
- * @param index 个数
- * @param size '0'为缩略图，'1'为原图
- * @returns 
- */
 export function imgSrc(dtid: number, index: number, size?: '0' | '1') {
     let tokenStr = tokens.tempToken ? '&token=' + tokens.tempToken : '';
     let sizeStr = size != undefined ? `&size=${size}` : '';
@@ -395,6 +388,7 @@ export async function getChatNode(id: string) {
             update_time: string;
             account: string;
             tag: string;
+            rootId:string;
             nodeList: nodeT[]
         }
     }
@@ -402,6 +396,8 @@ export async function getChatNode(id: string) {
     let res = await api<T>(url, 'GET', undefined, tokens.token);
     return res.data;
 }
+
+
 
 
 export async function getShare(key: string) {

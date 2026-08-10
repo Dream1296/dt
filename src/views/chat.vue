@@ -170,9 +170,9 @@ async function init() {
     vList.value.push(list[0]);
 
     // nodeIndex.set(rootId, [ref(0), 1]);
-    computeBranchSize(rootId);
+    computeBranchSize(data.rootId);
 
-    xuanran(rootId);
+    xuanran(data.rootId);
     console.log(nodeIndex);
 }
 
