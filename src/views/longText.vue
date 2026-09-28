@@ -33,7 +33,7 @@ const viewData = viewDataStore();
 let text = ref('');
 let textType = ref('');
 let title = ref('');
-let dtid = ref(-1);
+let dtid = ref<string>('-1');
 
 
 console.log(type,id);
@@ -56,7 +56,7 @@ function getLongTextFn(){
                 // document.title = `📖${res.title}`;
                 setDoTitle(res.title,res.type)
                 text.value = res.data;
-                dtid.value = Number(res.dtid);
+                dtid.value = res.dtid;
                 console.log(res.dtid);
                 
                 title.value = res.title;

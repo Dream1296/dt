@@ -11,8 +11,8 @@ export type dtList = {
 
     set: (newData: (Dt)[]) => void,
     addVlist: (i: number, direction?: 'previou' | 'next') => void
-    find: (id: number) => DtDataType | undefined,
-    del: (id: number) => boolean,
+    find: (id: string) => DtDataType | undefined,
+    del: (id: string) => boolean,
 
 }
 
@@ -41,7 +41,7 @@ export let dtData: dtList = {
 
     },
     //查询数据
-    find: (id: number) => {
+    find: (id: string) => {
         let obj = dtData.list.find(obj => obj.id == id);
         if (obj && obj.type == 'A') {
             return obj;
@@ -50,7 +50,7 @@ export let dtData: dtList = {
             return undefined;
         }
     },
-    del: (id: number) => {
+    del: (id: string) => {
         // 删除原始数据中的项
         const valueIndex = dtData.list.findIndex(item => item.id === id);
         if (valueIndex !== -1) {

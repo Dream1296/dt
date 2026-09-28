@@ -162,27 +162,23 @@ async function init() {
     let data = await getChatNode(rootId);
 
 
-
     about.value = data;
+    
     document.title = data.title;
+
     list = data.nodeList;
 
-    vList.value.push(list[0]);
+    computeBranchSize(rootId);
 
-    // nodeIndex.set(rootId, [ref(0), 1]);
-    computeBranchSize(data.rootId);
+    xuanran(rootId);
 
-    xuanran(data.rootId);
-    console.log(nodeIndex);
+    
 }
 
-function getFuNode(id: string) {
-    let arr = list.filter(obj => obj.parent_id == id);
-    return arr;
-}
+
 
 function computeBranchSize(id: string): number {
-    let children = getFuNode(id);
+    let children = getFuNode(id, list);
     const childCount = children.length;
     if (children.length == 0) {
         // 叶子节点 → 子树大小为 0
@@ -218,7 +214,8 @@ function computeBranchSize(id: string): number {
 
 function xuanran(id: string) {
 
-    let list1 = getFuNode(id);
+    vList.value.push(list.find(obj => obj.id == id)!);
+    let list1 = getFuNode(id, list);
 
     if (list1.length == 0) {
         return
@@ -226,7 +223,7 @@ function xuanran(id: string) {
 
     if (nodeIndex.has(id)) {
         let index = nodeIndex.get(id)!.index;
-        vList.value.push(list1[index.value]);
+        // vList.value.push(list1[index.value]);
         xuanran(list1[index.value].id);
     } else {
         nodeIndex.set(id, {
@@ -234,7 +231,7 @@ function xuanran(id: string) {
             size: list1.length,
             branchSizes: [-1],
         });
-        vList.value.push(list1[0]);
+        // vList.value.push(list1[0]);
         xuanran(list1[0].id);
     }
 }
@@ -252,13 +249,10 @@ function updataFn(data: string, val: string) {
         branchSizes: oldNode.branchSizes,
     });
     vList.value.length = 0;
-    vList.value.push(list[0]);
+    // vList.value.push(list[0]);
     xuanran(rootId);
 
     console.log(data, val);
-
-
-
 }
 
 
@@ -277,6 +271,7 @@ function showDate(date: string) {
 
 
 import { onMounted, onBeforeUnmount } from 'vue'
+import { getFuNode } from './chat';
 
 const customViewport = 'width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no'
 const defaultViewport = 'width=device-width, initial-scale=1.0'

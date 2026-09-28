@@ -116,7 +116,7 @@ export async function dtfind(qb: string, loa?: string) {
     return res;
 }
 
-export async function addDtindex(dtid: number, text: string) {
+export async function addDtindex(dtid: string, text: string) {
     const urls = Internet.url + "/api/dtindex";
     let res = await api(urls, 'POST', { id: dtid, dtindex: text }, tokens.token);
     return res;
@@ -124,7 +124,7 @@ export async function addDtindex(dtid: number, text: string) {
 }
 
 //单个动态
-export async function getdt(id: string | number, loa?: number): Promise<{ code: number, data: DtDataType }> {
+export async function getdt(id: string , loa?: number): Promise<{ code: number, data: DtDataType }> {
     loa = loa == undefined ? 0 : loa
     let urls = Internet.url + "/api/getdt?id=" + String(id) + "&loa=" + loa;
     let res = (await api(urls, 'GET', undefined, tokens.token)) as { code: number, data: DtDataType };
@@ -163,10 +163,10 @@ export async function delDts(dtId: string) {
 }
 
 //修改背景样式
-export async function setDtBgStyle(dtId: number, dtBgStyle: number) {
+export async function setDtBgStyle(dtId: string, dtBgStyle: number) {
     let urls = Internet.url + '/api/setBgStyle';
     let body = {
-        id: dtId,
+        id: String(dtId),
         dtBgStyle: dtBgStyle
     };
     let res = await api<{ tf: number }>(urls, 'POST', body, tokens.token);
@@ -225,7 +225,7 @@ export async function getUserBgIMg(): Promise<UserBgImgResponse> {
 
 
 
-export async function getlvObj(id: number) {
+export async function getlvObj(id: string) {
     let url = Internet.url + '/api/lviobj?id=' + id;
     let res = await api<{ id: number, dt_id: number, name: string, src: string }>(url, 'GET', undefined, undefined);
     return res;
@@ -242,7 +242,7 @@ export async function userIndex() {
     return res.index_arr;
 }
 
-export function imgSrc(dtid: number, index: number, size?: '0' | '1') {
+export function imgSrc(dtid: string, index: number, size?: '0' | '1') {
     let tokenStr = tokens.tempToken ? '&token=' + tokens.tempToken : '';
     let sizeStr = size != undefined ? `&size=${size}` : '';
 
@@ -263,7 +263,7 @@ export function imgSrcCom(comId: number, index: number, size?: '0' | '1') {
 }
 
 //视频
-export function dtVideo(dtid: number, index: number | string) {
+export function dtVideo(dtid: string, index: number | string) {
     if (tokens.tempToken) {
         return `${Internet.url}/api/dtvideo?dtid=${dtid}&index=${index}&token=${tokens.tempToken}`
     }
@@ -281,7 +281,7 @@ export function listVideo(path: string) {
 }
 
 // 视频图片
-export function dtVideoImg(dtid: number, index: number) {
+export function dtVideoImg(dtid: string, index: number) {
     if (tokens.tempToken) {
         return `${Internet.url}/api/dtvideoImg?dtid=${dtid}&index=${index}&token=${tokens.tempToken}`
     }
@@ -549,5 +549,20 @@ async function axiosGetWithTimeout(url: string, timeout = 500) {
 export async function register(username: string, passwd: string, nickname: string, email: string) {
     const urls = Internet.url + "/api/register";
     let res = await api<{ code: number, message: string }>(urls, 'POST', { username, passwd, nickname, email });
+    return res;
+}
+
+
+// 刷新更新
+export async function upDtImgTemp(t:"0" | "1") {
+    const urls = Internet.url + "/api/upDtImgTemp?t=" + t;
+    let res = await api<{ code: number, message: string }>(urls, 'GET', undefined,token.token);
+    return res;
+}
+
+
+export async function getKeepMapGps(id:number){
+    const urls = Internet.url + "/api/getKeepMapGps?id=" + id;
+    let res = await api<{ time:number,E:number,N:number }[]>(urls, 'GET', undefined, token.token);
     return res;
 }

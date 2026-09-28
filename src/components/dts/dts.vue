@@ -35,9 +35,9 @@
 
 		</div>
 
-		<van-switch v-if="data.id == 562" v-model="isMo" />
+		<van-switch v-if="data.id == '562'" v-model="isMo" />
 
-		<div id="thressV" v-if="data.id == 562 && isMo">
+		<div id="thressV" v-if="data.id == '562' && isMo">
 			<!-- <threeView modelPath="./小凳子.glb"></threeView> -->
 		</div>
 
@@ -221,22 +221,22 @@ onMounted(syncLoginState);
 let textLen = ref(60);
 
 let vData: {
-	id: number;
+	id: string;
 	isPlss: boolean;
 	isInput: boolean;
 	plText: string;
 };
 
-function tzlv(id: number) {
+function tzlv(id: string) {
 	router.push({ path: '/Lvi', query: { id: id } });
 }
 
-function tzlt(id: number) {
+function tzlt(id: string) {
 	router.push({ path: '/longText/b/' + id, });
 }
 
 
-function tzlongtext(id: number, index: number) {
+function tzlongtext(id: string, index: number) {
 	router.push({ path: '/longText/a/' + id });
 }
 
@@ -307,16 +307,16 @@ function emosrc(name: string) {
 }
 
 function imgSrcsc(index: number) {
-	let dtid = data.value?.id || 0;
+	let dtid = data.value?.id || '0';
 	return imgSrc(dtid, index, '0');
 }
 
-function videoSrc(index: number) {
-	let dtid = data.value?.id || 0;
-	return dtVideoImg(dtid, index);
+function videoSrc(index: string | number) {
+	let dtid = data.value?.id || '0';
+	return dtVideoImg(dtid, Number(index));
 }
 
-function tzXq(index: number) {
+function tzXq(index: string) {
 	router.push({ path: '/dtShow/' + index });
 }
 
@@ -326,9 +326,9 @@ function showImg(imgNum: number, videoNum: number, temp: number) {
 		playVideo(temp - imgNum);
 		return
 	}
-	let id = data.value?.id;
-	imgTemp.imgLog = imgSrc(Number(id), temp, '0');
-	imgTemp.imgSrc = imgSrc(Number(id), temp, '1');
+	let id = data.value?.id || '-1';
+	imgTemp.imgLog = imgSrc(id, temp, '0');
+	imgTemp.imgSrc = imgSrc(id, temp, '1');
 	if (userStoreData.isPc) {
 		window.open(imgTemp.imgSrc, '_blank');
 		return
@@ -466,7 +466,7 @@ function setPls() {
 				content: uptext,
 				commentsUser: '',
 				date: '',
-				dtId: 0,
+				dtId: '0',
 				imgAllNum: 0,
 				id: -1,
 			})

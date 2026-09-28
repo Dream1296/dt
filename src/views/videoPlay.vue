@@ -42,7 +42,7 @@ const route = useRoute();
 const src = ref('');
 const video = ref<HTMLVideoElement>();
 
-const dtid = Number(route.query.dtid);
+const dtid = route.query.dtid as string;
 const index = route.query.index;
 
 const isPlaying = ref(false);
@@ -60,14 +60,14 @@ onMounted(() => {
     if (meta) {
         meta.setAttribute('content', customViewport)
     }
-    if (dtid == -1) {
+    if (dtid == '-1') {
         return
     }
-    if (dtid >= 0) {
+    if (dtid >= '0') {
         src.value = dtVideo(dtid, Number(index));
     }
     
-    if (dtid == -2 && typeof index == 'string') {
+    if (dtid == '-2' && typeof index == 'string') {
         src.value = decodeURIComponent(index?.toString());    
     }
 

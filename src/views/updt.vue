@@ -64,13 +64,23 @@
             <van-radio-group v-model="loa" direction="horizontal">
                 <van-radio name="0">public</van-radio>
                 <!-- <van-radio name="1">Protected</van-radio> -->
-                 <van-radio name="1">Private</van-radio>
+                <van-radio name="1">Private</van-radio>
                 <van-radio name="10">Protected</van-radio>
                 <!-- <van-radio name="13">Private</van-radio> -->
                 <!-- <van-radio name="12">danger</van-radio> -->
             </van-radio-group>
-            <h3>内部上传图片</h3>
-            <van-switch v-model="isImgDir" />
+            <div>
+                <div>
+                    <h3>内部上传图片</h3>
+                    <van-switch v-model="isImgDir" />
+                </div>
+                <div>
+                    <h3>弱网模式</h3>
+                    <van-switch v-model="nullFile" />
+                </div>
+            </div>
+
+
             <div v-if="!userData.isPc">
                 <h3>发布参考时间</h3>
                 <p @click="showSetDate = true; showPopup = true">
@@ -135,7 +145,7 @@
 <script setup lang="ts">
 
 import { emojiSrc, emoList } from '@/api/api';
-import { ac, postDt, preUp, upfile, upfiles } from '@/api/upapi';
+import { ac, postDt, preUp, upDt, upfile, upfiles, upImgVideoNum } from '@/api/upapi';
 import { computed, onMounted, ref } from 'vue';
 import { closeToast, showConfirmDialog, showFailToast, showLoadingToast, showSuccessToast, Toast } from 'vant';
 import router from '@/router';
@@ -162,6 +172,9 @@ let upVideo = ref<HTMLInputElement>();
 let emojiList = ref<string[]>();
 let userData = userStore();
 
+// 弱网模式
+let nullFile = ref(false);
+
 emojiList.value = emojiNames;
 const gradientColor = {
     '0%': '#3fecff',
@@ -175,11 +188,11 @@ let showEmo = ref(false);
 
 let loa = ref<0 | 1 | 13 | 12>(0);
 const loaText = {
-    0:'公开的',
-    1:"私有的",
-    10:'仅登录',
-    13:'私有的',
-    12:'严格的',
+    0: '公开的',
+    1: "私有的",
+    10: '仅登录',
+    13: '私有的',
+    12: '严格的',
 };
 
 let dateArr = ref<string[]>([]);
@@ -393,11 +406,16 @@ async function updts() {
     isUp = true;
 
     let dtId = -1;
-    // 预上传 获取dtid
-    dtId = await preUp();
+    // 上传文本类数据
 
+    // dtId = await preUp();
+    let date = getDataTime(dateArr.value, timeArr.value);
+    let upDtRes = await upDt(txt, showImgNum.value, date, loa.value);
+    dtId = upDtRes.dtId;
     //上传媒体资源
-    let pro = upfiles(imgArr, videoArr, dtId);
+    console.log(upDtRes);
+
+    let pro = upfiles(imgArr, videoArr, dtId, upDtRes.imgNum, upDtRes.videoNum,nullFile.value);
     let allNum = imgArr.length + videoArr.length;
 
     watch(
@@ -418,8 +436,7 @@ async function updts() {
 
     let bool = await Promise.all(pro.upPromise.map(task => task()));
 
-    console.log('上传测试');
-    
+
     // 延迟函数
     function delay(ms: number) {
         return new Promise(resolve => setTimeout(resolve, ms));
@@ -427,24 +444,25 @@ async function updts() {
 
     // num = pro.percentCompleteArr;
     if (!bool) {
-        return console.log('错误');
+        showFailToast('上传失败');
+        isUp = false;
+        isupIng.value = false;
+        return
+    } else {
+        let res = await upImgVideoNum(dtId);
+        if (res.code != 200) {
+            showFailToast('更新媒体资源数量失败');
+            return;
+        }
+        await delay(1000);
+        showSuccessToast('上传成功');
+        isUp = false;
+        isupIng.value = false;
+        router.push({ path: '/'});
     }
-    if (showImgNum.value == 0) {
-        showImgNum.value = imgArr.length > 6 ? 6 : imgArr.length;
-    }
-    let time = getDataTime(dateArr.value, timeArr.value);
-    postDt(dtId, txt, imgArr.length, showImgNum.value, videoArr.length, time, loa.value, isImgDir.value)
-        .then((a: any) => {
-            if (a.tf == 1) {
-                isupIng.value = false;
-                saveDraftSnapshot();
-                showSuccessToast('上传成功！');
-                setTimeout(() => {
-                    router.push({ path: '/' });
-                }, 500);
-            }
 
-        })
+
+
 
 }
 

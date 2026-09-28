@@ -60,7 +60,7 @@ let dtid = ref("999");
 
 
 let vData: {
-	id: number;
+	id: string;
 	isPlss: boolean;
 	isInput: boolean;
 	plText: string;

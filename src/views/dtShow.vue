@@ -201,7 +201,7 @@ import { userStore } from '@/stores/userStore';
 let viewData = viewDataStore();
 let uStore = userStore();
 const route = useRoute();
-let dtid = Number((computed(() => route.params.dtid as string)).value);
+let dtid = ((computed(() => route.params.dtid as string)).value);
 
 let share = route.query.share;
 let srcShow = ref<string[]>([]);
@@ -239,8 +239,8 @@ function afterRead(fileItems: UploaderFileListItem | UploaderFileListItem[]) {
         isUpImgNum.value += 1;
         fileItem.status = 'uploading';
         let indexa = index++;
-        let file = fileItem.file;
-        upfile(file, 'img', percentCompleteArr.value, fileNameArr, indexa)
+        let file = fileItem.file!;
+        upfile(file, 'img', percentCompleteArr.value, Number(fileNameArr[0]), indexa,false)
             .then((data) => {
                 if (fileNameArr && fileItem && fileItem.file) {
                     fileNameArrMap.set(fileItem.file?.name, fileNameArr[indexa]);

@@ -29,7 +29,7 @@ const emit = defineEmits(['img']);
 
 const props = defineProps<{
     srcArr: string[],
-    dtid: number,
+    dtid: string,
     columns?: number,
 }>();
 

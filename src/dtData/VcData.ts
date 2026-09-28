@@ -4,7 +4,7 @@ import type { DtDataType, As, Dt } from "../types/dtType";
 // 处理和存储类别中的选项数据
 const VDATA_STORAGE_KEY = "VPLData";
 
-function createVDataItem(id: number): As {
+function createVDataItem(id: string): As {
     return {
         id,
         isPlss: false,
@@ -35,8 +35,8 @@ function loadVDataFromLocalStorage(): As[] {
 
         return parsedValue
             .map((item) => {
-                const id = Number(item?.id);
-                if (!Number.isFinite(id)) {
+                const id = item?.id;
+                if (typeof id !== "string") {
                     return null;
                 }
 
@@ -87,8 +87,7 @@ export function VcDataPush(dtData: (Dt)[]) {
 }
 
 
-export function findvData(id: string | number) {
-    id = Number(id);
+export function findvData(id: string ) {
     let obj = vData.value.find(a => a.id == id);
     if (obj) {
         return obj

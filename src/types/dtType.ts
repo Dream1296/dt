@@ -7,7 +7,7 @@ export type Dt = DtDataType | dataImg | Mood | Top | Year;
 export interface DtDataType {
   type: "A";
   date: string;
-  id: number;
+  id: string;
   idea: string;
   imgShowAll: number;
   imgShowProportion: string[];
@@ -16,13 +16,12 @@ export interface DtDataType {
   text: string;
   textArr: { type: string; text: string }[];
   keyword: { keyword: string; isAi: 0 | 1 }[];
-  longVideo?: { id: number; name: string; src: string }[];
+  longVideo?: { id: string; name: string; src: string }[];
   po: number;
   touxian: string;
   user: string;
   videoShowAll: number;
   videoNum: number;
-  com: Com[];
   bgStyle: number;
   // textTile: string;
   longText: {
@@ -44,7 +43,7 @@ export interface DtDataType {
 
 
 export type setDtDataT = {
-  id: number,
+  id: string,
   user?: string,
   date?: string,
   imgShowAll?: number,
@@ -64,7 +63,7 @@ export type chatRoot = {
 
 // 评论状态与选项状态记录
 export interface As {
-  id: number;
+  id: string;
   isPlss: boolean;
   isInput: boolean;
   plText: string;
@@ -74,7 +73,7 @@ export interface Com {
   commentsUser: string;
   content: string;
   date: string;
-  dtId: number;
+  dtId: string;
   id: number;
   imgAllNum: number;
   name: string;
@@ -107,7 +106,7 @@ export type Top = {
 //年份标识
 export type Year = {
   type: "year";
-  id: number;
+  id: string;
   year: number
 };
 

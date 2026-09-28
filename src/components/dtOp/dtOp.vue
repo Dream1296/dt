@@ -167,7 +167,7 @@ import { onBeforeUnmount, onMounted, ref, watch } from 'vue';
 
 type DtPatchData = Omit<setDtDataT, 'id'>;
 
-const props = defineProps<{ dtId: number, loa: number }>();
+const props = defineProps<{ dtId: string, loa: number }>();
 const emit = defineEmits<{
     close: [];
     minimize: [];

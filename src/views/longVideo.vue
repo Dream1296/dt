@@ -24,7 +24,7 @@ import { useRoute } from 'vue-router';
 
 
 const route = useRoute();
-const lvid = Number( route.query.id);
+const lvid =  route.query.id as string;
 
 let videoSrc = ref('');
 let title = ref('正在加载');

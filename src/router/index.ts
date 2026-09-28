@@ -63,13 +63,19 @@ const routes: Array<RouteRecordRaw> = [
     component : () => import('@/views/longText.vue')
   },{
     path:'/chat/:id',
-    component : () => import('@/views/chat.vue')
+    component : () => import('@/views/chat/chat.vue')
   },{
     path:'/list:pathMatch(.*)*',
     component :() => import('@/views/list.vue')
   },{
     path:'/zhuce',
     component: () => import('@/views/zhuce.vue')
+  },{
+    path:'/cmd',
+    component : () => import('@/views/cmd.vue')
+  },{
+    path:'/map',
+    component : () => import('@/views/map/map.vue')
   }
 
 ];

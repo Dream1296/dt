@@ -44,14 +44,14 @@ onMounted(() => {
     if (isNaN(Number(dtid.value)) || isNaN(Number(index.value)) || dtid === undefined || index === undefined) {
         imgSrcRef.value = tempStores.imgSrc;
     } else {
-        imgSrcRef.value = imgSrc( Number(dtid.value) , Number(index.value),'1');
+        imgSrcRef.value = imgSrc(dtid.value, Number(index.value), '1');
     }
 
     const img = new Image();
 
     img.onload = () => {
         stop(100).then(() => {
-           
+
             Shows.value = true;
         })
 
@@ -78,7 +78,7 @@ function stop(time: Number): Promise<void> {
 
 
 
-onUnmounted(()=>{
+onUnmounted(() => {
     tempStores.imgSrc = "";
     tempStores.imgLog = "";
 })

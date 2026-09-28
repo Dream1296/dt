@@ -16,7 +16,7 @@ import { computed } from 'vue';
 const props = defineProps<{
     title: string,
     data: string,
-    dtid: number
+    dtid: string
 }>();
 
 
@@ -37,7 +37,7 @@ let showText = computed(() => {
     return parseArticleHtml(html, props.dtid);
 })
 
-function parseArticleHtml(html: string, dtid: number): string {
+function parseArticleHtml(html: string, dtid: string): string {
     const parser = new DOMParser();
     const doc = parser.parseFromString(html, "text/html");
 
@@ -49,7 +49,7 @@ function parseArticleHtml(html: string, dtid: number): string {
         const index = img.getAttribute("index");
         const size = Number(img.getAttribute("size")) || '0';
 
-        dtid = Number(img.getAttribute("dtid")) != 0 ? Number(img.getAttribute("dtid")) : dtid;
+        dtid = (img.getAttribute("dtid")) != '0' ? img.getAttribute("dtid")! : dtid;
         console.log(dtid);
 
         // 如果没有 index，跳过
@@ -69,23 +69,23 @@ function parseArticleHtml(html: string, dtid: number): string {
 
 function setImg(e: MouseEvent) {
     console.log(e);
-    
+
     const target = e.target as HTMLElement;
-    
+
     if (target.tagName.toLowerCase() !== "img") return;
-    
-    
+
+
     const index = target.getAttribute("index");
     console.log(index);
-    let dtid = Number(target.getAttribute("dtid")) != 0 ? Number(target.getAttribute("dtid")) : props.dtid;
+    let dtid = (target.getAttribute("dtid")) != '0' ? target.getAttribute("dtid")! : props.dtid;
 
 
     if (index === null) return;
 
-     const src = imgSrc(dtid, Number(index), '1');
+    const src = imgSrc(dtid, Number(index), '1');
     //  跳转到src
     window.open(src, '_blank');
-      
+
 }
 
 
