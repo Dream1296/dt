@@ -2,7 +2,6 @@
     <div class="all">
 
 
-
         <!-- 顶部栏 -->
         <div id="kz" :class="{ kzs: showBg }" v-if="!userData.isPc">
             <topDh :showBg='showBg' @clicks="updt" @gologin="gologin"></topDh>
@@ -59,19 +58,19 @@
             <hr>
 
 
-            <div id="dtArr" ref="dtArr">
+            <div id="dtArr" ref="dtArr" v-if="vlist && vlist.length > 0">
                 <div v-for="(a, index) in vlist" :key="a.id" ref="dtsDom">
                     <div class="zhujian">
-                        <div v-if="a.type == 'A' && !a.KeepRun && !a.KeepBadminton">
+                        <div v-if="a.type == 'A'">
                             <dts @showImg="dtsClicks" @showVideo='playVideo' @showOptions="showDtOptions" :datas="a">
                             </dts>
                         </div>
 
-                        <div v-if="a.type == 'A' && a.KeepRun">
+                        <div v-if="a.type == 'A' && a.KeepRun && a.KeepRun.length > 0">
                             <KeepRun :datas="a"></KeepRun>
                         </div>
 
-                        <div v-if="a.type == 'A' && a.KeepBadminton">
+                        <div v-if="a.type == 'A' && a.KeepBadminton && a.KeepBadminton.length > 0">
                             <KeepBadminton :datas="a"></KeepBadminton>
                         </div>
 
@@ -106,6 +105,8 @@
 
 
             </div>
+
+
 
 
 
@@ -229,6 +230,8 @@ if (route.query.dtId && !isNaN(Number(route.query.dtId)) && Number(route.query.d
 console.log(Number(route.query.loa));
 console.log(isNaN(Number(route.query.loa)));
 
+
+
 if (route.query.loa && !isNaN(Number(route.query.loa)) && Number(route.query.loa) >= 0) {
     console.log(Number(route.query.loa));
     viewData.loa = Number(route.query.loa);
@@ -251,6 +254,10 @@ myEvent.on('dtFind', (e) => {
 
 //视图数据
 const vlist = dtData.vlist;
+
+setTimeout(() => {
+    console.log(vlist.value);
+}, 2000);
 
 
 // 底部信息是否显示

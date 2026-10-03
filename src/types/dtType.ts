@@ -1,44 +1,41 @@
 export type Dt = DtDataType | dataImg | Mood | Top | Year;
 
 
-
+//主数据列表 -来自后端
+export interface Lists {
+    id: string;
+    user: string;
+    name: string;
+    touxian: string;
+    touxianUrl?: string;
+    text: string;
+    mediaFileShowNum: number;
+    mediaFileNum:number;
+    imgShowProportion: string[];   // 图片显示比例
+    date: string;
+    po: number;   // 顶置 排序优先级
+    childId:string[];
+    longVideo: { id: string, name: string, src: string }[];
+    keyword: { keyword: string, isAi: number }[];
+    File: { name: string, fileId: string , loa: number}[];
+    map: {id:number,name:string,E:number,N:number}[];
+    bgStyle: number;
+    KeepRun: KeepRunRecord[];
+    KeepBadminton: BadmintonData[];
+    longText: {
+        id: number,
+        dtid: string,
+        tetile: string
+    }[];
+    chatRoot: chatRoot[];
+    loa: number
+}
 
 // 标准动态类型
-export interface DtDataType {
+export interface DtDataType extends Lists {
   type: "A";
-  date: string;
-  id: string;
-  idea: string;
-  imgShowAll: number;
-  imgShowProportion: string[];
-  imgAllNum: number;
-  name: string;
-  text: string;
   textArr: { type: string; text: string }[];
-  keyword: { keyword: string; isAi: 0 | 1 }[];
-  longVideo?: { id: string; name: string; src: string }[];
-  po: number;
-  touxian: string;
-  user: string;
-  videoShowAll: number;
-  videoNum: number;
-  bgStyle: number;
-  // textTile: string;
-  longText: {
-    id: number,
-    dtid: number,
-    tetile: string
-  }[];
-  File?: {
-    name: string,
-    fileId: string,
-    loa: number,
-  }[];
-  map: { id: number, name: string, E: number, N: number }[];
-  KeepRun?: KeepRunRecord;
-  KeepBadminton?: BadmintonData;
-  chatRoot?: chatRoot[];
-  loa: number;
+  childDt: DtDataType[];
 }
 
 

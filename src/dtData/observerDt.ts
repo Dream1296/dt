@@ -47,6 +47,9 @@ export let obsDt: obsDtType = {
                 if (startNum == 0) {
                     return
                 }
+                if(dtsDom.value[0] == undefined){
+                    return;
+                }
                 let a = dtsDom.value[0].offsetTop + 200;
               
                 window.scrollTo({

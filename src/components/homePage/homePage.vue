@@ -26,6 +26,7 @@
         </div>
 
         <div id="text2">
+            <!-- 文本 -->
             <div v-html="svgArr[1]"></div>
         </div>
 

@@ -127,11 +127,30 @@
 		<div class="shhuru" @click.stop='nulls' v-show="getV()!.isInput">
 			<textarea ref="textarea" @input="textInputHeightAuto" v-model="getV()!.plText"
 				@click.stop='nulls'></textarea>
-			<van-button @click.stop="setPls()" type="primary">发送</van-button>
+
+			<n-upload v-show="isUploadVisible" class="comment-upload" list-type="image-card"
+				:custom-request="customRequest">
+				点击上传
+			</n-upload>
+
+			<div class="comment-toolbar">
+				<button id="UpimgIco" type="button" aria-label="展开或收起图片上传"
+					:aria-expanded="isUploadVisible" @click.stop="isUploadVisible = !isUploadVisible">
+					<img src="../../assets/img/imgA.png" alt="上传图片">
+				</button>
+
+				<div class="comment-actions">
+					<label class="weak-network">
+						<span>弱网模式</span>
+						<n-switch v-model:value="nullFile" size="small" />
+					</label>
+					<van-button @click.stop="setPls()" type="primary">发送</van-button>
+				</div>
+			</div>
 		</div>
 		<!-- 评论显示 -->
-		<div v-if="data.com && data.com.length > 0">
-			<CommentShow :data="data.com"></CommentShow>
+		<div v-if="data.childDt && data.childDt.length > 0">
+			<CommentShow :data="data.childDt"></CommentShow>
 		</div>
 
 
@@ -150,7 +169,7 @@ import { type DtDataType } from '../../types/dtType';
 import Myimage from '../image/Myimage.vue';
 import { findvData, vDataSave } from '@/dtData/VcData';
 import { showSuccessToast, showFailToast, showConfirmDialog, Toast, Dialog, showToast } from 'vant';
-import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, dtFileDow, Internet } from '@/api/api';
+import { delDts, postCom, getTouxian, getEmoSrc, imgSrc, dtVideoImg, dtFileDow, Internet, upDtRelation } from '@/api/api';
 import { dtData } from '@/dtData/dtList';
 import router from '@/router';
 import { styleText } from 'util';
@@ -167,6 +186,8 @@ import CommentShow from '../comment/commentShow.vue';
 
 import bookIcon from '@/assets/img/img_load.png';
 import rarIcon from '@/assets/img/rar_ico.png';
+import type { UploadCustomRequestOptions, UploadFileInfo } from 'naive-ui';
+import { upDt, upfiles, upImgVideoNum } from '@/api/upapi';
 
 let imgTemp = tempStore();
 
@@ -198,7 +219,7 @@ const hasHangingLinks = computed(() => {
 	}
 	return current.text.length > textLen.value
 		|| current.longText.length > 0
-		|| visibleFiles.value.length > 0 
+		|| visibleFiles.value.length > 0
 		|| indexArr().length > 0;
 });
 
@@ -448,7 +469,13 @@ function nulls() {
 
 }
 
-function setPls() {
+
+let imgFileArr: File[] = [];
+let videoFileArr: File[] = [];
+let nullFile = ref(false);
+let isUploadVisible = ref(false);
+let upfilejd = ref(0);
+async function setPls() {
 	//调用提交接口
 	// ----
 	let uptext = getV()!.plText;
@@ -458,38 +485,91 @@ function setPls() {
 		showFailToast('拒绝操作');
 		return
 	}
-	postCom(uptext, String(id)).then((res: any) => {
-		if (res.tf == 1) {
-			showSuccessToast('成功文案');
-			data.value?.com.push({
-				name: '不爱吃糖',
-				content: uptext,
-				commentsUser: '',
-				date: '',
-				dtId: '0',
-				imgAllNum: 0,
-				id: -1,
-			})
-			getV()!.plText = '';
-			vDataSave();
-			nextTick(() => {
-				const textareas = textarea.value;
-				if (!textareas) {
-					return;
-				}
-				textareas.style.height = 'auto';
-				textareas.style.height = '150px';
+	if (uptext == '') {
+		showFailToast('评论动态内容不能为空');
+		return
+	}
+	if (id == '') {
+		showFailToast('异常!动态ID不能为空');
+		return
+	}
+	let showImgNum = imgFileArr.length < 3 ? imgFileArr.length : 3;
+
+
+	let upDtRes = await upDt(uptext, showImgNum, getDataTime(), props.datas?.loa ?? 0);
+	let dtId = upDtRes.dtId;
+	//上传媒体资源
+	console.log(upDtRes);
+
+	let pro = upfiles(imgFileArr, videoFileArr, dtId, upDtRes.imgNum, upDtRes.videoNum, nullFile.value);
+	let allNum = imgFileArr.length + videoFileArr.length;
+
+	watch(
+		() => pro.percentCompleteArr.value[0].reduce((acc: number, cur: number) => acc + cur, 0) + pro.percentCompleteArr.value[1].reduce((acc: number, cur: number) => acc + cur, 0)
+		,
+		(val) => {
+			let temp = 0;
+			pro.percentCompleteArr.value[0].forEach((item, index) => {
+				temp += item;
 			});
-		} else {
-			showFailToast('失败');
+			pro.percentCompleteArr.value[1].forEach((item, index) => {
+				temp += item;
+			});
+			upfilejd.value = Math.floor(temp / allNum * 100);
+			console.log(upfilejd.value);
+		})
+	let bool = await Promise.all(pro.upPromise.map(task => task()));
+
+
+	// 延迟函数
+	function delay(ms: number) {
+		return new Promise(resolve => setTimeout(resolve, ms));
+	}
+
+	// num = pro.percentCompleteArr;
+	if (!bool) {
+		showFailToast('上传失败');
+		return
+	} else {
+		let res = await upImgVideoNum(dtId);
+		if (res.code != 200) {
+			showFailToast('更新媒体资源数量失败');
+			return;
 		}
-	})
-
-
-
+		await delay(1000);
+		await upDtRelation(props.datas?.id?.toString() ?? '-1', dtId.toString());
+		showSuccessToast('上传成功');
+	}
 }
 
+function customRequest({
+	file,
+	data,
+	headers,
+	withCredentials,
+	action,
+	onFinish,
+	onError,
+	onProgress
+}: UploadCustomRequestOptions) {
+	if (file!.type!.startsWith('image/')) {
+		imgFileArr.push(file.file as File);
+	} else if (file!.type!.startsWith('video/')) {
+		videoFileArr.push(file.file as File);
+	}
+}
 
+// 获取当前时间
+function getDataTime() {
+	const date = new Date();
+	const year = date.getFullYear();
+	const month = String(date.getMonth() + 1).padStart(2, '0');
+	const day = String(date.getDate()).padStart(2, '0');
+	const hours = String(date.getHours()).padStart(2, '0');
+	const minutes = String(date.getMinutes()).padStart(2, '0');
+
+	return `${year}-${month}-${day} ${hours}:${minutes}:00`;
+}
 
 </script>
 

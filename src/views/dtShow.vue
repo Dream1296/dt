@@ -76,9 +76,9 @@
         <van-button icon="plus" type="primary" @click="showPlAdd = true">添加评论</van-button>
 
         <!-- 评论显示 -->
-        <div v-if="data.com.length > 0">
+        <!-- <div v-if="data.com.length > 0">
             <CommentShow :data="data.com" :showImg="true"></CommentShow>
-        </div>
+        </div> -->
 
     </div>
 

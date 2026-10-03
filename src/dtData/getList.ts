@@ -86,7 +86,8 @@ function saveUserListToLocalStorage() {
 export async function dtDataInit(loa: string | number): Promise<(Dt)[]> {
     //从网络请求获取数据
     let data = (await dtDate(loa, 0, dtData.signal)).data;
-
+    console.log(data);
+    
     for (let a of data) {
         if (a.type == 'A') {
             if (!a.keyword) {
@@ -98,7 +99,6 @@ export async function dtDataInit(loa: string | number): Promise<(Dt)[]> {
     //过滤掉不显示元素
     filterVisibleData(data);
 
-
     // DtDataType类型数组，用于分离出主动态数据
     let dataA: DtDataType[] = [];
 
@@ -109,17 +109,49 @@ export async function dtDataInit(loa: string | number): Promise<(Dt)[]> {
         }
     }
 
+    // 将子动态与主动态关联
+    handleDtRelation(data)
+
     // 将文本和表情包分离
     Asetcl(dataA);
 
     //将主数据改为带修改数据
     dtData.set(data);
+
+    // 评论相关数据
     VcDataPush(data);
+    console.log(data);
+    
     return data;
 }
 
 
 
+
+// 处理动态的父子关联关系
+export function handleDtRelation(listData: Dt[]) {
+    for (let dt of listData) {
+        if (dt.type !== 'A') {
+            continue;
+        }
+        dt.childDt = [];
+        if (!dt.childId || dt.childId.length === 0) {
+            continue;
+        }
+        
+        for (let id of dt.childId) {
+            const child = listData.find(a => (a.id === id && a.type == 'A')) as DtDataType;
+            if (child) {
+                const index = listData.findIndex(a => (a.id === child.id && a.type == 'A'));
+                if (index !== -1) {
+                    dt.childDt.push(child);
+                    // 删除子动态
+                    listData.splice(index, 1);
+                }
+            }
+        }
+    }  
+}
 
 
 
@@ -195,9 +227,9 @@ userIndex()
             })
         }
         console.log(data);
-        
+
         console.log(a);
-        
+
         tabList.value = a;
     })
 
@@ -232,14 +264,14 @@ function filterVisibleData(data: Dt[]) {
     //         data.splice(i, 1); // 删除当前项
     //     }
     // }
-    
+
     //用户过滤
     let userArr: string[] = getDateUserArr(data);
     setUserListFromData(userArr);
     if (userList.value.length >= 2) {
         filterDtByUser(data, userList.value);
     }
-    
+
 
     // 标签过滤
     if (tabList.value.length >= 2) {
@@ -274,13 +306,13 @@ export function filterDtByTag(
     data: Dt[],
     tabList: { name: string; show: boolean }[]
 ) {
-    
+
     // 最后一个一定是 #!rest
     const restRule = tabList[tabList.length - 1];
 
     // 前面的规则标签
     let normalRules = tabList.slice(0, -1);
-    
+
 
     // 倒序遍历，防止 splice 导致索引错乱
     for (let i = data.length - 1; i >= 0; i--) {
@@ -297,9 +329,9 @@ export function filterDtByTag(
 
         // 当前动态的标签数组
         const keywords = item.keyword.map(e => e.keyword);
-        
+
         let isRestRule = true;
-        
+
         // 是否最终显示
         let shouldShow = false;
 
@@ -308,14 +340,14 @@ export function filterDtByTag(
             // 当前动态是否包含这个标签
             if (keywords.includes(rule.name)) {
                 isRestRule = false;
-                if(rule.show){
+                if (rule.show) {
                     shouldShow = true;
                 }
             }
 
         }
 
-        if(isRestRule && restRule.show){
+        if (isRestRule && restRule.show) {
             shouldShow = true;
         }
 
@@ -328,14 +360,14 @@ export function filterDtByTag(
 
 
 
-function getDateUserArr(date:Dt[]){
+function getDateUserArr(date: Dt[]) {
     let userArr = new Set<string>();
     // 找出动态中的所有user
-    for(let a of date){
-        if(a.type != 'A'){
+    for (let a of date) {
+        if (a.type != 'A') {
             continue;
         }
-        userArr.add( a.user);
+        userArr.add(a.user);
     }
     // 将userArr以数组方式返回
     return Array.from(userArr);

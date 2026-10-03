@@ -334,32 +334,119 @@
   position: relative;
   width: 90%;
   height: auto;
-  /* background-color: aqua; */
-  border: 1px solid blue;
-  border-radius: 10px;
+  box-sizing: border-box;
+  padding: 12px;
+  border: 1px solid rgba(110, 84, 69, 0.2);
+  border-radius: 12px;
+  background: rgba(255, 250, 244, 0.92);
+  box-shadow: 0 6px 18px rgba(93, 67, 48, 0.1);
 
   textarea {
-    /* background-color: black; */
-    width: 95%;
+    display: block;
+    box-sizing: border-box;
+    width: 100%;
     height: 150px;
-    margin: 5px;
-    border: none;
-    /* 隐藏边框 */
+    margin: 0;
+    padding: 12px;
+    border: 1px solid rgba(110, 84, 69, 0.14);
+    border-radius: 8px;
     outline: none;
-    /* 移除焦点时的外轮廓 */
     resize: none;
-    /* 禁止手动调整大小 */
+    background: #fff;
+    color: #4d3325;
+    font: inherit;
+    line-height: 1.6;
+    transition: border-color 0.16s ease, box-shadow 0.16s ease;
+
+    &:focus {
+      border-color: rgba(173, 102, 67, 0.55);
+      box-shadow: 0 0 0 3px rgba(173, 102, 67, 0.1);
+    }
   }
 
-  button {
-    position: absolute;
-    left: 80%;
-    bottom: 6%;
+  .comment-upload {
+    display: flex;
+    align-items: center;
+    min-height: 76px;
+    margin-top: 10px;
+    padding: 10px;
+    box-sizing: border-box;
+    border: 1px dashed rgba(173, 102, 67, 0.34);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.72);
+  }
+
+  .comment-toolbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 38px;
+    margin-top: 10px;
+  }
+
+  #UpimgIco {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 36px;
+    width: 36px;
+    height: 36px;
+    padding: 7px;
+    box-sizing: border-box;
+    border: 1px solid rgba(173, 102, 67, 0.22);
+    border-radius: 8px;
+    background: #fff;
+    cursor: pointer;
+    transition: background-color 0.16s ease, border-color 0.16s ease, transform 0.16s ease;
+
+    img {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+
+    &:hover {
+      border-color: rgba(173, 102, 67, 0.5);
+      background: #fff8f2;
+    }
+
+    &:active {
+      transform: scale(0.96);
+    }
+  }
+
+  .comment-actions {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 10px;
+    min-width: 0;
+  }
+
+  .weak-network {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    min-height: 36px;
+    padding: 0 8px;
+    border: 1px solid rgba(110, 84, 69, 0.14);
+    border-radius: 8px;
+    background: rgba(255, 255, 255, 0.72);
+    color: #6b5142;
+    font-size: 13px;
+    white-space: nowrap;
+    cursor: pointer;
+  }
+
+  .comment-actions :deep(.van-button) {
+    flex: 0 0 auto;
     width: 60px;
-    height: 26px;
+    height: 36px;
+    border-radius: 8px;
+    box-shadow: none;
   }
 }
-
 
 .ding {
   width: 60px;
@@ -674,3 +761,27 @@
 //   font-weight: normal; /* 字体权重，可以是normal或指定的数字，如400 */  
 //   font-style: normal; /* 字体样式，可以是normal（正常）、italic（斜体）等 */  
 // }
+
+
+@media (max-width: 420px) {
+  .shhuru {
+    padding: 10px;
+
+    .comment-toolbar {
+      gap: 8px;
+    }
+
+    .comment-actions {
+      gap: 6px;
+    }
+
+    .weak-network {
+      padding: 0 6px;
+      font-size: 12px;
+    }
+
+    .comment-actions :deep(.van-button) {
+      width: 56px;
+    }
+  }
+}

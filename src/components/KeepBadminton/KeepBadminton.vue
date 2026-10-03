@@ -1,4 +1,7 @@
 <template>
+
+
+<!-- 
     <div id="main">
         <div id="top">羽毛球 #{{ props.datas?.id }}</div>
         <div id="juli">
@@ -11,14 +14,17 @@
             <div class="time">
                 <div>训练时长:</div>
                 <div>{{ data?.time_m }}</div>
-            </div>
+            </div> -->
+
+
+
 
             <!-- <div class="time">
                 <div>平均配速:</div>
                 <div>{{ data?.peishu }}</div>
             </div> -->
 
-            <div class="time">
+            <!-- <div class="time">
                 <div>平均心率:</div>
                 <div>{{ data?.xinlv }}</div>
             </div>
@@ -49,7 +55,11 @@
         </div>
 
 
-    </div>
+    </div> -->
+
+
+
+    
 </template>
 
 

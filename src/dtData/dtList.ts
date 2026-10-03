@@ -30,9 +30,10 @@ export let dtData: dtList = {
     },
     //将总数据中第i位添加到渲染视图数据中
     addVlist: (i: number, direction?: 'previou' | 'next') => {
+        if(dtData.list[i] == undefined){
+            return;
+        }
         if (direction == 'previou') {
-        
-            
             dtData.vlist.value.unshift(dtData.list[i]);
             return
         }

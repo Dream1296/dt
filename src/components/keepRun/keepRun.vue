@@ -1,8 +1,8 @@
 <template>
-    <div id="main">
+    <!-- <div id="main">
         <div id="top">跑步 #{{ props.datas?.id }}</div>
         <div id="juli">
-            <span class="num">{{ data?.juli }}</span>
+            <span class="num">{{ data[0]?.juli }}</span>
             <span class="km">KM</span>
         </div>
         <hr>
@@ -40,7 +40,7 @@
                 <div>训练无氧效果:</div>
                 <div>{{ data?.xunlanxiaoguo_wu }}</div>
             </div>
-
+ -->
 
 
 
@@ -74,14 +74,14 @@
 
 
 
-        </div>
+        <!-- </div>
 
         <div id="date">
             {{ data?.date.slice(0, 16) }}
         </div>
 
 
-    </div>
+    </div> -->
 </template>
 
 

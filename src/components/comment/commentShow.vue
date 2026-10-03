@@ -8,16 +8,16 @@
 				</span>
 				<span>:</span>
 				<span class="plText">
-					{{ pl.content }}
+					{{ pl.text }}
 				</span>
 				<span v-for="a in pl.imgAllNum" v-if="!props.showImg">
 					[图片]
 				</span>
-				<div id="imgShow" v-if="props.showImg">
+				<!-- <div id="imgShow" v-if="props.showImg">
 					<div v-for="(a, index) in pl.imgAllNum" class="img_item">
 						<Myimage :src="getImgSrc(pl.id,a-1)"></Myimage>
 					</div>
-				</div>
+				</div> -->
 
 			</div>
 
@@ -29,20 +29,20 @@
 
 
 <script setup lang="ts">
-import type { Com } from "@/types/dtType";
+import type { Com, DtDataType } from "@/types/dtType";
 import { ref } from "vue";
 import Myimage from '@/components/image/Myimage.vue'
 import { plPL } from "naive-ui";
 import { imgSrc, imgSrcCom } from "@/api/api";
 
 
-const props = withDefaults(defineProps<{
-	data: Com[],
-	showImg?: boolean;
-	imgSrc?: string[];
-}>(), {
-	showImg: false,
-});
+const props = defineProps<{
+	data: DtDataType[],
+	showImg?: boolean,
+}>();
+
+console.log(props.data);
+
 
 function getImgSrc(comId:number,index: number) {	
 	
